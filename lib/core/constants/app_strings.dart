@@ -35,6 +35,7 @@ class AppStrings {
       'Username can only contain letters, numbers, and underscores.';
 
   // Failure messages.
+  static const invalidInputError = 'Please enter valid information.';
   static const invalidCredentialsError =
       'Invalid email or password. Please try again.';
   static const emailAlreadyInUseError =

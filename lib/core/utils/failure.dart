@@ -42,6 +42,12 @@ class TooManyRequestsFailure extends Failure {
   ]);
 }
 
+class ValidationFailure extends Failure {
+  const ValidationFailure([
+    super.message = AppStrings.invalidInputError,
+  ]);
+}
+
 class CancelledFailure extends Failure {
   const CancelledFailure([
     super.message = AppStrings.cancelledError,
