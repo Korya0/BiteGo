@@ -34,6 +34,14 @@ flutter:
     - assets/svgs/onboarding/
     - assets/svgs/indicators/
 
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter/static/Inter_18pt-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Inter/static/Inter_18pt-SemiBold.ttf
+          weight: 600
+
 flutter_native_splash:
   color: "#FFFFFF"
   image: assets/images/native_splash.png

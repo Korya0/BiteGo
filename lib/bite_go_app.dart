@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:bite_go/core/constants/app_constants.dart';
 import 'package:bite_go/core/routes/app_router.dart';
+import 'package:bite_go/core/theme/app_theme.dart';
+import 'package:flutter/material.dart';
 
 class BiteGoApp extends StatelessWidget {
   const BiteGoApp({super.key});
@@ -7,10 +9,8 @@ class BiteGoApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'BiteGo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
+      title: AppConstants.appTitle,
+      theme: AppTheme.light,
       routerConfig: appRouter,
     );
   }
