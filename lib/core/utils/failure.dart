@@ -1,3 +1,5 @@
+import 'package:bite_go/core/constants/app_strings.dart';
+
 abstract class Failure {
   final String message;
 
@@ -6,42 +8,42 @@ abstract class Failure {
 
 class InvalidCredentialsFailure extends Failure {
   const InvalidCredentialsFailure([
-    super.message = 'Invalid email or password. Please try again.',
+    super.message = AppStrings.invalidCredentialsError,
   ]);
 }
 
 class EmailAlreadyExistsFailure extends Failure {
   const EmailAlreadyExistsFailure([
-    super.message = 'This email is already registered. Please use a different one.',
+    super.message = AppStrings.emailAlreadyInUseError,
   ]);
 }
 
 class NetworkFailure extends Failure {
   const NetworkFailure([
-    super.message = 'No internet connection. Please check your network settings.',
+    super.message = AppStrings.networkError,
   ]);
 }
 
 class TimeoutFailure extends Failure {
   const TimeoutFailure([
-    super.message = 'The operation timed out. Please try again.',
+    super.message = AppStrings.timeoutError,
   ]);
 }
 
 class UserNotFoundFailure extends Failure {
   const UserNotFoundFailure([
-    super.message = 'User not found. Please check your credentials.',
+    super.message = AppStrings.userNotFoundError,
   ]);
 }
 
 class TooManyRequestsFailure extends Failure {
   const TooManyRequestsFailure([
-    super.message = 'Too many requests. Please try again later.',
+    super.message = AppStrings.tooManyRequestsError,
   ]);
 }
 
 class UnknownFailure extends Failure {
   const UnknownFailure([
-    super.message = 'An unexpected error occurred. Please try again.',
+    super.message = AppStrings.unknownError,
   ]);
 }
