@@ -1,3 +1,4 @@
+import 'package:bite_go/core/logging/app_logger.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -10,13 +11,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     FirebaseAuth? firebaseAuth,
     FirebaseFirestore? firebaseFirestore,
     GoogleSignIn? googleSignIn,
+    required AppLogger appLogger,
   })  : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
         _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance,
-        _googleSignIn = googleSignIn ?? GoogleSignIn.instance;
+        _googleSignIn = googleSignIn ?? GoogleSignIn.instance,
+        _appLogger = appLogger;
 
   final FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firebaseFirestore;
   final GoogleSignIn _googleSignIn;
+  final AppLogger _appLogger;
 
   Future<void>? _googleSignInInit;
 
@@ -25,19 +29,23 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String email,
     required String password,
   }) async {
+    _appLogger.info('Auth: email/password login started');
     final credential = await _firebaseAuth.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
     final user = credential.user;
     if (user == null) {
+      _appLogger.error('Auth: login succeeded but Firebase returned no user');
       throw FirebaseException(
         code: 'null-user',
         message: 'Sign-in succeeded but returned no user.',
         plugin: 'firebase_auth',
       );
     }
-    return _loadProfile(user);
+    final profile = await _loadProfile(user);
+    _appLogger.success('Auth: email/password login succeeded');
+    return profile;
   }
 
   @override
@@ -46,12 +54,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String password,
     required String username,
   }) async {
+    _appLogger.info('Auth: sign up started');
     final credential = await _firebaseAuth.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
     final user = credential.user;
     if (user == null) {
+      _appLogger.error(
+        'Auth: account creation succeeded but Firebase returned no user',
+      );
       throw FirebaseException(
         code: 'null-user',
         message: 'Account creation succeeded but returned no user.',
@@ -73,12 +85,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         .doc(user.uid)
         .get();
     if (!document.exists) {
+      _appLogger.error(
+        'Auth: profile document missing after sign up (uid: ${user.uid})',
+      );
       throw FirebaseException(
         code: 'user-profile-not-found',
         message: 'Profile document not found for uid ${user.uid} after sign up.',
         plugin: 'cloud_firestore',
       );
     }
+    _appLogger.success('Auth: sign up succeeded');
     return UserModel.fromFirestore(
       document.data()!,
       documentId: user.uid,
@@ -87,6 +103,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<UserModel> signInWithGoogle() async {
+    _appLogger.info('Auth: Google sign-in started');
     final googleUser = await _authenticateWithGoogle();
     final googleAuth = googleUser.authentication;
     final credential = GoogleAuthProvider.credential(
@@ -95,6 +112,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     final credentialResult = await _firebaseAuth.signInWithCredential(credential);
     final user = credentialResult.user;
     if (user == null) {
+      _appLogger.error(
+        'Auth: Google sign-in succeeded but Firebase returned no user',
+      );
       throw FirebaseException(
         code: 'null-user',
         message: 'Google sign-in succeeded but returned no user.',
@@ -106,6 +126,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         .doc(user.uid)
         .get();
     if (document.exists) {
+      _appLogger.success('Auth: Google sign-in succeeded');
       return UserModel.fromFirestore(
         document.data()!,
         documentId: user.uid,
@@ -127,6 +148,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         .collection('users')
         .doc(user.uid)
         .get();
+    _appLogger.success('Auth: Google sign-in succeeded');
     return UserModel.fromFirestore(
       created.data()!,
       documentId: user.uid,
@@ -138,6 +160,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       await init;
     } catch (_) {
+      _appLogger.warning(
+        'Auth: GoogleSignIn initialization failed; will retry next call',
+      );
       _googleSignInInit = null;
       rethrow;
     }
@@ -154,7 +179,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<void> sendPasswordResetEmail({required String email}) async {
+    _appLogger.info('Auth: password reset email requested');
     await _firebaseAuth.sendPasswordResetEmail(email: email);
+    _appLogger.success('Auth: password reset email sent');
   }
 
   @override
@@ -173,6 +200,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         .doc(firebaseUser.uid)
         .get();
     if (!document.exists) {
+      _appLogger.error(
+        'Auth: no profile document found for uid ${firebaseUser.uid}',
+      );
       throw FirebaseException(
         code: 'user-profile-not-found',
         message: 'No profile document found for uid ${firebaseUser.uid}.',
@@ -187,6 +217,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<void> logout() async {
+    _appLogger.info('Auth: logout started');
     await _firebaseAuth.signOut();
+    _appLogger.success('Auth: logout completed');
   }
 }

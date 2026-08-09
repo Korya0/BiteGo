@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:bite_go/core/logging/app_logger.dart';
+import 'package:bite_go/core/utils/failure.dart';
 import 'package:bite_go/core/utils/firebase_error_mapper.dart';
 import 'package:bite_go/core/utils/result.dart';
 import 'package:bite_go/features/authentication/data/datasources/auth_remote_data_source.dart';
@@ -7,10 +9,15 @@ import 'package:bite_go/features/authentication/data/models/user_model.dart';
 import 'package:bite_go/features/authentication/data/repositories/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
-  AuthRepositoryImpl({required AuthRemoteDataSource authRemoteDataSource})
-    : _authRemoteDataSource = authRemoteDataSource;
+  AuthRepositoryImpl({
+    required AuthRemoteDataSource authRemoteDataSource,
+    required AppLogger appLogger,
+  })  : _authRemoteDataSource = authRemoteDataSource,
+        _appLogger = appLogger;
 
   final AuthRemoteDataSource _authRemoteDataSource;
+
+  final AppLogger _appLogger;
 
   @override
   Future<Result<UserModel>> login({
@@ -59,7 +66,7 @@ class AuthRepositoryImpl implements AuthRepository {
         )
         .handleError(
           (Object error, StackTrace stackTrace) =>
-              Error<UserModel?>(FirebaseErrorMapper.map(error)),
+              Error<UserModel?>(_handleFailure(error, stackTrace)),
         );
   }
 
@@ -71,8 +78,25 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Result<T>> _guard<T>(Future<T> Function() action) async {
     try {
       return Success(await action());
-    } on Exception catch (error) {
-      return Error(FirebaseErrorMapper.map(error));
+    } on Exception catch (error, stackTrace) {
+      return Error(_handleFailure(error, stackTrace));
     }
+  }
+
+  Failure _handleFailure(Object error, StackTrace stackTrace) {
+    final failure = FirebaseErrorMapper.map(error);
+    if (failure is UnknownFailure) {
+      _appLogger.error(
+        'AuthRepository: unexpected failure ${failure.runtimeType}',
+        error: error,
+        stackTrace: stackTrace,
+        report: true,
+      );
+    } else {
+      _appLogger.warning(
+        'AuthRepository: expected failure ${failure.runtimeType} ($error)',
+      );
+    }
+    return failure;
   }
 }

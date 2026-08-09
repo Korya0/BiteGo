@@ -4,6 +4,10 @@ import 'package:bite_go/core/di/app_injector.dart';
 import 'package:bite_go/core/routes/app_routes.dart';
 import 'package:bite_go/features/authentication/presentation/cubit/auth_session_cubit.dart';
 import 'package:bite_go/features/authentication/presentation/cubit/auth_session_state.dart';
+import 'package:bite_go/features/authentication/presentation/views/forgot_password_view.dart';
+import 'package:bite_go/features/authentication/presentation/views/login_view.dart';
+import 'package:bite_go/features/authentication/presentation/views/pre_authentication_view.dart';
+import 'package:bite_go/features/authentication/presentation/views/sign_up_view.dart';
 import 'package:bite_go/features/splash/presentation/views/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -48,27 +52,19 @@ GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: AppRoutes.auth,
-      builder: (context, state) => const Scaffold(
-        body: Center(child: Text('Pre-Authentication')),
-      ),
+      builder: (context, state) => const PreAuthenticationView(),
     ),
     GoRoute(
       path: AppRoutes.authLogin,
-      builder: (context, state) => const Scaffold(
-        body: Center(child: Text('Login')),
-      ),
+      builder: (context, state) => const LoginView(),
     ),
     GoRoute(
       path: AppRoutes.authSignUp,
-      builder: (context, state) => const Scaffold(
-        body: Center(child: Text('Sign Up')),
-      ),
+      builder: (context, state) => const SignUpView(),
     ),
     GoRoute(
       path: AppRoutes.authForgotPassword,
-      builder: (context, state) => const Scaffold(
-        body: Center(child: Text('Forgot Password')),
-      ),
+      builder: (context, state) => const ForgotPasswordView(),
     ),
   ],
 );

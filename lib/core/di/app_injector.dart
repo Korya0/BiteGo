@@ -29,10 +29,14 @@ Future<void> setupDependencies() async {
       firebaseAuth: getIt<FirebaseAuth>(),
       firebaseFirestore: getIt<FirebaseFirestore>(),
       googleSignIn: getIt<GoogleSignIn>(),
+      appLogger: getIt<AppLogger>(),
     ),
   );
   getIt.registerLazySingleton<AuthRepository>(
-    () => AuthRepositoryImpl(authRemoteDataSource: getIt<AuthRemoteDataSource>()),
+    () => AuthRepositoryImpl(
+      authRemoteDataSource: getIt<AuthRemoteDataSource>(),
+      appLogger: getIt<AppLogger>(),
+    ),
   );
 
   getIt.registerLazySingleton<AuthSessionCubit>(
