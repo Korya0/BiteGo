@@ -6,7 +6,7 @@ import '../error_reporter.dart';
 // TODO: 3) Add breadcrumb logs via FirebaseAnalytics.instance.logEvent() in key screens/buttons.
 // TODO: 4) Upload symbols after obfuscated builds:
 //          firebase crashlytics:symbols:upload --app=FIREBASE_APP_ID PATH/TO/symbols
-// TODO: 5) Test in release mode with FirebaseCrashlytics.instance.crash() and verify in Firebase Console.
+// [x] 5) Test in release mode with FirebaseCrashlytics.instance.crash() and verify in Firebase Console.
 
 class FirebaseCrashlyticsReporter implements ErrorReporter {
   @override
