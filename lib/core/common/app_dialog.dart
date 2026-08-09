@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:bite_go/core/utils/context_extension.dart';
 import 'package:bite_go/core/common/app_button.dart';
 import 'package:bite_go/core/common/app_gap.dart';
+import 'package:bite_go/core/constants/app_strings.dart';
+import 'package:bite_go/core/utils/context_extension.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class AppDialog {
   const AppDialog._();
@@ -21,7 +22,10 @@ class AppDialog {
           ),
           insetPadding: EdgeInsets.symmetric(horizontal: context.space.lg),
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: context.space.md, horizontal: context.space.md),
+            padding: EdgeInsets.symmetric(
+              vertical: context.space.md,
+              horizontal: context.space.md,
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -37,7 +41,7 @@ class AppDialog {
                 SizedBox(
                   width: double.infinity,
                   child: AppButton.primary(
-                    text: context.l10n.ok,
+                    text: AppStrings.ok,
                     onPressed: () => context.pop(),
                   ),
                 ),

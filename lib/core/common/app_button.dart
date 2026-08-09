@@ -49,7 +49,6 @@ class _AppButtonState extends State<AppButton> {
     final isPrimary = widget.type == AppButtonType.primary;
     final isSecondary = widget.type == AppButtonType.secondary;
     final isOutlined = widget.type == AppButtonType.outlined;
-    final isDark = context.isDarkMode;
 
     Color bgColor;
     if (isPrimary) {
@@ -59,9 +58,7 @@ class _AppButtonState extends State<AppButton> {
     } else if (isSecondary) {
       bgColor = context.color.secondaryScaffoldBackgroundColor;
     } else {
-      bgColor = isDark
-          ? context.color.secondaryScaffoldBackgroundColor
-          : context.color.scaffoldBackgroundColor;
+      bgColor = context.color.scaffoldBackgroundColor;
     }
 
     final txtColor = isPrimary
@@ -69,7 +66,7 @@ class _AppButtonState extends State<AppButton> {
         : context.color.textPrimary;
 
     Border? border;
-    if (isOutlined && !isDark) {
+    if (isOutlined) {
       border = Border.all(color: context.color.disabledButtonBackground);
     }
 

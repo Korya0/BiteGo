@@ -21,9 +21,8 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: context.color.backgroundPrimary,
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: context.color.backgroundPrimary,
-        statusBarIconBrightness: context.isDarkMode
-            ? Brightness.light
-            : Brightness.dark,
+        statusBarIconBrightness: Brightness.light
+         
       ),
       elevation: 0.005,
       scrolledUnderElevation: 0.005,
