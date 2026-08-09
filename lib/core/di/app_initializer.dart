@@ -1,14 +1,18 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import '../logging/app_logger.dart';
+import '../services/local_storage.dart';
 import '../utils/app_bloc_observer.dart';
 import 'app_injector.dart';
 
 class AppInitializer {
   static Future<void> initialize() async {
-
     await Firebase.initializeApp();
+
+    await Hive.initFlutter();
+    await Hive.openBox(HiveLocalStorage.boxName);
 
     await setupDependencies();
 
