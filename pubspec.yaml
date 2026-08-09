@@ -15,6 +15,10 @@ dependencies:
   go_router: ^17.4.0
   flutter_animate: ^4.1.1
   flutter_native_splash: ^2.4.7 # dart run flutter_native_splash:create
+  get_it: ^8.0.2
+  flutter_bloc: ^9.1.0
+  firebase_core: ^3.6.0
+  firebase_crashlytics: ^4.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
