@@ -18,6 +18,7 @@ Future<void> main() async {
         error: error,
         stackTrace: stackTrace,
         report: true,
+        fatal: true,
       );
     },
   );
