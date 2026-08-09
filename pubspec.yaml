@@ -28,12 +28,14 @@ dependencies:
   firebase_crashlytics: ^4.2.0
   firebase_analytics: ^11.6.0
   cloud_firestore: ^5.4.0
+  firebase_auth: ^5.7.0
 
   # Local Storage
   hive_flutter: ^1.1.0
 
   # Utilities
   flutter_native_splash: ^2.4.7 # dart run flutter_native_splash:create
+  google_sign_in: ^7.2.0
 
 dev_dependencies:
   flutter_test:
