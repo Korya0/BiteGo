@@ -46,6 +46,6 @@ class AppStrings {
       'User not found. Please check your credentials.';
   static const tooManyRequestsError =
       'Too many requests. Please try again later.';
-  static const unknownError =
-      'An unexpected error occurred. Please try again.';
+  static const cancelledError = 'Sign-in was cancelled.';
+  static const unknownError = 'An unexpected error occurred. Please try again.';
 }

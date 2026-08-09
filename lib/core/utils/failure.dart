@@ -42,6 +42,12 @@ class TooManyRequestsFailure extends Failure {
   ]);
 }
 
+class CancelledFailure extends Failure {
+  const CancelledFailure([
+    super.message = AppStrings.cancelledError,
+  ]);
+}
+
 class UnknownFailure extends Failure {
   const UnknownFailure([
     super.message = AppStrings.unknownError,
