@@ -1,0 +1,31 @@
+import 'package:flutter/material.dart';
+import '../colors/app_colors.dart';
+import '../fonts/app_text_styles.dart';
+import '../spacing/app_spacing.dart';
+import '../spacing/app_radius.dart';
+import '../spacing/app_shadow.dart';
+import '../spacing/app_opacity.dart';
+
+extension ColorExtension on BuildContext {
+  AppColors get color => const AppColors();
+}
+
+extension TextStyleExtension on BuildContext {
+  AppTextStyles get textStyle => const AppTextStyles();
+}
+
+extension SpaceExtension on BuildContext {
+  AppSpace get space => const AppSpace();
+}
+
+extension RadiusExtension on BuildContext {
+  AppRadius get radius => const AppRadius();
+}
+
+extension ShadowExtension on BuildContext {
+  AppShadow get shadow => const AppShadow();
+}
+
+extension OpacityExtension on BuildContext {
+  AppOpacity get opacity => const AppOpacity();
+}

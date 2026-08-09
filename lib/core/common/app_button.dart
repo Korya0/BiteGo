@@ -1,3 +1,4 @@
+import 'package:bite_go/core/theme/extensions/theme_extensions.dart';
 import 'package:flutter/material.dart';
 
 class AppButton extends StatelessWidget {
@@ -28,12 +29,12 @@ class AppButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: effectiveEnabled ? onPressed : null,
         child: isLoading
-            ? const SizedBox(
-                height: 20,
-                width: 20,
+            ? SizedBox(
+                height: context.space.md,
+                width: context.space.md,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  color: Colors.white,
+                  color: context.color.textOnPrimary,
                 ),
               )
             : Text(text),
