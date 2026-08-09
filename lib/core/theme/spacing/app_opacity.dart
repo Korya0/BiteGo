@@ -1,7 +1,8 @@
 class AppOpacity {
   const AppOpacity();
 
-  static const double disabled = 0.5;
-  static const double medium = 0.7;
-  static const double high = 0.9;
+  double get disabled => 0.5;
+  double get medium => 0.7;
+  double get high => 0.9;
+  double get low => 0.2;
 }

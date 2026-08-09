@@ -13,9 +13,7 @@ GoRouter appRouter = GoRouter(
     GoRoute(
       path: AppRoutes.home,
       builder: (context, state) => const Scaffold(
-        body: Center(
-          child: Text('Home View'),
-        ),
+        body: Center(child: Text('Home')),
       ),
     ),
   ],

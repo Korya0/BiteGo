@@ -19,4 +19,15 @@ class AppColors {
   Color get iconError => const Color(0xFFF44336);
   Color get iconBlack => const Color(0xFF000000);
   Color get iconSecondary => const Color(0xFF878787);
+
+  Color get white => backgroundPrimary;
+  Color get success => iconSuccess;
+  Color get error => iconError;
+  Color get teal => const Color(0xFF008080);
+  Color get blue => const Color(0xFF2196F3);
+  Color get appBarBackground => backgroundPrimary;
+  Color get bottomSheetBackground => backgroundSecondary;
+  Color get disabledButtonBackground => const Color(0xFFBDBDBD);
+  Color get secondaryScaffoldBackgroundColor => backgroundSecondary;
+  Color get scaffoldBackgroundColor => backgroundPrimary;
 }

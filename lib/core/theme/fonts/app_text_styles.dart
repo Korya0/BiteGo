@@ -20,4 +20,29 @@ class AppTextStyles {
   TextStyle get caption => GoogleFonts.inter(
     fontWeight: AppFontWeight.regular.value,
   );
+
+  static TextStyle font16Medium(BuildContext context) => GoogleFonts.inter(
+    fontSize: 16,
+    fontWeight: AppFontWeight.medium.value,
+  );
+
+  static TextStyle font15Medium(BuildContext context) => GoogleFonts.inter(
+    fontSize: 15,
+    fontWeight: AppFontWeight.medium.value,
+  );
+
+  static TextStyle font15Regular(BuildContext context) => GoogleFonts.inter(
+    fontSize: 15,
+    fontWeight: AppFontWeight.regular.value,
+  );
+
+  static TextStyle font14Regular(BuildContext context) => GoogleFonts.inter(
+    fontSize: 14,
+    fontWeight: AppFontWeight.regular.value,
+  );
+
+  static TextStyle font16Regular(BuildContext context) => GoogleFonts.inter(
+    fontSize: 16,
+    fontWeight: AppFontWeight.regular.value,
+  );
 }
