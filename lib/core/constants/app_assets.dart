@@ -17,13 +17,13 @@ class AppAssets {
   static const String svgsWhatsapp = '$_svgs/whatsapp.svg';
 
   static const String svgsIndicatorsBurger1 =
-      '$_svgs/indicators/burger_indicator_1.svg';
+      '$_svgs/pre_auth/burger_indicator_1.svg';
   static const String svgsIndicatorsBurger2 =
-      '$_svgs/indicators/burger_indicator_2.svg';
+      '$_svgs/pre_auth/burger_indicator_2.svg';
   static const String svgsIndicatorsBurger3 =
-      '$_svgs/indicators/burger_indicator_3.svg';
+      '$_svgs/pre_auth/burger_indicator_3.svg';
 
-  static const String svgsOnboarding1 = '$_svgs/onboarding/onboarding_1.svg';
-  static const String svgsOnboarding2 = '$_svgs/onboarding/onboarding_2.svg';
-  static const String svgsOnboarding3 = '$_svgs/onboarding/onboarding_3.svg';
+  static const String svgsPreAuth1 = '$_svgs/pre_auth/pre_auth_1.svg';
+  static const String svgsPreAuth2 = '$_svgs/pre_auth/pre_auth_2.svg';
+  static const String svgsPreAuth3 = '$_svgs/pre_auth/pre_auth_3.svg';
 }

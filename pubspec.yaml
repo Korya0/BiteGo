@@ -47,8 +47,7 @@ flutter:
   assets:
     - assets/images/
     - assets/svgs/
-    - assets/svgs/onboarding/
-    - assets/svgs/indicators/
+    - assets/svgs/pre_auth/
 
 
 flutter_native_splash:
