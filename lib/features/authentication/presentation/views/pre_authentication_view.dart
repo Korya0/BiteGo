@@ -29,13 +29,13 @@ class PreAuthenticationView extends StatelessWidget {
           children: [
             const Expanded(child: _CarouselSection()),
 
-            AppGap.h(context.space.xxl),
+            AppGap.h(context.space.xxl + context.space.lg),
 
             // Footer Buttons
             _FooterButtons(
               onGooglePressed: () {},
-              onEmailPressed: () => context.pushNamed(AppRoutes.authSignUp),
-              onLoginPressed: () => context.pushNamed(AppRoutes.authLogin),
+              onEmailPressed: () => context.push(AppRoutes.authSignUp),
+              onLoginPressed: () => context.push(AppRoutes.authLogin),
             ),
           ],
         ),
@@ -60,6 +60,7 @@ class _FooterButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      spacing: context.space.sm,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         AppButton.primary(
@@ -85,8 +86,6 @@ class _FooterButtons extends StatelessWidget {
               curve: Curves.easeOutCubic,
             ),
 
-        AppGap.h(context.space.sm + context.space.xs),
-
         AppButton.primary(
               text: AppStrings.preAuthSignUpWithEmail,
               onPressed: onEmailPressed,
@@ -105,8 +104,6 @@ class _FooterButtons extends StatelessWidget {
               duration: 315.ms,
               curve: Curves.easeOutCubic,
             ),
-
-        AppGap.h(context.space.xs),
 
         Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -196,110 +193,81 @@ class _CarouselSectionState extends State<_CarouselSection> {
     super.dispose();
   }
 
+  void _goToPage(int index) {
+    _autoPlayTimer.cancel();
+    setState(() => _currentIndex = index);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final slide = _slides[_currentIndex];
+
     return Column(
       children: [
-        // Illustration: scale + fade animation
+        // Illustration: fade in/out
         Expanded(
-          child:
-              Padding(
-                    padding: EdgeInsets.symmetric(horizontal: context.space.lg),
-                    child: SvgPicture.asset(
-                      _slides[_currentIndex].imagePath,
-                      fit: BoxFit.contain,
-                    ),
-                  )
-                  .animate(key: ValueKey('img_$_currentIndex'))
-                  .fadeIn(duration: 450.ms, curve: Curves.easeOut)
-                  .scale(
-                    begin: const Offset(0.85, 0.85),
-                    end: const Offset(1.0, 1.0),
-                    duration: 450.ms,
-                    curve: Curves.easeOutBack,
-                  ),
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 450),
+            switchInCurve: Curves.easeOut,
+            switchOutCurve: Curves.easeIn,
+            transitionBuilder: (child, animation) =>
+                FadeTransition(opacity: animation, child: child),
+            child: SvgPicture.asset(slide.imagePath, fit: BoxFit.contain),
+          ),
         ),
-
-        // Text: slide from right + fade animation
-        Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: context.space.xl),
-                  child: Text(
-                    _slides[_currentIndex].title,
-                    textAlign: TextAlign.center,
-                    style: context.textStyle.title.copyWith(
-                      fontSize: context.space.fontSizeTitleSm,
-                      color: context.color.textPrimary,
-                    ),
-                  ),
+        AppGap.h(context.space.xs),
+        // Text: fade in/out
+        AnimatedSwitcher(
+          duration: const Duration(milliseconds: 380),
+          switchInCurve: Curves.easeOut,
+          switchOutCurve: Curves.easeIn,
+          transitionBuilder: (child, animation) =>
+              FadeTransition(opacity: animation, child: child),
+          child: Column(
+            key: ValueKey('text_$_currentIndex'),
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                slide.title,
+                textAlign: TextAlign.center,
+                style: context.textStyle.title.copyWith(
+                  fontSize: context.space.fontSizeTitleSm,
+                  color: context.color.textPrimary,
                 ),
-                AppGap.h(context.space.xs),
-                Padding(
-                  padding: EdgeInsets.only(
-                    left: context.space.xxl,
-                    right: context.space.xxl,
-                    bottom: context.space.sm,
-                  ),
-                  child: Text(
-                    _slides[_currentIndex].subtitle,
+              ),
+              AppGap.h(context.space.xs),
 
-                    textAlign: TextAlign.center,
-                    style: context.textStyle.body.copyWith(
-                      fontSize: context.space.fontSizeSm,
-                      color: context.color.textSecondary,
-                    ),
-                  ),
+              Text(
+                slide.subtitle,
+                textAlign: TextAlign.center,
+                style: context.textStyle.body.copyWith(
+                  fontSize: context.space.fontSizeSm,
+                  color: context.color.textSecondary,
                 ),
-              ],
-            )
-            .animate(key: ValueKey('text_$_currentIndex'))
-            .fadeIn(duration: 380.ms, curve: Curves.easeOut)
-            .slideX(
-              begin: 0.12,
-              end: 0,
-              duration: 380.ms,
-              curve: Curves.easeOut,
-            ),
+              ),
+            ],
+          ),
+        ),
 
         // Indicators: slide from top + fade animation
         SizedBox(
-              height:
-                  context.space.iconSm *
-                  _slides.map((s) => s.indicatorPath).toList().length,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.end,
-                spacing: 0,
-                children: List.generate(
-                  _currentIndex + 1,
-                  (index) {
-                    final reversedIndex = _currentIndex + 1 - 1 - index;
-                    return GestureDetector(
-                      key: ValueKey(reversedIndex),
-                      behavior: HitTestBehavior.opaque,
-
-                      onTap: () =>
-                          (index) => setState(() => _currentIndex = index),
-                      child: SvgPicture.asset(
-                        _slides
-                            .map((s) => s.indicatorPath)
-                            .toList()[reversedIndex],
-                      ),
-                    );
-                  },
+          height: context.space.iconSm * _slides.length,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: List.generate(_currentIndex + 1, (index) {
+              final reversedIndex = _currentIndex - index;
+              return GestureDetector(
+                key: ValueKey(reversedIndex),
+                behavior: HitTestBehavior.opaque,
+                onTap: () => _goToPage(reversedIndex),
+                child: SvgPicture.asset(
+                  _slides[reversedIndex].indicatorPath,
                 ),
-              ),
-            )
-            .animate(key: ValueKey('indicators_$_currentIndex'))
-            .fadeIn(duration: 220.ms, curve: Curves.easeOut)
-            .slideY(
-              begin: -0.8,
-              end: 0,
-              duration: 420.ms,
-              curve: Curves.easeOutBack,
-            ),
+              );
+            }),
+          ),
+        ),
       ],
     );
   }
