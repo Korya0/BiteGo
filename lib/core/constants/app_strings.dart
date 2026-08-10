@@ -34,6 +34,21 @@ class AppStrings {
   static const usernameAllowedCharsError =
       'Username can only contain letters, numbers, and underscores.';
 
+  // Pre-authentication screen.
+  static const preAuthSlide1Title = 'Order Anything, Anytime';
+  static const preAuthSlide1Subtitle =
+      'Browse hundreds of restaurants and cuisines right at your fingertips';
+  static const preAuthSlide2Title = 'Fast & Fresh Delivery';
+  static const preAuthSlide2Subtitle =
+      'Get your favourite meals delivered hot and fresh to your door';
+  static const preAuthSlide3Title = 'Track Your Order Live';
+  static const preAuthSlide3Subtitle =
+      'Follow every step of your delivery in real time on the map';
+  static const preAuthSignUpWithGoogle = 'Sign up with Google';
+  static const preAuthSignUpWithEmail = 'Sign up with Email';
+  static const preAuthAlreadyHaveAccount = 'Already have an account?';
+  static const preAuthLogIn = 'Log in';
+
   // Failure messages.
   static const invalidInputError = 'Please enter valid information.';
   static const invalidCredentialsError =

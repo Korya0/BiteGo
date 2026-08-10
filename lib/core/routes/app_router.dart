@@ -21,12 +21,19 @@ const Set<String> _authRoutes = {
   AppRoutes.authForgotPassword,
 };
 
-class _AuthSessionRouterRefresh extends ChangeNotifier {
-  _AuthSessionRouterRefresh(AuthSessionCubit authSessionCubit) {
+class _RouterRefresh extends ChangeNotifier {
+  _RouterRefresh(AuthSessionCubit authSessionCubit) {
     _subscription = authSessionCubit.stream.listen((_) => notifyListeners());
   }
 
   late final StreamSubscription<AuthSessionState> _subscription;
+
+  bool splashCompleted = false;
+
+  void completeSplash() {
+    splashCompleted = true;
+    notifyListeners();
+  }
 
   @override
   void dispose() {
@@ -35,14 +42,18 @@ class _AuthSessionRouterRefresh extends ChangeNotifier {
   }
 }
 
+final _routerRefresh = _RouterRefresh(getIt<AuthSessionCubit>());
+
 GoRouter appRouter = GoRouter(
   initialLocation: AppRoutes.splash,
-  refreshListenable: _AuthSessionRouterRefresh(getIt<AuthSessionCubit>()),
+  refreshListenable: _routerRefresh,
   redirect: _redirectBasedOnAuthState,
   routes: [
     GoRoute(
       path: AppRoutes.splash,
-      builder: (context, state) => const SplashView(),
+      builder: (context, state) => SplashView(
+        onCompleted: _routerRefresh.completeSplash,
+      ),
     ),
     GoRoute(
       path: AppRoutes.home,
@@ -71,15 +82,21 @@ GoRouter appRouter = GoRouter(
 
 String? _redirectBasedOnAuthState(BuildContext context, GoRouterState state) {
   final bool isOnSplash = state.matchedLocation == AppRoutes.splash;
+
+  // لو الـ splash لسه مخلصتش، افضل عليها
+  if (!_routerRefresh.splashCompleted) {
+    return isOnSplash ? null : AppRoutes.splash;
+  }
+
   final bool isOnAuthRoute = _authRoutes.contains(state.matchedLocation);
   final bool isOnProtectedRoute = _protectedRoutes.contains(
     state.matchedLocation,
   );
+
   return switch (getIt<AuthSessionCubit>().state) {
     AuthSessionUnknown() => isOnSplash ? null : AppRoutes.splash,
-    Unauthenticated() => isOnSplash || isOnProtectedRoute
-        ? AppRoutes.auth
-        : null,
+    Unauthenticated() =>
+      isOnSplash || isOnProtectedRoute ? AppRoutes.auth : null,
     Authenticated() => isOnSplash || isOnAuthRoute ? AppRoutes.home : null,
   };
 }

@@ -11,6 +11,7 @@ class BiteGoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: AppStrings.appTitle,
+      debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
       routerConfig: appRouter,
       builder: (context, child) {

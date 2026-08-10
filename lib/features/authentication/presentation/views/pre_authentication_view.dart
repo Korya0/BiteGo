@@ -1,14 +1,322 @@
+import 'dart:async';
+
+import 'package:bite_go/core/common/app_button.dart';
+import 'package:bite_go/core/common/app_gap.dart';
+import 'package:bite_go/core/common/app_text_button.dart';
+import 'package:bite_go/core/constants/app_assets.dart';
+import 'package:bite_go/core/constants/app_strings.dart';
+import 'package:bite_go/core/routes/app_routes.dart';
+import 'package:bite_go/core/utils/context_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class PreAuthenticationView extends StatelessWidget {
   const PreAuthenticationView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('Pre-Authentication'),
+    return Scaffold(
+      body: Padding(
+        padding: EdgeInsets.only(
+          left: context.space.md,
+          right: context.space.md,
+          bottom: context.space.xl,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Expanded(child: _CarouselSection()),
+
+            AppGap.h(context.space.xxl),
+
+            // Footer Buttons
+            _FooterButtons(
+              onGooglePressed: () {},
+              onEmailPressed: () => context.pushNamed(AppRoutes.authSignUp),
+              onLoginPressed: () => context.pushNamed(AppRoutes.authLogin),
+            ),
+          ],
+        ),
       ),
     );
   }
+}
+
+// Footer Buttons
+
+class _FooterButtons extends StatelessWidget {
+  const _FooterButtons({
+    required this.onGooglePressed,
+    required this.onEmailPressed,
+    required this.onLoginPressed,
+  });
+
+  final VoidCallback onGooglePressed;
+  final VoidCallback onEmailPressed;
+  final VoidCallback onLoginPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        AppButton.primary(
+              text: AppStrings.preAuthSignUpWithGoogle,
+              onPressed: onGooglePressed,
+              leading: SvgPicture.asset(
+                AppAssets.svgsGoogle,
+                height: context.space.iconSm,
+                width: context.space.iconSm,
+                colorFilter: ColorFilter.mode(
+                  context.color.textOnPrimary,
+                  BlendMode.srcIn,
+                ),
+              ),
+            )
+            .animate()
+            .fadeIn(delay: 0.ms, duration: 315.ms, curve: Curves.easeOut)
+            .slideY(
+              begin: 0.35,
+              end: 0,
+              delay: 0.ms,
+              duration: 315.ms,
+              curve: Curves.easeOutCubic,
+            ),
+
+        AppGap.h(context.space.sm + context.space.xs),
+
+        AppButton.primary(
+              text: AppStrings.preAuthSignUpWithEmail,
+              onPressed: onEmailPressed,
+              leading: Icon(
+                Icons.email_outlined,
+                size: context.space.iconSm,
+                color: context.color.textOnPrimary,
+              ),
+            )
+            .animate()
+            .fadeIn(delay: 105.ms, duration: 315.ms, curve: Curves.easeOut)
+            .slideY(
+              begin: 0.35,
+              end: 0,
+              delay: 105.ms,
+              duration: 315.ms,
+              curve: Curves.easeOutCubic,
+            ),
+
+        AppGap.h(context.space.xs),
+
+        Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  AppStrings.preAuthAlreadyHaveAccount,
+                  style: context.textStyle.body.copyWith(
+                    fontSize: context.space.fontSizeSm,
+                    color: context.color.textPrimary,
+                  ),
+                ),
+                AppTextButton(
+                  text: AppStrings.preAuthLogIn,
+                  onPressed: onLoginPressed,
+                  textStyle: context.textStyle.subtitle.copyWith(
+                    fontSize: context.space.fontSizeSm,
+                    color: context.color.primary,
+                  ),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: context.space.xs,
+                    vertical: context.space.xs,
+                  ),
+                ),
+              ],
+            )
+            .animate()
+            .fadeIn(delay: 210.ms, duration: 315.ms, curve: Curves.easeOut)
+            .slideY(
+              begin: 0.35,
+              end: 0,
+              delay: 210.ms,
+              duration: 315.ms,
+              curve: Curves.easeOutCubic,
+            ),
+      ],
+    );
+  }
+}
+
+// Carousel Section
+
+class _CarouselSection extends StatefulWidget {
+  const _CarouselSection();
+
+  @override
+  State<_CarouselSection> createState() => _CarouselSectionState();
+}
+
+class _CarouselSectionState extends State<_CarouselSection> {
+  int _currentIndex = 0;
+  late final Timer _autoPlayTimer;
+
+  static const List<_SlideData> _slides = [
+    _SlideData(
+      imagePath: AppAssets.svgsPreAuth1,
+      title: AppStrings.preAuthSlide1Title,
+      subtitle: AppStrings.preAuthSlide1Subtitle,
+      indicatorPath: AppAssets.svgsIndicatorsBurger1,
+    ),
+    _SlideData(
+      imagePath: AppAssets.svgsPreAuth2,
+      title: AppStrings.preAuthSlide2Title,
+      subtitle: AppStrings.preAuthSlide2Subtitle,
+      indicatorPath: AppAssets.svgsIndicatorsBurger2,
+    ),
+    _SlideData(
+      imagePath: AppAssets.svgsPreAuth3,
+      title: AppStrings.preAuthSlide3Title,
+      subtitle: AppStrings.preAuthSlide3Subtitle,
+      indicatorPath: AppAssets.svgsIndicatorsBurger3,
+    ),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _autoPlayTimer = Timer.periodic(const Duration(seconds: 3), (_) {
+      setState(() {
+        _currentIndex = (_currentIndex + 1) % _slides.length;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _autoPlayTimer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        // Illustration: scale + fade animation
+        Expanded(
+          child:
+              Padding(
+                    padding: EdgeInsets.symmetric(horizontal: context.space.lg),
+                    child: SvgPicture.asset(
+                      _slides[_currentIndex].imagePath,
+                      fit: BoxFit.contain,
+                    ),
+                  )
+                  .animate(key: ValueKey('img_$_currentIndex'))
+                  .fadeIn(duration: 450.ms, curve: Curves.easeOut)
+                  .scale(
+                    begin: const Offset(0.85, 0.85),
+                    end: const Offset(1.0, 1.0),
+                    duration: 450.ms,
+                    curve: Curves.easeOutBack,
+                  ),
+        ),
+
+        // Text: slide from right + fade animation
+        Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: context.space.xl),
+                  child: Text(
+                    _slides[_currentIndex].title,
+                    textAlign: TextAlign.center,
+                    style: context.textStyle.title.copyWith(
+                      fontSize: context.space.fontSizeTitleSm,
+                      color: context.color.textPrimary,
+                    ),
+                  ),
+                ),
+                AppGap.h(context.space.xs),
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: context.space.xxl,
+                    right: context.space.xxl,
+                    bottom: context.space.sm,
+                  ),
+                  child: Text(
+                    _slides[_currentIndex].subtitle,
+
+                    textAlign: TextAlign.center,
+                    style: context.textStyle.body.copyWith(
+                      fontSize: context.space.fontSizeSm,
+                      color: context.color.textSecondary,
+                    ),
+                  ),
+                ),
+              ],
+            )
+            .animate(key: ValueKey('text_$_currentIndex'))
+            .fadeIn(duration: 380.ms, curve: Curves.easeOut)
+            .slideX(
+              begin: 0.12,
+              end: 0,
+              duration: 380.ms,
+              curve: Curves.easeOut,
+            ),
+
+        // Indicators: slide from top + fade animation
+        SizedBox(
+              height:
+                  context.space.iconSm *
+                  _slides.map((s) => s.indicatorPath).toList().length,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.end,
+                spacing: 0,
+                children: List.generate(
+                  _currentIndex + 1,
+                  (index) {
+                    final reversedIndex = _currentIndex + 1 - 1 - index;
+                    return GestureDetector(
+                      key: ValueKey(reversedIndex),
+                      behavior: HitTestBehavior.opaque,
+
+                      onTap: () =>
+                          (index) => setState(() => _currentIndex = index),
+                      child: SvgPicture.asset(
+                        _slides
+                            .map((s) => s.indicatorPath)
+                            .toList()[reversedIndex],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            )
+            .animate(key: ValueKey('indicators_$_currentIndex'))
+            .fadeIn(duration: 220.ms, curve: Curves.easeOut)
+            .slideY(
+              begin: -0.8,
+              end: 0,
+              duration: 420.ms,
+              curve: Curves.easeOutBack,
+            ),
+      ],
+    );
+  }
+}
+
+// Slide Data Model
+
+class _SlideData {
+  const _SlideData({
+    required this.imagePath,
+    required this.title,
+    required this.subtitle,
+    required this.indicatorPath,
+  });
+
+  final String imagePath;
+  final String title;
+  final String subtitle;
+  final String indicatorPath;
 }

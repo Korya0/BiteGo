@@ -15,7 +15,13 @@ class AppSpace {
   double get fontSizeMd => 16.0;
   double get fontSizeLg => 18.0;
   double get fontSizeXl => 20.0;
+  double get fontSizeTitleSm => 22.0;
   double get fontSizeXxl => 24.0;
+
+  double get iconXs => 14.0;
+  double get iconSm => 22.0;
+  double get iconMd => 24.0;
+  double get iconLg => 32.0;
 
   EdgeInsets all(double value) => EdgeInsets.all(value);
 
