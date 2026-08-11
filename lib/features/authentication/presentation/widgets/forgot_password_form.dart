@@ -10,6 +10,7 @@ import 'package:bite_go/features/authentication/data/validators/email_validator.
 import 'package:bite_go/features/authentication/data/validators/no_space_formatter.dart';
 import 'package:bite_go/features/authentication/presentation/cubit/forgot_password_cubit.dart';
 import 'package:bite_go/features/authentication/presentation/cubit/forgot_password_state.dart';
+import 'package:bite_go/features/authentication/presentation/widgets/auth_error_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -63,12 +64,13 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
           } else {
             context.go(AppRoutes.authLogin);
           }
-        } else if (state is ForgotPasswordFailure) {
-          AppDialog.showInfo(context: context, message: state.failure.message);
         }
       },
       builder: (context, state) {
         final isLoading = state is ForgotPasswordLoading;
+        final errorMessage = state is ForgotPasswordFailure
+            ? state.failure.message
+            : null;
         return Form(
           key: _formKey,
           child: Column(
@@ -92,6 +94,7 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
                   );
                 },
               ),
+              AuthErrorText(message: errorMessage),
             ],
           ),
         );

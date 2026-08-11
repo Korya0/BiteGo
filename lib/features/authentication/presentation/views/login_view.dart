@@ -1,5 +1,4 @@
 import 'package:bite_go/core/common/app_app_bar.dart';
-import 'package:bite_go/core/common/app_dialog.dart';
 import 'package:bite_go/core/common/app_gap.dart';
 import 'package:bite_go/core/common/app_text_divider.dart';
 import 'package:bite_go/core/constants/app_strings.dart';
@@ -7,6 +6,7 @@ import 'package:bite_go/core/utils/context_extension.dart';
 import 'package:bite_go/core/utils/failure.dart';
 import 'package:bite_go/features/authentication/presentation/cubit/login_cubit.dart';
 import 'package:bite_go/features/authentication/presentation/cubit/login_state.dart';
+import 'package:bite_go/features/authentication/presentation/widgets/auth_error_text.dart';
 import 'package:bite_go/features/authentication/presentation/widgets/auth_header.dart';
 import 'package:bite_go/features/authentication/presentation/widgets/google_sign_in_button.dart';
 import 'package:bite_go/features/authentication/presentation/widgets/login_form.dart';
@@ -27,9 +27,6 @@ class _LoginViewState extends State<LoginView> {
   void _onStateChanged(LoginState state) {
     if (state is! LoginLoading && _isGoogleLoading) {
       setState(() => _isGoogleLoading = false);
-    }
-    if (state is LoginFailure && state.failure is! CancelledFailure) {
-      AppDialog.showInfo(context: context, message: state.failure.message);
     }
   }
 
@@ -54,7 +51,7 @@ class _LoginViewState extends State<LoginView> {
               padding: EdgeInsets.only(
                 left: context.space.md,
                 right: context.space.md,
-                bottom: context.space.xl,
+                bottom: context.space.xl + context.bottomSystemInset,
               ),
               child: _Body(
                 isGoogleLoading: _isGoogleLoading,
@@ -107,7 +104,21 @@ class _Body extends StatelessWidget {
               duration: 300.ms,
               curve: Curves.easeOutCubic,
             ),
-        AppGap.h(context.space.xl),
+        BlocBuilder<LoginCubit, LoginState>(
+          buildWhen: (previous, current) =>
+              previous.runtimeType != current.runtimeType ||
+              (previous is LoginFailure &&
+                  current is LoginFailure &&
+                  previous.failure.message != current.failure.message),
+          builder: (context, state) {
+            final message =
+                state is LoginFailure && state.failure is! CancelledFailure
+                ? state.failure.message
+                : null;
+            return AuthErrorText(message: message);
+          },
+        ),
+
         const AppTextDivider(text: AppStrings.or)
             .animate()
             .fadeIn(delay: 200.ms, duration: 300.ms, curve: Curves.easeOut)
@@ -118,8 +129,6 @@ class _Body extends StatelessWidget {
               duration: 300.ms,
               curve: Curves.easeOutCubic,
             ),
-        AppGap.h(context.space.xl),
-
         GoogleSignInButton(
               onPressed: onGooglePressed,
               isLoading: isGoogleLoading,

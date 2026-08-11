@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:bite_go/core/theme/app_theme.dart';
 import 'package:bite_go/core/utils/context_extension.dart';
 
 class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -19,11 +19,7 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: context.color.backgroundPrimary,
-      systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarColor: context.color.backgroundPrimary,
-        statusBarIconBrightness: Brightness.light
-         
-      ),
+      systemOverlayStyle: AppTheme.systemUiOverlayStyle,
       elevation: 0.005,
       scrolledUnderElevation: 0.005,
       shadowColor: context.color.iconBlack.withValues(alpha: context.opacity.medium),

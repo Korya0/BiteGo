@@ -115,7 +115,7 @@ void main() {
     expect(find.byType(GoogleSignInButton), findsOneWidget);
     expect(find.text(AppStrings.preAuthSignUpWithGoogle), findsOneWidget);
     expect(find.text('Facebook'), findsNothing);
-    expect(find.byType(AppTextDivider), findsNothing);
+    expect(find.byType(AppTextDivider), findsOneWidget);
   });
 
   testWidgets('sign up view shows the shared Google button and no social '
@@ -130,10 +130,10 @@ void main() {
     expect(find.byType(GoogleSignInButton), findsOneWidget);
     expect(find.text(AppStrings.preAuthSignUpWithGoogle), findsOneWidget);
     expect(find.text('Facebook'), findsNothing);
-    expect(find.byType(AppTextDivider), findsNothing);
+    expect(find.byType(AppTextDivider), findsOneWidget);
   });
 
-  testWidgets('login failure is shown in an AppDialog, not a SnackBar',
+  testWidgets('login failure is shown as inline red text, not a dialog',
       (tester) async {
     final h = _AuthViewsHarness();
     addTearDown(h.dispose);
@@ -152,12 +152,12 @@ void main() {
     await tapAppButton(tester, AppStrings.loginButton);
     await tester.pump(const Duration(milliseconds: 300));
 
-    expect(find.byType(Dialog), findsOneWidget);
+    expect(find.byType(Dialog), findsNothing);
     expect(find.text(AppStrings.invalidCredentialsError), findsOneWidget);
     expect(find.byType(SnackBar), findsNothing);
   });
 
-  testWidgets('sign up failure is shown in an AppDialog, not a SnackBar',
+  testWidgets('sign up failure is shown as inline red text, not a dialog',
       (tester) async {
     final h = _AuthViewsHarness();
     addTearDown(h.dispose);
@@ -183,7 +183,7 @@ void main() {
     await tapAppButton(tester, AppStrings.signUpButton);
     await tester.pump(const Duration(milliseconds: 300));
 
-    expect(find.byType(Dialog), findsOneWidget);
+    expect(find.byType(Dialog), findsNothing);
     expect(find.text(AppStrings.emailAlreadyInUseError), findsOneWidget);
     expect(find.byType(SnackBar), findsNothing);
   });
@@ -227,7 +227,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 100));
   });
 
-  testWidgets('forgot password failure is shown in an AppDialog',
+  testWidgets('forgot password failure is shown as inline red text',
       (tester) async {
     final h = _AuthViewsHarness();
     addTearDown(h.dispose);
@@ -243,7 +243,7 @@ void main() {
     await tapAppButton(tester, AppStrings.forgotPasswordButton);
     await tester.pump(const Duration(milliseconds: 300));
 
-    expect(find.byType(Dialog), findsOneWidget);
+    expect(find.byType(Dialog), findsNothing);
     expect(find.text(AppStrings.userNotFoundError), findsOneWidget);
     expect(find.byType(SnackBar), findsNothing);
   });

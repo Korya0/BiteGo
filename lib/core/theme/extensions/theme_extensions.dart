@@ -29,3 +29,10 @@ extension ShadowExtension on BuildContext {
 extension OpacityExtension on BuildContext {
   AppOpacity get opacity => const AppOpacity();
 }
+
+extension SystemInsetsExtension on BuildContext {
+  /// System UI padding (status bar, navigation bar, notches).
+  EdgeInsets get systemInsets => MediaQuery.paddingOf(this);
+
+  double get bottomSystemInset => systemInsets.bottom;
+}

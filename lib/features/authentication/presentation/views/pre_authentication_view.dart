@@ -32,26 +32,29 @@ class PreAuthenticationView extends StatelessWidget {
       builder: (context, state) {
         final isGoogleLoading = state is SignUpLoading;
         return Scaffold(
-          body: Padding(
-            padding: EdgeInsets.only(
-              left: context.space.md,
-              right: context.space.md,
-              bottom: context.space.xl,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Expanded(child: _CarouselSection()),
+          body: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.only(
+                left: context.space.md,
+                right: context.space.md,
+                bottom: context.space.xl,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Expanded(child: _CarouselSection()),
 
-                AppGap.h(context.space.xxl + context.space.lg),
+                  AppGap.h(context.space.xxl + context.space.lg),
 
-                _FooterButtons(
-                  onGooglePressed: context.read<SignUpCubit>().signInWithGoogle,
-                  onEmailPressed: () => context.push(AppRoutes.authSignUp),
-                  onLoginPressed: () => context.push(AppRoutes.authLogin),
-                  isGoogleLoading: isGoogleLoading,
-                ),
-              ],
+                  _FooterButtons(
+                    onGooglePressed:
+                        context.read<SignUpCubit>().signInWithGoogle,
+                    onEmailPressed: () => context.push(AppRoutes.authSignUp),
+                    onLoginPressed: () => context.push(AppRoutes.authLogin),
+                    isGoogleLoading: isGoogleLoading,
+                  ),
+                ],
+              ),
             ),
           ),
         );

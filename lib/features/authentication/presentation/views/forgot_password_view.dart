@@ -21,7 +21,7 @@ class ForgotPasswordView extends StatelessWidget {
             padding: EdgeInsets.only(
               left: context.space.md,
               right: context.space.md,
-              bottom: context.space.xl,
+              bottom: context.space.xl + context.bottomSystemInset,
             ),
             child: const _Body(),
           ),
