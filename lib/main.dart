@@ -13,7 +13,7 @@ Future<void> main() async {
       await AppInitializer.initialize();
       runApp(
         /*  DevicePreview(
-          builder: (context) => const BiteGoApp(),
+          builder: (context) => const BiteGoApp
         ),*/
         const BiteGoApp(),
       );

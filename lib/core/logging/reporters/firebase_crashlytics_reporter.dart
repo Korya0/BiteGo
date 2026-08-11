@@ -1,5 +1,7 @@
 import 'dart:async';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+
 import '../error_reporter.dart';
 
 // TODO: 2) Set user identifier on login/logout via FirebaseCrashlytics.instance.setUserIdentifier(userId).

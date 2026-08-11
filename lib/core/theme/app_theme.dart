@@ -8,6 +8,7 @@ class AppTheme {
 
   static ThemeData get light => ThemeData(
     useMaterial3: true,
+    splashFactory: NoSplash.splashFactory,
     fontFamily: AppFonts.inter,
     colorScheme: ColorScheme.fromSeed(
       seedColor: const AppColors().primary,

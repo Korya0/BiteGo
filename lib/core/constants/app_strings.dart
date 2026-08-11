@@ -49,6 +49,52 @@ class AppStrings {
   static const preAuthAlreadyHaveAccount = 'Already have an account?';
   static const preAuthLogIn = 'Log in';
 
+  // Login screen.
+  static const loginTitle = 'Welcome Back!';
+  static const loginSubtitle = 'Sign in to your account to continue.';
+  static const loginAppBarTitle = 'Login';
+  static const loginEmailLabel = 'Email';
+  static const loginEmailHint = 'Enter your email';
+  static const loginPasswordLabel = 'Password';
+  static const loginPasswordHint = 'Enter your password';
+  static const loginForgotPassword = 'Forgot password?';
+  static const loginButton = 'Login';
+  static const loginNoAccount = "Don't have an account?";
+  static const loginSignUp = 'Sign Up';
+
+  // Sign Up screen.
+  static const signUpTitle = 'Create Account';
+  static const signUpSubtitle = 'Fill in your details to get started.';
+  static const signUpAppBarTitle = 'Sign Up';
+  static const signUpEmailLabel = 'Email';
+  static const signUpEmailHint = 'Enter your email';
+  static const signUpPasswordLabel = 'Password';
+  static const signUpPasswordHint = 'Create a password';
+  static const signUpUsernameLabel = 'Username';
+  static const signUpUsernameHint = 'Choose a username';
+  static const signUpTermsPrefix = "By creating an account, you agree to BiteGo's ";
+  static const signUpTermsLink = 'terms & conditions';
+  static const signUpTermsAnd = ' and ';
+  static const signUpPrivacyLink = 'privacy policy';
+  static const signUpTermsSuffix = '.';
+  static const signUpButton = 'Sign Up';
+  static const signUpAlreadyHaveAccount = 'Already have an account?';
+  static const signUpLogIn = 'Log In';
+
+  // Forgot Password screen.
+  static const forgotPasswordTitle = 'Reset Password';
+  static const forgotPasswordAppBarTitle = 'Forgot Password';
+  static const forgotPasswordEmailLabel = 'Email';
+  static const forgotPasswordEmailHint = 'Enter your email';
+  static const forgotPasswordHelperText =
+      "Enter your registered email and we'll send you instructions to reset your password.";
+  static const forgotPasswordButton = 'Send Instructions';
+
+  // Social auth.
+  static const socialAuthOr = 'or';
+  static const socialAuthGoogle = 'Google';
+  static const socialAuthFacebook = 'Facebook';
+
   // Failure messages.
   static const invalidInputError = 'Please enter valid information.';
   static const invalidCredentialsError =
