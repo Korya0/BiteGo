@@ -41,8 +41,6 @@
       • Add to Favorites<br>
       • Add to Cart
     </td>
-  </tr>
-  <tr>
     <td valign="top" style="border: 1px solid #d0d7de; padding: 16px;">
       <b style="color:#FE8C00;">04. Search</b><br><br>
       <b>Status:</b> ⬜ Not Started<br><br>
@@ -50,6 +48,8 @@
       • Search Food<br>
       • Search Results
     </td>
+  </tr>
+  <tr>
     <td valign="top" style="border: 1px solid #d0d7de; padding: 16px;">
       <b style="color:#FE8C00;">05. Favorites</b><br><br>
       <b>Status:</b> ⬜ Not Started<br><br>
@@ -69,8 +69,6 @@
       • Decrease Quantity<br>
       • Total Price
     </td>
-  </tr>
-  <tr>
     <td valign="top" style="border: 1px solid #d0d7de; padding: 16px;">
       <b style="color:#FE8C00;">07. Delivery Map</b><br><br>
       <b>Status:</b> ⬜ Not Started<br><br>
@@ -89,6 +87,8 @@
       • Cash Payment<br>
       • Card Payment
     </td>
+  </tr>
+  <tr>
     <td valign="top" style="border: 1px solid #d0d7de; padding: 16px;">
       <b style="color:#FE8C00;">09. Profile</b><br><br>
       <b>Status:</b> ⬜ Not Started<br><br>
@@ -97,8 +97,6 @@
       • Settings<br>
       • Help Center
     </td>
-  </tr>
-  <tr>
     <td valign="top" style="border: 1px solid #d0d7de; padding: 16px;">
       <b style="color:#FE8C00;">10. Notifications</b><br><br>
       <b>Status:</b> ⬜ Not Started<br><br>

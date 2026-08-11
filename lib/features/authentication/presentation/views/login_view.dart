@@ -48,11 +48,7 @@ class _LoginViewState extends State<LoginView> {
           bottom: false,
           child: SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.only(
-                left: context.space.md,
-                right: context.space.md,
-                bottom: context.space.xl + context.bottomSystemInset,
-              ),
+              padding: context.screenPadding,
               child: _Body(
                 isGoogleLoading: _isGoogleLoading,
                 onGooglePressed: _signInWithGoogle,

@@ -16,6 +16,12 @@ extension TextStyleExtension on BuildContext {
 
 extension SpaceExtension on BuildContext {
   AppSpace get space => const AppSpace();
+
+  EdgeInsets get screenPadding => EdgeInsets.only(
+    left: space.md,
+    right: space.md,
+    bottom: space.xl + bottomSystemInset,
+  );
 }
 
 extension RadiusExtension on BuildContext {

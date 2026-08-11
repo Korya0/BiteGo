@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:bite_go/core/common/app_button.dart';
-import 'package:bite_go/core/common/app_gap.dart';
 import 'package:bite_go/core/common/app_dialog.dart';
+import 'package:bite_go/core/common/app_gap.dart';
 import 'package:bite_go/core/common/app_text_button.dart';
 import 'package:bite_go/core/constants/app_assets.dart';
 import 'package:bite_go/core/constants/app_strings.dart';
@@ -34,11 +34,8 @@ class PreAuthenticationView extends StatelessWidget {
         return Scaffold(
           body: SafeArea(
             child: Padding(
-              padding: EdgeInsets.only(
-                left: context.space.md,
-                right: context.space.md,
-                bottom: context.space.xl,
-              ),
+              padding: context.screenPadding,
+
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -47,8 +44,9 @@ class PreAuthenticationView extends StatelessWidget {
                   AppGap.h(context.space.xxl + context.space.lg),
 
                   _FooterButtons(
-                    onGooglePressed:
-                        context.read<SignUpCubit>().signInWithGoogle,
+                    onGooglePressed: context
+                        .read<SignUpCubit>()
+                        .signInWithGoogle,
                     onEmailPressed: () => context.push(AppRoutes.authSignUp),
                     onLoginPressed: () => context.push(AppRoutes.authLogin),
                     isGoogleLoading: isGoogleLoading,
