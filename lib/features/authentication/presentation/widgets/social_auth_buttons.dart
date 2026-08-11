@@ -10,11 +10,13 @@ class SocialAuthButtons extends StatelessWidget {
   const SocialAuthButtons({
     required this.onGooglePressed,
     required this.onFacebookPressed,
+    this.isGoogleLoading = false,
     super.key,
   });
 
   final VoidCallback onGooglePressed;
   final VoidCallback onFacebookPressed;
+  final bool isGoogleLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +32,7 @@ class SocialAuthButtons extends StatelessWidget {
               assetPath: AppAssets.svgsGoogle,
               label: AppStrings.socialAuthGoogle,
               onPressed: onGooglePressed,
+              isLoading: isGoogleLoading,
             ),
             AppGap.w(context.space.lg),
             _SocialButton(
@@ -44,18 +47,18 @@ class SocialAuthButtons extends StatelessWidget {
   }
 }
 
-// Social Button
-
 class _SocialButton extends StatefulWidget {
   const _SocialButton({
     required this.assetPath,
     required this.label,
     required this.onPressed,
+    this.isLoading = false,
   });
 
   final String assetPath;
   final String label;
   final VoidCallback onPressed;
+  final bool isLoading;
 
   @override
   State<_SocialButton> createState() => _SocialButtonState();
@@ -70,11 +73,17 @@ class _SocialButtonState extends State<_SocialButton> {
       label: widget.label,
       button: true,
       child: Listener(
-        onPointerDown: (_) => setState(() => _isPressed = true),
-        onPointerUp: (_) => setState(() => _isPressed = false),
-        onPointerCancel: (_) => setState(() => _isPressed = false),
+        onPointerDown: widget.isLoading
+            ? null
+            : (_) => setState(() => _isPressed = true),
+        onPointerUp: widget.isLoading
+            ? null
+            : (_) => setState(() => _isPressed = false),
+        onPointerCancel: widget.isLoading
+            ? null
+            : (_) => setState(() => _isPressed = false),
         child: GestureDetector(
-          onTap: widget.onPressed,
+          onTap: widget.isLoading ? null : widget.onPressed,
           behavior: HitTestBehavior.opaque,
           child: AnimatedOpacity(
             duration: const Duration(milliseconds: 50),
@@ -90,11 +99,17 @@ class _SocialButtonState extends State<_SocialButton> {
                 ),
               ),
               alignment: Alignment.center,
-              child: SvgPicture.asset(
-                widget.assetPath,
-                width: context.space.md + context.space.xs,
-                height: context.space.md + context.space.xs,
-              ),
+              child: widget.isLoading
+                  ? SizedBox(
+                      width: context.space.iconMd,
+                      height: context.space.iconMd,
+                      child: const CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : SvgPicture.asset(
+                      widget.assetPath,
+                      width: context.space.md + context.space.xs,
+                      height: context.space.md + context.space.xs,
+                    ),
             ),
           ),
         ),

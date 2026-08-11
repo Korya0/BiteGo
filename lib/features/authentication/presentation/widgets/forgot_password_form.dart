@@ -1,12 +1,17 @@
 import 'package:bite_go/core/common/app_button.dart';
 import 'package:bite_go/core/common/app_gap.dart';
+import 'package:bite_go/core/common/app_snack_bar.dart';
 import 'package:bite_go/core/common/app_text_field.dart';
 import 'package:bite_go/core/constants/app_strings.dart';
 import 'package:bite_go/core/utils/context_extension.dart';
 import 'package:bite_go/core/validators/latin_only_formatter.dart';
 import 'package:bite_go/features/authentication/data/validators/email_validator.dart';
 import 'package:bite_go/features/authentication/data/validators/no_space_formatter.dart';
+import 'package:bite_go/features/authentication/presentation/cubit/forgot_password_cubit.dart';
+import 'package:bite_go/features/authentication/presentation/cubit/forgot_password_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class ForgotPasswordForm extends StatefulWidget {
   const ForgotPasswordForm({super.key});
@@ -32,41 +37,62 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
   }
 
   void _submit() {
-    if (_formKey.currentState?.validate() ?? false) {
-      // TODO: trigger send reset email logic
+    if (!(_formKey.currentState?.validate() ?? false)) {
+      return;
     }
+    context.read<ForgotPasswordCubit>().sendResetEmail(
+          email: _emailController.text.trim(),
+        );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _ForgotPasswordFields(
-            emailController: _emailController,
-            onEmailSubmitted: (_) => _submit(),
-            onEmailChanged: _validateField,
+    return BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
+      listener: (context, state) {
+        if (state is ForgotPasswordEmailSent) {
+          AppSnackBar.show(
+            context: context,
+            message: AppStrings.forgotPasswordEmailSent,
+          );
+          if (context.canPop()) {
+            context.pop();
+          }
+        } else if (state is ForgotPasswordFailure) {
+          AppSnackBar.show(context: context, message: state.failure.message);
+        }
+      },
+      builder: (context, state) {
+        final isLoading = state is ForgotPasswordLoading;
+        return Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _ForgotPasswordFields(
+                emailController: _emailController,
+                onEmailSubmitted: (_) => _submit(),
+                onEmailChanged: _validateField,
+              ),
+              AppGap.h(context.space.xl),
+              ValueListenableBuilder<bool>(
+                valueListenable: _formValid,
+                builder: (context, valid, _) {
+                  return AppButton.primary(
+                    text: AppStrings.forgotPasswordButton,
+                    onPressed: isLoading ? null : _submit,
+                    isDisabled: !valid,
+                    isLoading: isLoading,
+                  );
+                },
+              ),
+            ],
           ),
-          AppGap.h(context.space.xl),
-          ValueListenableBuilder<bool>(
-            valueListenable: _formValid,
-            builder: (context, valid, _) {
-              return _ForgotPasswordActions(
-                onSendPressed: _submit,
-                isDisabled: !valid,
-              );
-            },
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
-
-// Forgot Password Fields
 
 class _ForgotPasswordFields extends StatelessWidget {
   const _ForgotPasswordFields({
@@ -104,27 +130,6 @@ class _ForgotPasswordFields extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-// Forgot Password Actions
-
-class _ForgotPasswordActions extends StatelessWidget {
-  const _ForgotPasswordActions({
-    required this.onSendPressed,
-    required this.isDisabled,
-  });
-
-  final VoidCallback onSendPressed;
-  final bool isDisabled;
-
-  @override
-  Widget build(BuildContext context) {
-    return AppButton.primary(
-      text: AppStrings.forgotPasswordButton,
-      onPressed: onSendPressed,
-      isDisabled: isDisabled,
     );
   }
 }

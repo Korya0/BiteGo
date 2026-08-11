@@ -31,8 +31,6 @@ class ForgotPasswordView extends StatelessWidget {
   }
 }
 
-// Body
-
 class _Body extends StatelessWidget {
   const _Body();
 

@@ -9,7 +9,10 @@ import 'package:bite_go/core/validators/latin_only_formatter.dart';
 import 'package:bite_go/features/authentication/data/validators/email_validator.dart';
 import 'package:bite_go/features/authentication/data/validators/no_space_formatter.dart';
 import 'package:bite_go/features/authentication/data/validators/password_validator.dart';
+import 'package:bite_go/features/authentication/presentation/cubit/login_cubit.dart';
+import 'package:bite_go/features/authentication/presentation/cubit/login_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class LoginForm extends StatefulWidget {
@@ -25,6 +28,7 @@ class _LoginFormState extends State<LoginForm> {
   final _passwordController = TextEditingController();
   final _passwordFocusNode = FocusNode();
   final _formValid = ValueNotifier(false);
+  bool _isEmailLoading = false;
 
   @override
   void dispose() {
@@ -41,46 +45,68 @@ class _LoginFormState extends State<LoginForm> {
     _formValid.value = emailValid && passwordValid;
   }
 
-  void _submit() {
-    if (_formKey.currentState?.validate() ?? false) {
-      // TODO: trigger login logic
+  void _updateEmailLoading(bool value) {
+    if (mounted && _isEmailLoading != value) {
+      setState(() => _isEmailLoading = value);
     }
+  }
+
+  void _submit() {
+    if (_isEmailLoading) {
+      return;
+    }
+    if (!(_formKey.currentState?.validate() ?? false)) {
+      return;
+    }
+    _updateEmailLoading(true);
+    context.read<LoginCubit>().login(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+        );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _LoginFields(
-            emailController: _emailController,
-            passwordController: _passwordController,
-            passwordFocusNode: _passwordFocusNode,
-            onPasswordSubmitted: (_) => _submit(),
-            onEmailChanged: _validateField,
-            onPasswordChanged: _validateField,
+    return BlocConsumer<LoginCubit, LoginState>(
+      listener: (context, state) {
+        if (state is! LoginLoading) {
+          _updateEmailLoading(false);
+        }
+      },
+      builder: (context, state) {
+        return Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _LoginFields(
+                emailController: _emailController,
+                passwordController: _passwordController,
+                passwordFocusNode: _passwordFocusNode,
+                onPasswordSubmitted: (_) => _submit(),
+                onEmailChanged: _validateField,
+                onPasswordChanged: _validateField,
+              ),
+              AppGap.h(context.space.xl),
+              ValueListenableBuilder<bool>(
+                valueListenable: _formValid,
+                builder: (context, valid, _) {
+                  return AppButton.primary(
+                    text: AppStrings.loginButton,
+                    onPressed: _submit,
+                    isDisabled: !valid,
+                    isLoading: _isEmailLoading,
+                  );
+                },
+              ),
+            ],
           ),
-          AppGap.h(context.space.xl),
-          ValueListenableBuilder<bool>(
-            valueListenable: _formValid,
-            builder: (context, valid, _) {
-              return _LoginActions(
-                onLoginPressed: _submit,
-                onSignUpPressed: () => context.push(AppRoutes.authSignUp),
-                isDisabled: !valid,
-              );
-            },
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
-
-// Login Fields
 
 class _LoginFields extends StatelessWidget {
   const _LoginFields({
@@ -141,35 +167,6 @@ class _LoginFields extends StatelessWidget {
               vertical: context.space.xs,
             ),
           ),
-        ),
-      ],
-    );
-  }
-}
-
-// Login Actions
-
-class _LoginActions extends StatelessWidget {
-  const _LoginActions({
-    required this.onLoginPressed,
-    required this.onSignUpPressed,
-    required this.isDisabled,
-  });
-
-  final VoidCallback onLoginPressed;
-  final VoidCallback onSignUpPressed;
-  final bool isDisabled;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        AppButton.primary(
-          text: AppStrings.loginButton,
-          onPressed: onLoginPressed,
-          isDisabled: isDisabled,
         ),
       ],
     );

@@ -2,15 +2,16 @@ import 'package:bite_go/core/common/app_button.dart';
 import 'package:bite_go/core/common/app_gap.dart';
 import 'package:bite_go/core/common/app_text_field.dart';
 import 'package:bite_go/core/constants/app_strings.dart';
-import 'package:bite_go/core/routes/app_routes.dart';
 import 'package:bite_go/core/utils/context_extension.dart';
 import 'package:bite_go/core/validators/latin_only_formatter.dart';
 import 'package:bite_go/features/authentication/data/validators/email_validator.dart';
 import 'package:bite_go/features/authentication/data/validators/no_space_formatter.dart';
 import 'package:bite_go/features/authentication/data/validators/password_validator.dart';
 import 'package:bite_go/features/authentication/data/validators/username_validator.dart';
+import 'package:bite_go/features/authentication/presentation/cubit/sign_up_cubit.dart';
+import 'package:bite_go/features/authentication/presentation/cubit/sign_up_state.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({super.key});
@@ -25,6 +26,7 @@ class _SignUpFormState extends State<SignUpForm> {
   final _passwordController = TextEditingController();
   final _usernameController = TextEditingController();
   final _formValid = ValueNotifier(false);
+  bool _isSignUpLoading = false;
 
   @override
   void dispose() {
@@ -42,49 +44,72 @@ class _SignUpFormState extends State<SignUpForm> {
     _formValid.value = emailValid && passwordValid && usernameValid;
   }
 
-  void _submit() {
-    if (_formKey.currentState?.validate() ?? false) {
-      // TODO: trigger sign up logic
+  void _updateLoading(bool value) {
+    if (mounted && _isSignUpLoading != value) {
+      setState(() => _isSignUpLoading = value);
     }
+  }
+
+  void _submit() {
+    if (_isSignUpLoading) {
+      return;
+    }
+    if (!(_formKey.currentState?.validate() ?? false)) {
+      return;
+    }
+    _updateLoading(true);
+    context.read<SignUpCubit>().signUp(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+          username: _usernameController.text.trim(),
+        );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _SignUpFields(
-            emailController: _emailController,
-            passwordController: _passwordController,
-            usernameController: _usernameController,
-            onUsernameSubmitted: (_) => _submit(),
-            onEmailChanged: _validateField,
-            onPasswordChanged: _validateField,
-            onUsernameChanged: _validateField,
+    return BlocConsumer<SignUpCubit, SignUpState>(
+      listener: (context, state) {
+        if (state is! SignUpLoading) {
+          _updateLoading(false);
+        }
+      },
+      builder: (context, state) {
+        return Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _SignUpFields(
+                emailController: _emailController,
+                passwordController: _passwordController,
+                usernameController: _usernameController,
+                onUsernameSubmitted: (_) => _submit(),
+                onEmailChanged: _validateField,
+                onPasswordChanged: _validateField,
+                onUsernameChanged: _validateField,
+              ),
+              AppGap.h(context.space.md),
+              const _TermsText(),
+              AppGap.h(context.space.xl),
+              ValueListenableBuilder<bool>(
+                valueListenable: _formValid,
+                builder: (context, valid, _) {
+                  return AppButton.primary(
+                    text: AppStrings.signUpButton,
+                    onPressed: _submit,
+                    isDisabled: !valid,
+                    isLoading: _isSignUpLoading,
+                  );
+                },
+              ),
+            ],
           ),
-          AppGap.h(context.space.md),
-          const _TermsText(),
-          AppGap.h(context.space.xl),
-          ValueListenableBuilder<bool>(
-            valueListenable: _formValid,
-            builder: (context, valid, _) {
-              return _SignUpActions(
-                onSignUpPressed: _submit,
-                onLoginPressed: () => context.push(AppRoutes.authLogin),
-                isDisabled: !valid,
-              );
-            },
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
-
-// Sign Up Fields
 
 class _SignUpFields extends StatelessWidget {
   const _SignUpFields({
@@ -147,8 +172,6 @@ class _SignUpFields extends StatelessWidget {
   }
 }
 
-// Terms Text
-
 class _TermsText extends StatelessWidget {
   const _TermsText();
 
@@ -198,35 +221,6 @@ class _TermsText extends StatelessWidget {
           const TextSpan(text: AppStrings.signUpTermsSuffix),
         ],
       ),
-    );
-  }
-}
-
-// Sign Up Actions
-
-class _SignUpActions extends StatelessWidget {
-  const _SignUpActions({
-    required this.onSignUpPressed,
-    required this.onLoginPressed,
-    required this.isDisabled,
-  });
-
-  final VoidCallback onSignUpPressed;
-  final VoidCallback onLoginPressed;
-  final bool isDisabled;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        AppButton.primary(
-          text: AppStrings.signUpButton,
-          onPressed: onSignUpPressed,
-          isDisabled: isDisabled,
-        ),
-      ],
     );
   }
 }

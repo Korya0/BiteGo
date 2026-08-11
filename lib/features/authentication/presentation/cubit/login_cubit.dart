@@ -41,10 +41,25 @@ class LoginCubit extends Cubit<LoginState> {
       password: password,
     );
 
-    if (isClosed) {
+    _handleResult(result);
+  }
+
+  Future<void> signInWithGoogle() async {
+    if (state is LoginLoading) {
       return;
     }
 
+    emit(const LoginLoading());
+
+    final result = await _authRepository.signInWithGoogle();
+
+    _handleResult(result);
+  }
+
+  void _handleResult(Result<UserModel> result) {
+    if (isClosed) {
+      return;
+    }
     switch (result) {
       case Success<UserModel>():
         emit(LoginSuccess(result.data));

@@ -39,8 +39,13 @@ Future<void> setupDependencies() async {
     ),
   );
 
+  getIt.registerSingleton<ErrorReporter>(FirebaseCrashlyticsReporter());
+
   getIt.registerLazySingleton<AuthSessionCubit>(
-    () => AuthSessionCubit(authRepository: getIt<AuthRepository>()),
+    () => AuthSessionCubit(
+      authRepository: getIt<AuthRepository>(),
+      errorReporter: getIt<ErrorReporter>(),
+    ),
   );
   getIt.registerFactory<LoginCubit>(
     () => LoginCubit(authRepository: getIt<AuthRepository>()),
@@ -51,8 +56,6 @@ Future<void> setupDependencies() async {
   getIt.registerFactory<ForgotPasswordCubit>(
     () => ForgotPasswordCubit(authRepository: getIt<AuthRepository>()),
   );
-
-  getIt.registerSingleton<ErrorReporter>(FirebaseCrashlyticsReporter());
   getIt.registerSingleton<AppLogger>(
     AppLogger(
       enableConsole: kDebugMode,

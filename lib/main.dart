@@ -11,12 +11,7 @@ Future<void> main() async {
     () async {
       WidgetsFlutterBinding.ensureInitialized();
       await AppInitializer.initialize();
-      runApp(
-        /*  DevicePreview(
-          builder: (context) => const BiteGoApp
-        ),*/
-        const BiteGoApp(),
-      );
+      runApp(const BiteGoApp());
     },
     (error, stackTrace) {
       getIt<AppLogger>().error(

@@ -1,30 +1,65 @@
 import 'package:bite_go/core/common/app_app_bar.dart';
 import 'package:bite_go/core/common/app_gap.dart';
+import 'package:bite_go/core/common/app_snack_bar.dart';
 import 'package:bite_go/core/constants/app_strings.dart';
 import 'package:bite_go/core/utils/context_extension.dart';
+import 'package:bite_go/core/utils/failure.dart';
+import 'package:bite_go/features/authentication/presentation/cubit/login_cubit.dart';
+import 'package:bite_go/features/authentication/presentation/cubit/login_state.dart';
 import 'package:bite_go/features/authentication/presentation/widgets/auth_header.dart';
 import 'package:bite_go/features/authentication/presentation/widgets/login_form.dart';
 import 'package:bite_go/features/authentication/presentation/widgets/social_auth_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class LoginView extends StatelessWidget {
+class LoginView extends StatefulWidget {
   const LoginView({super.key});
 
   @override
+  State<LoginView> createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
+  bool _isGoogleLoading = false;
+
+  void _onStateChanged(LoginState state) {
+    if (state is! LoginLoading && _isGoogleLoading) {
+      setState(() => _isGoogleLoading = false);
+    }
+    if (state is LoginFailure && state.failure is! CancelledFailure) {
+      AppSnackBar.show(context: context, message: state.failure.message);
+    }
+  }
+
+  void _signInWithGoogle() {
+    if (context.read<LoginCubit>().state is LoginLoading) {
+      return;
+    }
+    setState(() => _isGoogleLoading = true);
+    context.read<LoginCubit>().signInWithGoogle();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const AppAppBar(title: AppStrings.loginAppBarTitle),
-      body: SafeArea(
-        bottom: false,
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.only(
-              left: context.space.md,
-              right: context.space.md,
-              bottom: context.space.xl,
+    return BlocListener<LoginCubit, LoginState>(
+      listener: (context, state) => _onStateChanged(state),
+      child: Scaffold(
+        appBar: const AppAppBar(title: AppStrings.loginAppBarTitle),
+        body: SafeArea(
+          bottom: false,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.only(
+                left: context.space.md,
+                right: context.space.md,
+                bottom: context.space.xl,
+              ),
+              child: _Body(
+                isGoogleLoading: _isGoogleLoading,
+                onGooglePressed: _signInWithGoogle,
+              ),
             ),
-            child: const _Body(),
           ),
         ),
       ),
@@ -32,10 +67,14 @@ class LoginView extends StatelessWidget {
   }
 }
 
-// Body
-
 class _Body extends StatelessWidget {
-  const _Body();
+  const _Body({
+    required this.isGoogleLoading,
+    required this.onGooglePressed,
+  });
+
+  final bool isGoogleLoading;
+  final VoidCallback onGooglePressed;
 
   @override
   Widget build(BuildContext context) {
@@ -57,8 +96,9 @@ class _Body extends StatelessWidget {
             .slideY(begin: 0.2, end: 0, delay: 100.ms, duration: 300.ms, curve: Curves.easeOutCubic),
         AppGap.h(context.space.xl),
         SocialAuthButtons(
-          onGooglePressed: () {},
+          onGooglePressed: onGooglePressed,
           onFacebookPressed: () {},
+          isGoogleLoading: isGoogleLoading,
         )
             .animate()
             .fadeIn(delay: 200.ms, duration: 300.ms, curve: Curves.easeOut)

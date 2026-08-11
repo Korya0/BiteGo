@@ -2,13 +2,18 @@ import 'dart:async';
 
 import 'package:bite_go/core/common/app_button.dart';
 import 'package:bite_go/core/common/app_gap.dart';
+import 'package:bite_go/core/common/app_snack_bar.dart';
 import 'package:bite_go/core/common/app_text_button.dart';
 import 'package:bite_go/core/constants/app_assets.dart';
 import 'package:bite_go/core/constants/app_strings.dart';
 import 'package:bite_go/core/routes/app_routes.dart';
 import 'package:bite_go/core/utils/context_extension.dart';
+import 'package:bite_go/core/utils/failure.dart';
+import 'package:bite_go/features/authentication/presentation/cubit/sign_up_cubit.dart';
+import 'package:bite_go/features/authentication/presentation/cubit/sign_up_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
@@ -17,45 +22,55 @@ class PreAuthenticationView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.only(
-          left: context.space.md,
-          right: context.space.md,
-          bottom: context.space.xl,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Expanded(child: _CarouselSection()),
-
-            AppGap.h(context.space.xxl + context.space.lg),
-
-            // Footer Buttons
-            _FooterButtons(
-              onGooglePressed: () {},
-              onEmailPressed: () => context.push(AppRoutes.authSignUp),
-              onLoginPressed: () => context.push(AppRoutes.authLogin),
+    return BlocConsumer<SignUpCubit, SignUpState>(
+      listener: (context, state) {
+        if (state is SignUpFailure && state.failure is! CancelledFailure) {
+          AppSnackBar.show(context: context, message: state.failure.message);
+        }
+      },
+      builder: (context, state) {
+        final isGoogleLoading = state is SignUpLoading;
+        return Scaffold(
+          body: Padding(
+            padding: EdgeInsets.only(
+              left: context.space.md,
+              right: context.space.md,
+              bottom: context.space.xl,
             ),
-          ],
-        ),
-      ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Expanded(child: _CarouselSection()),
+
+                AppGap.h(context.space.xxl + context.space.lg),
+
+                _FooterButtons(
+                  onGooglePressed: context.read<SignUpCubit>().signInWithGoogle,
+                  onEmailPressed: () => context.push(AppRoutes.authSignUp),
+                  onLoginPressed: () => context.push(AppRoutes.authLogin),
+                  isGoogleLoading: isGoogleLoading,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
-
-// Footer Buttons
 
 class _FooterButtons extends StatelessWidget {
   const _FooterButtons({
     required this.onGooglePressed,
     required this.onEmailPressed,
     required this.onLoginPressed,
+    required this.isGoogleLoading,
   });
 
   final VoidCallback onGooglePressed;
   final VoidCallback onEmailPressed;
   final VoidCallback onLoginPressed;
+  final bool isGoogleLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +81,7 @@ class _FooterButtons extends StatelessWidget {
         AppButton.primary(
               text: AppStrings.preAuthSignUpWithGoogle,
               onPressed: onGooglePressed,
+              isLoading: isGoogleLoading,
               leading: SvgPicture.asset(
                 AppAssets.svgsGoogle,
                 height: context.space.iconSm,
@@ -143,8 +159,6 @@ class _FooterButtons extends StatelessWidget {
   }
 }
 
-// Carousel Section
-
 class _CarouselSection extends StatefulWidget {
   const _CarouselSection();
 
@@ -204,7 +218,6 @@ class _CarouselSectionState extends State<_CarouselSection> {
 
     return Column(
       children: [
-        // Illustration: fade in/out
         Expanded(
           child: AnimatedSwitcher(
             duration: const Duration(milliseconds: 450),
@@ -216,7 +229,6 @@ class _CarouselSectionState extends State<_CarouselSection> {
           ),
         ),
         AppGap.h(context.space.xs),
-        // Text: fade in/out
         AnimatedSwitcher(
           duration: const Duration(milliseconds: 380),
           switchInCurve: Curves.easeOut,
@@ -249,7 +261,6 @@ class _CarouselSectionState extends State<_CarouselSection> {
           ),
         ),
 
-        // Indicators: slide from top + fade animation
         SizedBox(
           height: context.space.iconSm * _slides.length,
           child: Column(
@@ -272,8 +283,6 @@ class _CarouselSectionState extends State<_CarouselSection> {
     );
   }
 }
-
-// Slide Data Model
 
 class _SlideData {
   const _SlideData({

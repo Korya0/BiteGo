@@ -8,4 +8,6 @@ abstract interface class ErrorReporter {
     Map<String, Object>? metadata,
     bool fatal = false,
   });
+
+  void setUserIdentifier(String? identifier);
 }

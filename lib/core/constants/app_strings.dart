@@ -95,6 +95,17 @@ class AppStrings {
   static const socialAuthGoogle = 'Google';
   static const socialAuthFacebook = 'Facebook';
 
+  // Home.
+  static const homeTitle = 'Home';
+  static const logoutTitle = 'Log Out';
+  static const logoutMessage = 'Are you sure you want to log out?';
+  static const logoutConfirm = 'Log Out';
+  static const logoutCancel = 'Cancel';
+
+  // Forgot password feedback.
+  static const forgotPasswordEmailSent =
+      'Password reset email sent. Check your inbox.';
+
   // Failure messages.
   static const invalidInputError = 'Please enter valid information.';
   static const invalidCredentialsError =

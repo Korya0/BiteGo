@@ -51,10 +51,25 @@ class SignUpCubit extends Cubit<SignUpState> {
       username: username,
     );
 
-    if (isClosed) {
+    _handleResult(result);
+  }
+
+  Future<void> signInWithGoogle() async {
+    if (state is SignUpLoading) {
       return;
     }
 
+    emit(const SignUpLoading());
+
+    final result = await _authRepository.signInWithGoogle();
+
+    _handleResult(result);
+  }
+
+  void _handleResult(Result<UserModel> result) {
+    if (isClosed) {
+      return;
+    }
     switch (result) {
       case Success<UserModel>():
         emit(SignUpSuccess(result.data));
