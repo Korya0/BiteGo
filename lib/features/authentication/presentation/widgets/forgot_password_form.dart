@@ -17,11 +17,17 @@ class ForgotPasswordForm extends StatefulWidget {
 class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
+  final _formValid = ValueNotifier(false);
 
   @override
   void dispose() {
     _emailController.dispose();
+    _formValid.dispose();
     super.dispose();
+  }
+
+  void _validateField(String? _) {
+    _formValid.value = EmailValidator.validate(_emailController.text) == null;
   }
 
   void _submit() {
@@ -41,9 +47,18 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
           _ForgotPasswordFields(
             emailController: _emailController,
             onEmailSubmitted: (_) => _submit(),
+            onEmailChanged: _validateField,
           ),
           AppGap.h(context.space.xl),
-          _ForgotPasswordActions(onSendPressed: _submit),
+          ValueListenableBuilder<bool>(
+            valueListenable: _formValid,
+            builder: (context, valid, _) {
+              return _ForgotPasswordActions(
+                onSendPressed: _submit,
+                isDisabled: !valid,
+              );
+            },
+          ),
         ],
       ),
     );
@@ -56,10 +71,12 @@ class _ForgotPasswordFields extends StatelessWidget {
   const _ForgotPasswordFields({
     required this.emailController,
     required this.onEmailSubmitted,
+    required this.onEmailChanged,
   });
 
   final TextEditingController emailController;
   final ValueChanged<String> onEmailSubmitted;
+  final ValueChanged<String>? onEmailChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +92,7 @@ class _ForgotPasswordFields extends StatelessWidget {
           showValidationState: true,
           validator: EmailValidator.validate,
           inputFormatters: [latinOnlyFormatter],
+          onChanged: onEmailChanged,
         ),
         AppGap.h(context.space.sm),
         Text(
@@ -92,15 +110,20 @@ class _ForgotPasswordFields extends StatelessWidget {
 // Forgot Password Actions
 
 class _ForgotPasswordActions extends StatelessWidget {
-  const _ForgotPasswordActions({required this.onSendPressed});
+  const _ForgotPasswordActions({
+    required this.onSendPressed,
+    required this.isDisabled,
+  });
 
   final VoidCallback onSendPressed;
+  final bool isDisabled;
 
   @override
   Widget build(BuildContext context) {
     return AppButton.primary(
       text: AppStrings.forgotPasswordButton,
       onPressed: onSendPressed,
+      isDisabled: isDisabled,
     );
   }
 }

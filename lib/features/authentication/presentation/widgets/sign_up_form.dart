@@ -23,13 +23,22 @@ class _SignUpFormState extends State<SignUpForm> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _usernameController = TextEditingController();
+  final _formValid = ValueNotifier(false);
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     _usernameController.dispose();
+    _formValid.dispose();
     super.dispose();
+  }
+
+  void _validateField(String? _) {
+    final emailValid = EmailValidator.validate(_emailController.text) == null;
+    final passwordValid = PasswordValidator.validate(_passwordController.text) == null;
+    final usernameValid = UsernameValidator.validate(_usernameController.text) == null;
+    _formValid.value = emailValid && passwordValid && usernameValid;
   }
 
   void _submit() {
@@ -51,13 +60,22 @@ class _SignUpFormState extends State<SignUpForm> {
             passwordController: _passwordController,
             usernameController: _usernameController,
             onUsernameSubmitted: (_) => _submit(),
+            onEmailChanged: _validateField,
+            onPasswordChanged: _validateField,
+            onUsernameChanged: _validateField,
           ),
           AppGap.h(context.space.md),
           const _TermsText(),
           AppGap.h(context.space.xl),
-          _SignUpActions(
-            onSignUpPressed: _submit,
-            onLoginPressed: () => context.push(AppRoutes.authLogin),
+          ValueListenableBuilder<bool>(
+            valueListenable: _formValid,
+            builder: (context, valid, _) {
+              return _SignUpActions(
+                onSignUpPressed: _submit,
+                onLoginPressed: () => context.push(AppRoutes.authLogin),
+                isDisabled: !valid,
+              );
+            },
           ),
         ],
       ),
@@ -73,12 +91,18 @@ class _SignUpFields extends StatelessWidget {
     required this.passwordController,
     required this.usernameController,
     required this.onUsernameSubmitted,
+    required this.onEmailChanged,
+    required this.onPasswordChanged,
+    required this.onUsernameChanged,
   });
 
   final TextEditingController emailController;
   final TextEditingController passwordController;
   final TextEditingController usernameController;
   final ValueChanged<String> onUsernameSubmitted;
+  final ValueChanged<String>? onEmailChanged;
+  final ValueChanged<String>? onPasswordChanged;
+  final ValueChanged<String>? onUsernameChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +118,7 @@ class _SignUpFields extends StatelessWidget {
           showValidationState: true,
           validator: EmailValidator.validate,
           inputFormatters: [latinOnlyFormatter],
+          onChanged: onEmailChanged,
         ),
         AppGap.h(context.space.lg),
         AppTextField(
@@ -104,6 +129,7 @@ class _SignUpFields extends StatelessWidget {
           showValidationState: true,
           validator: PasswordValidator.validate,
           inputFormatters: [latinOnlyFormatter],
+          onChanged: onPasswordChanged,
         ),
         AppGap.h(context.space.lg),
         AppTextField(
@@ -113,6 +139,7 @@ class _SignUpFields extends StatelessWidget {
           showValidationState: true,
           validator: UsernameValidator.validate,
           inputFormatters: [latinOnlyFormatter],
+          onChanged: onUsernameChanged,
         ),
       ],
     );
@@ -180,10 +207,12 @@ class _SignUpActions extends StatelessWidget {
   const _SignUpActions({
     required this.onSignUpPressed,
     required this.onLoginPressed,
+    required this.isDisabled,
   });
 
   final VoidCallback onSignUpPressed;
   final VoidCallback onLoginPressed;
+  final bool isDisabled;
 
   @override
   Widget build(BuildContext context) {
@@ -194,6 +223,7 @@ class _SignUpActions extends StatelessWidget {
         AppButton.primary(
           text: AppStrings.signUpButton,
           onPressed: onSignUpPressed,
+          isDisabled: isDisabled,
         ),
       ],
     );

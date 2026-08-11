@@ -23,13 +23,21 @@ class _LoginFormState extends State<LoginForm> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _passwordFocusNode = FocusNode();
+  final _formValid = ValueNotifier(false);
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     _passwordFocusNode.dispose();
+    _formValid.dispose();
     super.dispose();
+  }
+
+  void _validateField(String? _) {
+    final emailValid = EmailValidator.validate(_emailController.text) == null;
+    final passwordValid = PasswordValidator.validate(_passwordController.text) == null;
+    _formValid.value = emailValid && passwordValid;
   }
 
   void _submit() {
@@ -51,11 +59,19 @@ class _LoginFormState extends State<LoginForm> {
             passwordController: _passwordController,
             passwordFocusNode: _passwordFocusNode,
             onPasswordSubmitted: (_) => _submit(),
+            onEmailChanged: _validateField,
+            onPasswordChanged: _validateField,
           ),
           AppGap.h(context.space.xl),
-          _LoginActions(
-            onLoginPressed: _submit,
-            onSignUpPressed: () => context.push(AppRoutes.authSignUp),
+          ValueListenableBuilder<bool>(
+            valueListenable: _formValid,
+            builder: (context, valid, _) {
+              return _LoginActions(
+                onLoginPressed: _submit,
+                onSignUpPressed: () => context.push(AppRoutes.authSignUp),
+                isDisabled: !valid,
+              );
+            },
           ),
         ],
       ),
@@ -71,12 +87,16 @@ class _LoginFields extends StatelessWidget {
     required this.passwordController,
     required this.passwordFocusNode,
     required this.onPasswordSubmitted,
+    required this.onEmailChanged,
+    required this.onPasswordChanged,
   });
 
   final TextEditingController emailController;
   final TextEditingController passwordController;
   final FocusNode passwordFocusNode;
   final ValueChanged<String> onPasswordSubmitted;
+  final ValueChanged<String>? onEmailChanged;
+  final ValueChanged<String>? onPasswordChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -92,6 +112,7 @@ class _LoginFields extends StatelessWidget {
           showValidationState: true,
           validator: EmailValidator.validate,
           inputFormatters: [latinOnlyFormatter],
+          onChanged: onEmailChanged,
         ),
         AppGap.h(context.space.lg),
         AppTextField(
@@ -102,6 +123,7 @@ class _LoginFields extends StatelessWidget {
           showValidationState: true,
           validator: PasswordValidator.validate,
           inputFormatters: [latinOnlyFormatter],
+          onChanged: onPasswordChanged,
         ),
         AppGap.h(context.space.sm),
         Align(
@@ -130,10 +152,12 @@ class _LoginActions extends StatelessWidget {
   const _LoginActions({
     required this.onLoginPressed,
     required this.onSignUpPressed,
+    required this.isDisabled,
   });
 
   final VoidCallback onLoginPressed;
   final VoidCallback onSignUpPressed;
+  final bool isDisabled;
 
   @override
   Widget build(BuildContext context) {
@@ -144,6 +168,7 @@ class _LoginActions extends StatelessWidget {
         AppButton.primary(
           text: AppStrings.loginButton,
           onPressed: onLoginPressed,
+          isDisabled: isDisabled,
         ),
       ],
     );
