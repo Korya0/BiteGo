@@ -139,16 +139,16 @@ void main() {
       find.text(AppStrings.forgotPasswordEmailSent),
       timeout: const Duration(seconds: 60),
     );
+    await tapAppButton(tester, AppStrings.ok);
+    await pumpUntilFound(tester, find.text(AppStrings.loginTitle));
     debugPrint(
-      'E2E M04 PASS: Firebase accepted password reset for the account '
-      '(email delivery cannot be confirmed without inbox access)',
+      'E2E M04 PASS: Firebase accepted password reset for the account, OK '
+      'returned to Login (email delivery cannot be confirmed without inbox '
+      'access)',
     );
 
-    debugPrint('E2E M03: attempting Google sign-in');
-    await pumpUntilFound(tester, find.text(AppStrings.loginTitle));
+    debugPrint('E2E M03: attempting Google sign-in from Login');
     await tester.pump(const Duration(milliseconds: 500));
-    await tester.tap(find.byIcon(Icons.arrow_back).last);
-    await pumpUntilFound(tester, find.text(AppStrings.preAuthSignUpWithEmail));
     await tapAppButton(tester, AppStrings.preAuthSignUpWithGoogle);
     await tester.pump(const Duration(seconds: 1));
     final end = DateTime.now().add(const Duration(seconds: 25));
@@ -159,7 +159,7 @@ void main() {
         landedHome = true;
         break;
       }
-      if (find.byType(SnackBar).evaluate().isNotEmpty) {
+      if (find.byType(Dialog).evaluate().isNotEmpty) {
         break;
       }
     }
@@ -168,15 +168,20 @@ void main() {
     } else {
       debugPrint(
         'E2E M03 BLOCKED/NOT VERIFIED: Google sign-in did not complete. '
-        'google-services.json has an empty oauth_client array (no web client '
-        'id) and no SHA-1 fingerprint is registered in the Firebase console, '
-        'so GoogleSignIn cannot initialize. Requires Firebase console config + '
-        'manual Google account interaction.',
+        'Requires a Google account on the device and manual interaction with '
+        'the Google account picker. Configuration (serverClientId / '
+        'google-services.json) is in place; this step cannot be fully '
+        'automated without that interaction.',
       );
       expect(
-        find.text(AppStrings.preAuthSignUpWithEmail),
-        findsOneWidget,
+        find.text(AppStrings.homeTitle),
+        findsNothing,
         reason: 'Google flow should not navigate to Home when blocked',
+      );
+      expect(
+        find.text(AppStrings.loginTitle),
+        findsOneWidget,
+        reason: 'Should remain on Login when Google sign-in is blocked',
       );
     }
   });

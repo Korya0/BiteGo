@@ -68,6 +68,41 @@ void main() {
       );
     });
 
+    test(
+      'preserves clientConfigurationError message instead of generic unknown',
+      () {
+        final failure = FirebaseErrorMapper.map(
+          FirebaseException(
+            code: 'clientConfigurationError',
+            message: 'serverClientId must be provided on Android',
+            plugin: 'google_sign_in',
+          ),
+        );
+
+        expect(failure, isA<UnknownFailure>());
+        expect(
+          failure.message,
+          'serverClientId must be provided on Android',
+        );
+      },
+    );
+
+    test(
+      'preserves providerConfigurationError message instead of generic unknown',
+      () {
+        final failure = FirebaseErrorMapper.map(
+          FirebaseException(
+            code: 'providerConfigurationError',
+            message: 'Google provider is misconfigured',
+            plugin: 'google_sign_in',
+          ),
+        );
+
+        expect(failure, isA<UnknownFailure>());
+        expect(failure.message, 'Google provider is misconfigured');
+      },
+    );
+
     test('maps TimeoutException to TimeoutFailure', () {
       expect(
         FirebaseErrorMapper.map(TimeoutException('timed out')),

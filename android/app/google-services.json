@@ -12,7 +12,20 @@
           "package_name": "com.bitego.app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "196173487752-lcksfh2t5p415br8flbhi14tqk4dj851.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bitego.app",
+            "certificate_hash": "fac8c1ff15c02b55af73874a1650cbb5da60ee47"
+          }
+        },
+        {
+          "client_id": "196173487752-ulpjivoaat6t5532gthle1pdfdufigh9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAiVrba5B2O4FcnNrXBxaZqn0SefWNKJH8"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "196173487752-ulpjivoaat6t5532gthle1pdfdufigh9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

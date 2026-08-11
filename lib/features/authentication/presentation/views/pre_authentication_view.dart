@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bite_go/core/common/app_button.dart';
 import 'package:bite_go/core/common/app_gap.dart';
-import 'package:bite_go/core/common/app_snack_bar.dart';
+import 'package:bite_go/core/common/app_dialog.dart';
 import 'package:bite_go/core/common/app_text_button.dart';
 import 'package:bite_go/core/constants/app_assets.dart';
 import 'package:bite_go/core/constants/app_strings.dart';
@@ -11,6 +11,7 @@ import 'package:bite_go/core/utils/context_extension.dart';
 import 'package:bite_go/core/utils/failure.dart';
 import 'package:bite_go/features/authentication/presentation/cubit/sign_up_cubit.dart';
 import 'package:bite_go/features/authentication/presentation/cubit/sign_up_state.dart';
+import 'package:bite_go/features/authentication/presentation/widgets/google_sign_in_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,7 +26,7 @@ class PreAuthenticationView extends StatelessWidget {
     return BlocConsumer<SignUpCubit, SignUpState>(
       listener: (context, state) {
         if (state is SignUpFailure && state.failure is! CancelledFailure) {
-          AppSnackBar.show(context: context, message: state.failure.message);
+          AppDialog.showInfo(context: context, message: state.failure.message);
         }
       },
       builder: (context, state) {
@@ -78,19 +79,9 @@ class _FooterButtons extends StatelessWidget {
       spacing: context.space.sm,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        AppButton.primary(
-              text: AppStrings.preAuthSignUpWithGoogle,
+        GoogleSignInButton(
               onPressed: onGooglePressed,
               isLoading: isGoogleLoading,
-              leading: SvgPicture.asset(
-                AppAssets.svgsGoogle,
-                height: context.space.iconSm,
-                width: context.space.iconSm,
-                colorFilter: ColorFilter.mode(
-                  context.color.textOnPrimary,
-                  BlendMode.srcIn,
-                ),
-              ),
             )
             .animate()
             .fadeIn(delay: 0.ms, duration: 315.ms, curve: Curves.easeOut)

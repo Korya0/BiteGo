@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:bite_go/core/constants/app_strings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'failure.dart';
@@ -19,6 +20,11 @@ class FirebaseErrorMapper {
         'too-many-requests' => const TooManyRequestsFailure(),
         'network-request-failed' => const NetworkFailure(),
         'canceled' => const CancelledFailure(),
+        // Preserve Google Sign-In / provider misconfiguration details so they
+        // are not replaced by a generic unknown-error string.
+        'clientConfigurationError' ||
+        'providerConfigurationError' =>
+          UnknownFailure(_messageOrUnknown(error.message)),
         _ => const UnknownFailure(),
       };
     }
@@ -29,5 +35,13 @@ class FirebaseErrorMapper {
       return const NetworkFailure();
     }
     return const UnknownFailure();
+  }
+
+  static String _messageOrUnknown(String? message) {
+    final trimmed = message?.trim();
+    if (trimmed == null || trimmed.isEmpty) {
+      return AppStrings.unknownError;
+    }
+    return trimmed;
   }
 }

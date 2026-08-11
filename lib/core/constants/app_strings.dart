@@ -90,11 +90,6 @@ class AppStrings {
       "Enter your registered email and we'll send you instructions to reset your password.";
   static const forgotPasswordButton = 'Send Instructions';
 
-  // Social auth.
-  static const socialAuthOr = 'or';
-  static const socialAuthGoogle = 'Google';
-  static const socialAuthFacebook = 'Facebook';
-
   // Home.
   static const homeTitle = 'Home';
   static const logoutTitle = 'Log Out';
@@ -104,7 +99,7 @@ class AppStrings {
 
   // Forgot password feedback.
   static const forgotPasswordEmailSent =
-      'Password reset email sent. Check your inbox.';
+      'Password reset email sent. Check your inbox and follow the link to set a new password.';
 
   // Failure messages.
   static const invalidInputError = 'Please enter valid information.';

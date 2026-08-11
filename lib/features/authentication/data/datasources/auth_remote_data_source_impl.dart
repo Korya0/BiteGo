@@ -1,3 +1,4 @@
+import 'package:bite_go/core/constants/google_auth_config.dart';
 import 'package:bite_go/core/logging/app_logger.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,15 +12,19 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     FirebaseAuth? firebaseAuth,
     FirebaseFirestore? firebaseFirestore,
     GoogleSignIn? googleSignIn,
+    String? googleServerClientId,
     required AppLogger appLogger,
   })  : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
         _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance,
         _googleSignIn = googleSignIn ?? GoogleSignIn.instance,
+        _googleServerClientId =
+            googleServerClientId ?? GoogleAuthConfig.serverClientId,
         _appLogger = appLogger;
 
   final FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firebaseFirestore;
   final GoogleSignIn _googleSignIn;
+  final String _googleServerClientId;
   final AppLogger _appLogger;
 
   Future<void>? _googleSignInInit;
@@ -156,12 +161,17 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   Future<GoogleSignInAccount> _authenticateWithGoogle() async {
-    final init = _googleSignInInit ??= _googleSignIn.initialize();
+    final init = _googleSignInInit ??= _googleSignIn.initialize(
+      // Android Credential Manager requires the Web OAuth client ID.
+      serverClientId: _googleServerClientId,
+    );
     try {
       await init;
-    } catch (_) {
-      _appLogger.warning(
+    } catch (error, stackTrace) {
+      _appLogger.error(
         'Auth: GoogleSignIn initialization failed; will retry next call',
+        error: error,
+        stackTrace: stackTrace,
       );
       _googleSignInInit = null;
       rethrow;

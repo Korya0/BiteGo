@@ -1,8 +1,9 @@
 import 'package:bite_go/core/common/app_button.dart';
+import 'package:bite_go/core/common/app_dialog.dart';
 import 'package:bite_go/core/common/app_gap.dart';
-import 'package:bite_go/core/common/app_snack_bar.dart';
 import 'package:bite_go/core/common/app_text_field.dart';
 import 'package:bite_go/core/constants/app_strings.dart';
+import 'package:bite_go/core/routes/app_routes.dart';
 import 'package:bite_go/core/utils/context_extension.dart';
 import 'package:bite_go/core/validators/latin_only_formatter.dart';
 import 'package:bite_go/features/authentication/data/validators/email_validator.dart';
@@ -48,17 +49,22 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is ForgotPasswordEmailSent) {
-          AppSnackBar.show(
+          await AppDialog.showInfo(
             context: context,
             message: AppStrings.forgotPasswordEmailSent,
           );
+          if (!context.mounted) {
+            return;
+          }
           if (context.canPop()) {
             context.pop();
+          } else {
+            context.go(AppRoutes.authLogin);
           }
         } else if (state is ForgotPasswordFailure) {
-          AppSnackBar.show(context: context, message: state.failure.message);
+          AppDialog.showInfo(context: context, message: state.failure.message);
         }
       },
       builder: (context, state) {

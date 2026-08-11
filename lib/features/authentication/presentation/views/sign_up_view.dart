@@ -1,14 +1,14 @@
 import 'package:bite_go/core/common/app_app_bar.dart';
+import 'package:bite_go/core/common/app_dialog.dart';
 import 'package:bite_go/core/common/app_gap.dart';
-import 'package:bite_go/core/common/app_snack_bar.dart';
 import 'package:bite_go/core/constants/app_strings.dart';
 import 'package:bite_go/core/utils/context_extension.dart';
 import 'package:bite_go/core/utils/failure.dart';
 import 'package:bite_go/features/authentication/presentation/cubit/sign_up_cubit.dart';
 import 'package:bite_go/features/authentication/presentation/cubit/sign_up_state.dart';
 import 'package:bite_go/features/authentication/presentation/widgets/auth_header.dart';
+import 'package:bite_go/features/authentication/presentation/widgets/google_sign_in_button.dart';
 import 'package:bite_go/features/authentication/presentation/widgets/sign_up_form.dart';
-import 'package:bite_go/features/authentication/presentation/widgets/social_auth_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,7 +28,7 @@ class _SignUpViewState extends State<SignUpView> {
       setState(() => _isGoogleLoading = false);
     }
     if (state is SignUpFailure && state.failure is! CancelledFailure) {
-      AppSnackBar.show(context: context, message: state.failure.message);
+      AppDialog.showInfo(context: context, message: state.failure.message);
     }
   }
 
@@ -107,10 +107,9 @@ class _Body extends StatelessWidget {
               curve: Curves.easeOutCubic,
             ),
         AppGap.h(context.space.xl),
-        SocialAuthButtons(
-          onGooglePressed: onGooglePressed,
-          onFacebookPressed: () {},
-          isGoogleLoading: isGoogleLoading,
+        GoogleSignInButton(
+          onPressed: onGooglePressed,
+          isLoading: isGoogleLoading,
         )
             .animate()
             .fadeIn(delay: 200.ms, duration: 300.ms, curve: Curves.easeOut)

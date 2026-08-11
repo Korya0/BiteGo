@@ -11,8 +11,6 @@ class AppAssets {
   static const String imagesBiteGoLogoName = '$_images/bite_go_logo_name.png';
   static const String imagesNativeSplash = '$_images/native_splash.png';
 
-  static const String svgsFacebook = '$_svgs/facebook.svg';
-  static const String svgsGmail = '$_svgs/gmail.svg';
   static const String svgsGoogle = '$_svgs/google.svg';
   static const String svgsWhatsapp = '$_svgs/whatsapp.svg';
 
