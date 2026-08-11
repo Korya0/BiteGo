@@ -1,6 +1,7 @@
 import 'package:bite_go/core/common/app_app_bar.dart';
 import 'package:bite_go/core/common/app_dialog.dart';
 import 'package:bite_go/core/common/app_gap.dart';
+import 'package:bite_go/core/common/app_text_divider.dart';
 import 'package:bite_go/core/constants/app_strings.dart';
 import 'package:bite_go/core/utils/context_extension.dart';
 import 'package:bite_go/core/utils/failure.dart';
@@ -83,25 +84,55 @@ class _Body extends StatelessWidget {
       children: [
         AppGap.h(context.space.xl),
         const AuthHeader(
-          title: AppStrings.loginTitle,
-          subtitle: AppStrings.loginSubtitle,
-        )
+              title: AppStrings.loginTitle,
+              subtitle: AppStrings.loginSubtitle,
+            )
             .animate()
             .fadeIn(delay: 0.ms, duration: 300.ms, curve: Curves.easeOut)
-            .slideY(begin: 0.2, end: 0, delay: 0.ms, duration: 300.ms, curve: Curves.easeOutCubic),
+            .slideY(
+              begin: 0.2,
+              end: 0,
+              delay: 0.ms,
+              duration: 300.ms,
+              curve: Curves.easeOutCubic,
+            ),
         AppGap.h(context.space.xl),
         const LoginForm()
             .animate()
             .fadeIn(delay: 100.ms, duration: 300.ms, curve: Curves.easeOut)
-            .slideY(begin: 0.2, end: 0, delay: 100.ms, duration: 300.ms, curve: Curves.easeOutCubic),
+            .slideY(
+              begin: 0.2,
+              end: 0,
+              delay: 100.ms,
+              duration: 300.ms,
+              curve: Curves.easeOutCubic,
+            ),
         AppGap.h(context.space.xl),
-        GoogleSignInButton(
-          onPressed: onGooglePressed,
-          isLoading: isGoogleLoading,
-        )
+        const AppTextDivider(text: AppStrings.or)
             .animate()
             .fadeIn(delay: 200.ms, duration: 300.ms, curve: Curves.easeOut)
-            .slideY(begin: 0.2, end: 0, delay: 200.ms, duration: 300.ms, curve: Curves.easeOutCubic),
+            .slideY(
+              begin: 0.2,
+              end: 0,
+              delay: 200.ms,
+              duration: 300.ms,
+              curve: Curves.easeOutCubic,
+            ),
+        AppGap.h(context.space.xl),
+
+        GoogleSignInButton(
+              onPressed: onGooglePressed,
+              isLoading: isGoogleLoading,
+            )
+            .animate()
+            .fadeIn(delay: 200.ms, duration: 300.ms, curve: Curves.easeOut)
+            .slideY(
+              begin: 0.2,
+              end: 0,
+              delay: 200.ms,
+              duration: 300.ms,
+              curve: Curves.easeOutCubic,
+            ),
       ],
     );
   }

@@ -4,6 +4,7 @@ class AppStrings {
   static const appTitle = 'Bite Go';
 
   static const ok = 'OK';
+  static const or = 'OR';
 
   // Email validation.
   static const emailEmptyError = 'Email cannot be empty.';
