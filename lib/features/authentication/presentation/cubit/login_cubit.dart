@@ -1,7 +1,7 @@
 import 'package:bite_go/core/utils/failure.dart';
 import 'package:bite_go/core/utils/result.dart';
-import 'package:bite_go/core/validators/email_validator.dart';
-import 'package:bite_go/core/validators/password_validator.dart';
+import 'package:bite_go/features/authentication/data/validators/email_validator.dart';
+import 'package:bite_go/features/authentication/data/validators/password_validator.dart';
 import 'package:bite_go/features/authentication/data/models/user_model.dart';
 import 'package:bite_go/features/authentication/data/repositories/auth_repository.dart';
 import 'package:bite_go/features/authentication/presentation/cubit/login_state.dart';

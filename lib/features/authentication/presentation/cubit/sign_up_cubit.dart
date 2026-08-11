@@ -2,9 +2,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:bite_go/core/utils/failure.dart';
 import 'package:bite_go/core/utils/result.dart';
-import 'package:bite_go/core/validators/email_validator.dart';
-import 'package:bite_go/core/validators/password_validator.dart';
-import 'package:bite_go/core/validators/username_validator.dart';
+import 'package:bite_go/features/authentication/data/validators/email_validator.dart';
+import 'package:bite_go/features/authentication/data/validators/password_validator.dart';
+import 'package:bite_go/features/authentication/data/validators/username_validator.dart';
 import 'package:bite_go/features/authentication/data/models/user_model.dart';
 import 'package:bite_go/features/authentication/data/repositories/auth_repository.dart';
 import 'package:bite_go/features/authentication/presentation/cubit/sign_up_state.dart';

@@ -1,6 +1,5 @@
 import 'package:bite_go/core/constants/app_strings.dart';
 
-
 class PasswordValidator {
   const PasswordValidator._();
 

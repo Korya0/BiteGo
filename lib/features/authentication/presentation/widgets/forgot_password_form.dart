@@ -3,8 +3,9 @@ import 'package:bite_go/core/common/app_gap.dart';
 import 'package:bite_go/core/common/app_text_field.dart';
 import 'package:bite_go/core/constants/app_strings.dart';
 import 'package:bite_go/core/utils/context_extension.dart';
-import 'package:bite_go/core/validators/email_validator.dart';
 import 'package:bite_go/core/validators/latin_only_formatter.dart';
+import 'package:bite_go/features/authentication/data/validators/email_validator.dart';
+import 'package:bite_go/features/authentication/data/validators/no_space_formatter.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPasswordForm extends StatefulWidget {
@@ -91,7 +92,7 @@ class _ForgotPasswordFields extends StatelessWidget {
           autofocus: true,
           showValidationState: true,
           validator: EmailValidator.validate,
-          inputFormatters: [latinOnlyFormatter],
+          inputFormatters: [latinOnlyFormatter, noSpaceFormatter],
           onChanged: onEmailChanged,
         ),
         AppGap.h(context.space.sm),
