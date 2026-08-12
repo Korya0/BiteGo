@@ -11,9 +11,9 @@ import 'package:bite_go/features/authentication/presentation/views/forgot_passwo
 import 'package:bite_go/features/authentication/presentation/views/login_view.dart';
 import 'package:bite_go/features/authentication/presentation/views/pre_authentication_view.dart';
 import 'package:bite_go/features/authentication/presentation/views/sign_up_view.dart';
-import 'package:bite_go/features/food_details/presentation/cubit/food_details_cubit.dart';
-import 'package:bite_go/features/food_details/presentation/views/food_details_view.dart';
 import 'package:bite_go/features/home/data/models/food_model.dart';
+import 'package:bite_go/features/home/presentation/cubit/food_details_cubit.dart';
+import 'package:bite_go/features/home/presentation/views/food_details_view.dart';
 import 'package:bite_go/features/home/presentation/cubit/home_cubit.dart';
 import 'package:bite_go/features/home/presentation/views/home_view.dart';
 import 'package:bite_go/features/splash/presentation/views/splash_view.dart';

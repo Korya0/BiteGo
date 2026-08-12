@@ -4,7 +4,7 @@ import 'package:bite_go/core/common/app_button.dart';
 import 'package:bite_go/core/constants/app_strings.dart';
 import 'package:bite_go/features/home/presentation/widgets/food_card.dart';
 import 'package:bite_go/features/home/presentation/widgets/home_category_chips.dart';
-import 'package:bite_go/features/food_details/presentation/widgets/quantity_control.dart';
+import 'package:bite_go/features/home/presentation/widgets/quantity_control.dart';
 import 'package:bite_go/main.dart' as app;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

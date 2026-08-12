@@ -2,9 +2,9 @@ import 'package:bite_go/core/common/app_button.dart';
 import 'package:bite_go/core/common/app_gap.dart';
 import 'package:bite_go/core/common/app_snack_bar.dart';
 import 'package:bite_go/core/utils/context_extension.dart';
-import 'package:bite_go/features/food_details/presentation/cubit/food_details_cubit.dart';
-import 'package:bite_go/features/food_details/presentation/cubit/food_details_state.dart';
-import 'package:bite_go/features/food_details/presentation/widgets/quantity_control.dart';
+import 'package:bite_go/features/home/presentation/cubit/food_details_cubit.dart';
+import 'package:bite_go/features/home/presentation/cubit/food_details_state.dart';
+import 'package:bite_go/features/home/presentation/widgets/quantity_control.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

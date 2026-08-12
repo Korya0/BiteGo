@@ -1,4 +1,4 @@
-import 'package:bite_go/features/food_details/presentation/cubit/food_details_cubit.dart';
+import 'package:bite_go/features/home/presentation/cubit/food_details_cubit.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../helpers/fakes.dart';

@@ -1,5 +1,5 @@
-import 'package:bite_go/features/food_details/presentation/cubit/food_details_state.dart';
 import 'package:bite_go/features/home/data/models/food_model.dart';
+import 'package:bite_go/features/home/presentation/cubit/food_details_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FoodDetailsCubit extends Cubit<FoodDetailsState> {
