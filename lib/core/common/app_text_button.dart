@@ -29,7 +29,7 @@ class _AppTextButtonState extends State<AppTextButton> {
   Widget build(BuildContext context) {
     final style =
         widget.textStyle ??
-        context.textStyle.subtitle.copyWith(color: context.color.blue);
+        context.textStyle.subtitle.copyWith(color: context.color.link);
 
     Widget content = Text(widget.text, style: style);
 

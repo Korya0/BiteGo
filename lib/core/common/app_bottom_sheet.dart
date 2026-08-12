@@ -12,7 +12,7 @@ class AppBottomSheet {
     return showModalBottomSheet<T>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: context.color.bottomSheetBackground,
+      backgroundColor: context.color.backgroundSecondary,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(context.radius.lg),

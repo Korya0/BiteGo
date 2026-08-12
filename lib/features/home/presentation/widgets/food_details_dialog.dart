@@ -1,0 +1,258 @@
+import 'package:bite_go/core/common/app_button.dart';
+import 'package:bite_go/core/common/app_gap.dart';
+import 'package:bite_go/core/common/image_with_shimmer.dart';
+import 'package:bite_go/core/constants/app_strings.dart';
+import 'package:bite_go/core/utils/context_extension.dart';
+import 'package:bite_go/features/home/data/models/food_model.dart';
+import 'package:bite_go/features/home/presentation/cubit/food_details_cubit.dart';
+import 'package:bite_go/features/home/presentation/cubit/food_details_state.dart';
+import 'package:bite_go/features/home/presentation/widgets/quantity_control.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+/// Shows the food details dialog for the given [food].
+///
+/// Replaces the old food details route: opens from a food card via a
+/// regular tap or a long press.
+Future<void> showFoodDetailsDialog(
+  BuildContext context,
+  FoodModel food,
+) {
+  return showDialog<void>(
+    context: context,
+    builder: (context) => FoodDetailsDialog(food: food),
+  );
+}
+
+class FoodDetailsDialog extends StatelessWidget {
+  const FoodDetailsDialog({required this.food, super.key});
+
+  final FoodModel food;
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: EdgeInsets.all(context.space.md),
+      child: BlocProvider(
+        create: (context) => FoodDetailsCubit(food: food),
+        child: BlocBuilder<FoodDetailsCubit, FoodDetailsState>(
+          builder: (context, state) {
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(context.radius.lg),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.sizeOf(context).height * 0.85,
+                ),
+                child: Material(
+                  color: context.color.backgroundPrimary,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _DialogImage(imageUrl: state.food.imageUrl),
+                      Flexible(
+                        child: SingleChildScrollView(
+                          padding: EdgeInsets.fromLTRB(
+                            context.space.md,
+                            context.space.lg,
+                            context.space.md,
+                            context.space.xl,
+                          ),
+                          child: _DialogContent(state: state),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _DialogImage extends StatelessWidget {
+  const _DialogImage({required this.imageUrl});
+
+  final String imageUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 260,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          if (imageUrl.isEmpty)
+            ColoredBox(
+              color: context.color.backgroundSecondary,
+              child: Center(
+                child: Icon(
+                  Icons.image_not_supported_outlined,
+                  color: context.color.iconSecondary,
+                  size: 48,
+                ),
+              ),
+            )
+          else
+            ImageWithShimmer(imageUrl: imageUrl),
+          // Close button.
+          Positioned(
+            top: context.space.md,
+            right: context.space.md,
+            child: GestureDetector(
+              onTap: () => Navigator.of(context).pop(),
+              child: CircleAvatar(
+                backgroundColor: context.color.backgroundPrimary.withValues(
+                  alpha: 0.9,
+                ),
+                child: Icon(
+                  Icons.close_rounded,
+                  color: context.color.textPrimary,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DialogContent extends StatelessWidget {
+  const _DialogContent({required this.state});
+
+  final FoodDetailsState state;
+
+  @override
+  Widget build(BuildContext context) {
+    final food = state.food;
+    final totalPrice = food.price * state.quantity;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Text(
+                food.name,
+                style: context.textStyle.title.copyWith(
+                  fontSize: context.space.fontSizeTitleSm,
+                  color: context.color.textPrimary,
+                ),
+              ),
+            ),
+            AppGap.w(context.space.sm),
+            _RatingBadge(rating: food.rating),
+          ],
+        ),
+        AppGap.h(context.space.sm),
+        Text(
+          _formatPrice(food.price),
+          style: context.textStyle.title.copyWith(
+            fontSize: context.space.fontSizeXl,
+            color: context.color.primary,
+          ),
+        ),
+        AppGap.h(context.space.md),
+        Text(
+          food.description,
+          style: context.textStyle.body.copyWith(
+            fontSize: context.space.fontSizeMd,
+            color: context.color.textSecondary,
+            height: 1.5,
+          ),
+        ),
+        AppGap.h(context.space.xl),
+        Row(
+          children: [
+            Text(
+              AppStrings.foodDetailsQuantity,
+              style: context.textStyle.subtitle.copyWith(
+                fontSize: context.space.fontSizeMd,
+                color: context.color.textPrimary,
+              ),
+            ),
+            const Spacer(),
+            QuantityControl(
+              quantity: state.quantity,
+              onIncrement: () =>
+                  context.read<FoodDetailsCubit>().increment(),
+              onDecrement: () =>
+                  context.read<FoodDetailsCubit>().decrement(),
+            ),
+          ],
+        ),
+        AppGap.h(context.space.xl),
+        AppButton.primary(
+          text:
+              '${AppStrings.foodDetailsAddToCart} — ${_formatPrice(totalPrice)}',
+          onPressed: () {
+            // Close the dialog first so the confirmation snackbar is visible
+            // on the home screen instead of behind the modal barrier.
+            final messenger = ScaffoldMessenger.of(context);
+            Navigator.of(context).pop();
+            messenger
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(content: Text('${food.name} added to cart!')),
+              );
+          },
+        ),
+      ],
+    );
+  }
+
+  String _formatPrice(double price) {
+    final p = price.toInt();
+    if (p >= 1000) {
+      return '${(p / 1000).toStringAsFixed(p % 1000 == 0 ? 0 : 1)}k IQD';
+    }
+    return '$p IQD';
+  }
+}
+
+class _RatingBadge extends StatelessWidget {
+  const _RatingBadge({required this.rating});
+
+  final double rating;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: context.color.starYellow.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(context.radius.sm),
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: context.space.sm,
+          vertical: context.space.xs,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.star_rounded,
+              size: 16,
+              color: context.color.starYellow,
+            ),
+            AppGap.w(context.space.xs),
+            Text(
+              rating.toStringAsFixed(1),
+              style: context.textStyle.subtitle.copyWith(
+                fontSize: context.space.fontSizeSm,
+                color: context.color.textPrimary,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

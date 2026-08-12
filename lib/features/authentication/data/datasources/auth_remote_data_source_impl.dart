@@ -1,4 +1,4 @@
-import 'package:bite_go/core/constants/google_auth_config.dart';
+import 'package:bite_go/core/constants/app_constants.dart';
 import 'package:bite_go/core/logging/app_logger.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,7 +18,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance,
         _googleSignIn = googleSignIn ?? GoogleSignIn.instance,
         _googleServerClientId =
-            googleServerClientId ?? GoogleAuthConfig.serverClientId,
+            googleServerClientId ?? AppConstants.serverClientId,
         _appLogger = appLogger;
 
   final FirebaseAuth _firebaseAuth;

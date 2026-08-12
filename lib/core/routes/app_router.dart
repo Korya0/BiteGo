@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:bite_go/core/common/bottom_nav_bar/bottom_nav_tabs.dart';
+import 'package:bite_go/core/common/bottom_nav_bar/main_view.dart';
 import 'package:bite_go/core/di/app_injector.dart';
 import 'package:bite_go/core/routes/app_routes.dart';
 import 'package:bite_go/features/authentication/presentation/cubit/auth_session_cubit.dart';
@@ -11,17 +13,18 @@ import 'package:bite_go/features/authentication/presentation/views/forgot_passwo
 import 'package:bite_go/features/authentication/presentation/views/login_view.dart';
 import 'package:bite_go/features/authentication/presentation/views/pre_authentication_view.dart';
 import 'package:bite_go/features/authentication/presentation/views/sign_up_view.dart';
-import 'package:bite_go/features/home/data/models/food_model.dart';
-import 'package:bite_go/features/home/presentation/cubit/food_details_cubit.dart';
-import 'package:bite_go/features/home/presentation/views/food_details_view.dart';
+import 'package:bite_go/features/cart/cart_view.dart';
 import 'package:bite_go/features/home/presentation/cubit/home_cubit.dart';
 import 'package:bite_go/features/home/presentation/views/home_view.dart';
+import 'package:bite_go/features/profile/profile_view.dart';
 import 'package:bite_go/features/splash/presentation/views/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-const Set<String> _protectedRoutes = {AppRoutes.home, AppRoutes.foodDetails};
+final Set<String> _protectedRoutes = {
+  for (final tab in bottomNavTabs) tab.path,
+};
 
 const Set<String> _authRoutes = {
   AppRoutes.auth,
@@ -82,22 +85,21 @@ GoRouter createAppRouter(
           onCompleted: routerRefresh.completeSplash,
         ),
       ),
-      GoRoute(
-        path: AppRoutes.home,
-        builder: (context, state) => BlocProvider(
-          create: (context) => homeFactory()..loadHomeData(),
-          child: const HomeView(),
-        ),
-      ),
-      GoRoute(
-        path: AppRoutes.foodDetails,
-        builder: (context, state) {
-          final food = state.extra as FoodModel;
-          return BlocProvider(
-            create: (context) => FoodDetailsCubit(food: food),
-            child: const FoodDetailsView(),
-          );
-        },
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) =>
+            MainView(navigationShell: navigationShell),
+        branches: [
+          for (final tab in bottomNavTabs)
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: tab.path,
+                  builder: (context, state) =>
+                      _buildTabPage(context, tab.path, homeFactory),
+                ),
+              ],
+            ),
+        ],
       ),
       GoRoute(
         path: AppRoutes.auth,
@@ -142,6 +144,26 @@ String? _redirectBasedOnAuthState(
     splashCompleted: routerRefresh.splashCompleted,
     location: state.matchedLocation,
   );
+}
+
+Widget _buildTabPage(
+  BuildContext context,
+  String path,
+  HomeCubit Function() homeFactory,
+) {
+  return switch (path) {
+    AppRoutes.home => BlocProvider(
+      create: (context) => homeFactory()..loadHomeData(),
+      child: const HomeView(),
+    ),
+    AppRoutes.cart => const CartView(),
+    AppRoutes.profile => const ProfileView(),
+    _ => throw ArgumentError.value(
+      path,
+      'path',
+      'No page registered for bottom nav tab',
+    ),
+  };
 }
 
 String? redirectBasedOnAuthState({

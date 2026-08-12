@@ -2,22 +2,20 @@ import 'package:bite_go/core/common/app_gap.dart';
 import 'package:bite_go/core/common/image_with_shimmer.dart';
 import 'package:bite_go/core/utils/context_extension.dart';
 import 'package:bite_go/features/home/data/models/food_model.dart';
+import 'package:bite_go/features/home/presentation/widgets/food_details_dialog.dart';
 import 'package:flutter/material.dart';
 
 class FoodCard extends StatelessWidget {
-  const FoodCard({
-    required this.food,
-    required this.onTap,
-    super.key,
-  });
+  const FoodCard({required this.food, this.isSkeleton = false, super.key});
 
   final FoodModel food;
-  final VoidCallback onTap;
+  final bool isSkeleton;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: isSkeleton ? null : () => showFoodDetailsDialog(context, food),
+      onLongPress: isSkeleton ? null : () => showFoodDetailsDialog(context, food),
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: context.color.backgroundPrimary,
@@ -47,37 +45,37 @@ class FoodCard extends StatelessWidget {
                     food.name,
                     style: context.textStyle.title.copyWith(
                       fontSize: 13,
-                      color: const Color(0xFF111111),
+                      color: context.color.textPrimaryStrong,
                       height: 1.25,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const AppGap.h(4),
+                  AppGap.h(context.space.xs),
                   Text(
                     food.description,
                     style: context.textStyle.body.copyWith(
                       fontSize: 11,
-                      color: const Color(0xFF999999),
+                      color: context.color.textTertiary,
                       height: 1.63,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const AppGap.h(8),
+                  AppGap.h(context.space.sm),
                   Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.star_rounded,
                         size: 10,
-                        color: Color(0xFFFFC107),
+                        color: context.color.starYellow,
                       ),
-                      const SizedBox(width: 2),
+                      const AppGap.w(2),
                       Text(
                         food.rating.toStringAsFixed(1),
                         style: context.textStyle.subtitle.copyWith(
                           fontSize: 11,
-                          color: const Color(0xFF666666),
+                          color: context.color.textMuted,
                         ),
                       ),
                       const Spacer(),

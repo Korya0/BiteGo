@@ -91,6 +91,11 @@ class AppStrings {
       "Enter your registered email and we'll send you instructions to reset your password.";
   static const forgotPasswordButton = 'Send Instructions';
 
+  // Bottom navigation.
+  static const bottomNavHome = 'Home';
+  static const bottomNavCart = 'Cart';
+  static const bottomNavProfile = 'Profile';
+
   // Home.
   static const homeTitle = 'Home';
   static const homeSectionPopularFoods = 'Popular Foods';

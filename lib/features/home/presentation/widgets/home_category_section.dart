@@ -33,11 +33,11 @@ class HomeCategorySection extends StatelessWidget {
             AppStrings.homeFindByCategory,
             style: context.textStyle.title.copyWith(
               fontSize: context.space.fontSizeMd,
-              color: const Color(0xFF111111),
+              color: context.color.textPrimaryStrong,
               height: 1.5,
             ),
           ),
-          const AppGap.h(16),
+          AppGap.h(context.space.md),
           SizedBox(
             height: 95,
             child: ListView.separated(
@@ -106,7 +106,7 @@ class _CategoryIcon extends StatelessWidget {
                 child: isAll
                     ? Icon(
                         Icons.grid_view_rounded,
-                        size: 24,
+                        size: context.space.iconMd,
                         color: isSelected
                             ? context.color.textOnPrimary
                             : context.color.textSecondary,
@@ -133,7 +133,7 @@ class _CategoryIcon extends StatelessWidget {
                 fontSize: 11,
                 color: isSelected
                     ? context.color.primary
-                    : const Color(0xFF999999),
+                    : context.color.textTertiary,
               ),
             ),
           ],

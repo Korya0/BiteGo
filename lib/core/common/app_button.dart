@@ -61,9 +61,9 @@ class _AppButtonState extends State<AppButton> {
           ? context.color.disabledButtonBackground
           : context.color.primary;
     } else if (isSecondary) {
-      bgColor = context.color.secondaryScaffoldBackgroundColor;
+      bgColor = context.color.backgroundSecondary;
     } else {
-      bgColor = context.color.scaffoldBackgroundColor;
+      bgColor = context.color.backgroundPrimary;
     }
 
     final txtColor = isPrimary
