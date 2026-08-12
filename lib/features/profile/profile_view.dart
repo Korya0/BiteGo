@@ -1,7 +1,7 @@
 import 'package:bite_go/core/common/app_snack_bar.dart';
 import 'package:bite_go/core/utils/result.dart';
 import 'package:bite_go/features/authentication/presentation/cubit/auth_session_cubit.dart';
-import 'package:bite_go/features/home/presentation/widgets/profile_content.dart';
+import 'package:bite_go/features/profile/profile_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

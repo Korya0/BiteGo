@@ -39,7 +39,7 @@ class _HomeBannerCarouselState extends State<HomeBannerCarousel> {
               return _BannerCard(banner: banner);
             }).toList(),
           ),
-          // Page indicator overlaid on the images, bottom-right.
+      
           if (widget.banners.length > 1)
             Positioned(
               right: context.space.md,
@@ -50,13 +50,15 @@ class _HomeBannerCarouselState extends State<HomeBannerCarousel> {
                   final isActive = index == _currentIndex;
                   return AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
-                    margin: const EdgeInsets.symmetric(horizontal: 3),
-                    width: isActive ? 18 : 6,
-                    height: 6,
+                    margin: EdgeInsets.symmetric(horizontal: context.space.xs),
+                    width: isActive ? context.space.md : context.space.xsSm,
+                    height: context.space.xsSm,
                     decoration: BoxDecoration(
                       color: isActive
-                          ? Colors.white
-                          : Colors.white.withValues(alpha: 0.4),
+                          ? context.color.textOnPrimary
+                          : context.color.textOnPrimary.withValues(
+                              alpha: context.opacity.disabled,
+                            ),
                       borderRadius: BorderRadius.circular(context.radius.xxl),
                     ),
                   );
@@ -80,15 +82,16 @@ class _BannerCard extends StatelessWidget {
       fit: StackFit.expand,
       children: [
         ImageWithShimmer(imageUrl: banner.imageUrl),
-        // Gradient overlay for text legibility.
         DecoratedBox(
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: const Alignment(0, 0.32),
               end: const Alignment(1, 0.68),
               colors: [
-                Colors.black.withValues(alpha: 0.72),
-                Colors.black.withValues(alpha: 0.15),
+                context.color.iconBlack.withValues(
+                  alpha: context.opacity.medium,
+                ),
+                context.color.iconBlack.withValues(alpha: context.opacity.low),
               ],
             ),
           ),
@@ -108,8 +111,7 @@ class _BannerCard extends StatelessWidget {
                   banner.title,
                   style: context.textStyle.title.copyWith(
                     fontSize: context.space.fontSizeXl,
-                    color: Colors.white,
-                    height: 1.25,
+                    color: context.color.textOnPrimary,
                   ),
                 ),
               if (banner.subtitle.isNotEmpty) ...[
@@ -118,8 +120,9 @@ class _BannerCard extends StatelessWidget {
                   banner.subtitle,
                   style: context.textStyle.body.copyWith(
                     fontSize: context.space.fontSizeXs,
-                    color: Colors.white.withValues(alpha: 0.75),
-                    height: 1.5,
+                    color: context.color.textOnPrimary.withValues(
+                      alpha: context.opacity.medium,
+                    ),
                   ),
                 ),
               ],
@@ -144,16 +147,15 @@ class _BannerBadge extends StatelessWidget {
         borderRadius: BorderRadius.circular(context.radius.xxl),
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: context.space.sm + 2,
+        padding: context.space.symmetric(
+          horizontal: context.space.smXs,
           vertical: context.space.xs,
         ),
         child: Text(
           text,
           style: context.textStyle.title.copyWith(
-            fontSize: 11,
+            fontSize: context.space.fontSizeXxs,
             color: context.color.textOnPrimary,
-            height: 1.5,
           ),
         ),
       ),

@@ -34,9 +34,9 @@ class FoodCard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12,
-                vertical: 10,
+              padding: context.space.symmetric(
+                horizontal: context.space.smMd,
+                vertical: context.space.smXs,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,9 +44,8 @@ class FoodCard extends StatelessWidget {
                   Text(
                     food.name,
                     style: context.textStyle.title.copyWith(
-                      fontSize: 13,
+                      fontSize: context.space.fontSizeXsSm,
                       color: context.color.textPrimaryStrong,
-                      height: 1.25,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -55,7 +54,7 @@ class FoodCard extends StatelessWidget {
                   Text(
                     food.description,
                     style: context.textStyle.body.copyWith(
-                      fontSize: 11,
+                      fontSize: context.space.fontSizeXxs,
                       color: context.color.textTertiary,
                       height: 1.63,
                     ),
@@ -67,14 +66,14 @@ class FoodCard extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.star_rounded,
-                        size: 10,
+                        size: context.space.iconXxs,
                         color: context.color.starYellow,
                       ),
-                      const AppGap.w(2),
+                      AppGap.w(context.space.xxs),
                       Text(
                         food.rating.toStringAsFixed(1),
                         style: context.textStyle.subtitle.copyWith(
-                          fontSize: 11,
+                          fontSize: context.space.fontSizeXxs,
                           color: context.color.textMuted,
                         ),
                       ),
@@ -82,7 +81,7 @@ class FoodCard extends StatelessWidget {
                       Text(
                         _formatPrice(food.price),
                         style: context.textStyle.title.copyWith(
-                          fontSize: 13,
+                          fontSize: context.space.fontSizeXsSm,
                           color: context.color.primary,
                         ),
                       ),

@@ -25,7 +25,12 @@ class HomeCategorySection extends StatelessWidget {
     ];
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+      padding: context.space.only(
+        left: context.space.mdLg,
+        top: context.space.mdLg,
+        right: context.space.mdLg,
+        bottom: context.space.sm,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -43,7 +48,7 @@ class HomeCategorySection extends StatelessWidget {
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: allItems.length,
-              separatorBuilder: (_, _) => const AppGap.w(12),
+              separatorBuilder: (_, _) => AppGap.w(context.space.smMd),
               itemBuilder: (context, index) {
                 final categoryId = allItems[index];
                 final isSelected = selectedCategoryId == categoryId;
@@ -93,14 +98,8 @@ class _CategoryIcon extends StatelessWidget {
                 color: isSelected
                     ? context.color.primary
                     : context.color.backgroundPrimary,
-                borderRadius: BorderRadius.circular(16.8),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color(0x11000000),
-                    blurRadius: 10.5,
-                    offset: Offset(0, 2.1),
-                  ),
-                ],
+                borderRadius: BorderRadius.circular(context.radius.lg),
+                boxShadow: context.shadow.sm,
               ),
               child: Center(
                 child: isAll
@@ -114,7 +113,7 @@ class _CategoryIcon extends StatelessWidget {
                     : Text(
                         label.isEmpty ? '?' : label[0].toUpperCase(),
                         style: context.textStyle.title.copyWith(
-                          fontSize: 20,
+                          fontSize: context.space.fontSizeXl,
                           color: isSelected
                               ? context.color.textOnPrimary
                               : context.color.textSecondary,
@@ -122,7 +121,7 @@ class _CategoryIcon extends StatelessWidget {
                       ),
               ),
             ),
-            const AppGap.h(6),
+            AppGap.h(context.space.xsSm),
             Text(
               label,
               key: ValueKey('category_label_$label'),
@@ -130,7 +129,7 @@ class _CategoryIcon extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: context.textStyle.subtitle.copyWith(
-                fontSize: 11,
+                fontSize: context.space.fontSizeXxs,
                 color: isSelected
                     ? context.color.primary
                     : context.color.textTertiary,

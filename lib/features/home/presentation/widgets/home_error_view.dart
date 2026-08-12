@@ -4,7 +4,11 @@ import 'package:bite_go/core/utils/context_extension.dart';
 import 'package:flutter/material.dart';
 
 class HomeErrorView extends StatelessWidget {
-  const HomeErrorView({required this.message, required this.onRetry, super.key});
+  const HomeErrorView({
+    required this.message,
+    required this.onRetry,
+    super.key,
+  });
 
   final String message;
   final VoidCallback onRetry;
@@ -13,16 +17,10 @@ class HomeErrorView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: EdgeInsets.all(context.space.lg),
+        padding: context.screenPadding,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              Icons.error_outline_rounded,
-              size: context.space.iconLg,
-              color: context.color.error,
-            ),
-            AppGap.h(context.space.md),
             Text(
               message,
               textAlign: TextAlign.center,

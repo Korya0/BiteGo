@@ -93,7 +93,7 @@ class _DialogImage extends StatelessWidget {
                 child: Icon(
                   Icons.image_not_supported_outlined,
                   color: context.color.iconSecondary,
-                  size: 48,
+                  size: context.space.iconXxl,
                 ),
               ),
             )
@@ -107,7 +107,7 @@ class _DialogImage extends StatelessWidget {
               onTap: () => Navigator.of(context).pop(),
               child: CircleAvatar(
                 backgroundColor: context.color.backgroundPrimary.withValues(
-                  alpha: 0.9,
+                  alpha: context.opacity.high,
                 ),
                 child: Icon(
                   Icons.close_rounded,
@@ -226,7 +226,7 @@ class _RatingBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: context.color.starYellow.withValues(alpha: 0.15),
+        color: context.color.starYellow.withValues(alpha: context.opacity.low),
         borderRadius: BorderRadius.circular(context.radius.sm),
       ),
       child: Padding(
@@ -239,7 +239,7 @@ class _RatingBadge extends StatelessWidget {
           children: [
             Icon(
               Icons.star_rounded,
-              size: 16,
+              size: context.space.iconXsSm,
               color: context.color.starYellow,
             ),
             AppGap.w(context.space.xs),

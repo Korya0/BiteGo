@@ -29,37 +29,79 @@ class HomeSuccessView extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: [
+        if (banners.isNotEmpty)
+          SliverToBoxAdapter(child: HomeBannerCarousel(banners: banners)),
+
         SliverToBoxAdapter(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (banners.isNotEmpty) ...[
-                HomeBannerCarousel(banners: banners),
-                AppGap.h(context.space.md),
-              ],
               HomeCategorySection(
                 categories: categories,
                 selectedCategoryId: selectedCategoryId,
                 onCategorySelected: onCategorySelected,
               ),
-              AppGap.h(context.space.md),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: context.space.md),
-                child: Text(
-                  AppStrings.homeSectionPopularFoods,
-                  style: context.textStyle.title.copyWith(
-                    fontSize: context.space.fontSizeLg,
-                    color: context.color.textPrimary,
+              if (foods.isEmpty)
+                const _EmptyFoodsView()
+              else ...[
+                AppGap.h(context.space.md),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: context.space.md),
+                  child: Text(
+                    AppStrings.homeSectionPopularFoods,
+                    style: context.textStyle.title.copyWith(
+                      fontSize: context.space.fontSizeLg,
+                      color: context.color.textPrimary,
+                    ),
                   ),
                 ),
-              ),
-              AppGap.h(context.space.sm),
+                AppGap.h(context.space.sm),
+                _FoodsGrid(foods: foods, isSkeleton: false),
+              ],
             ],
           ),
         ),
-        _FoodsGrid(foods: foods, isSkeleton: false),
-        const SliverToBoxAdapter(child: SizedBox(height: 32)),
+       
+       
+        SliverToBoxAdapter(child: SizedBox(height: context.space.xl)),
       ],
+    );
+  }
+}
+
+class _EmptyFoodsView extends StatelessWidget {
+  const _EmptyFoodsView();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(context.space.lg),
+      child: Center(
+        child: Column(
+          children: [
+            Text(
+              AppStrings.homeSectionPopularFoods,
+              style: context.textStyle.title.copyWith(
+                fontSize: context.space.fontSizeLg,
+                color: context.color.textPrimary,
+              ),
+            ),
+            AppGap.h(context.space.sm),
+            Icon(
+              Icons.no_food_rounded,
+              size: context.space.iconLg,
+              color: context.color.iconSecondary,
+            ),
+            AppGap.h(context.space.sm),
+            Text(
+              AppStrings.homeEmptyFoods,
+              style: context.textStyle.body.copyWith(
+                color: context.color.textSecondary,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -72,48 +114,20 @@ class _FoodsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (foods.isEmpty) {
-      return SliverToBoxAdapter(
-        child: Padding(
-          padding: EdgeInsets.all(context.space.lg),
-          child: Center(
-            child: Column(
-              children: [
-                Icon(
-                  Icons.no_food_rounded,
-                  size: context.space.iconLg,
-                  color: context.color.iconSecondary,
-                ),
-                AppGap.h(context.space.sm),
-                Text(
-                  AppStrings.homeEmptyFoods,
-                  style: context.textStyle.body.copyWith(
-                    color: context.color.textSecondary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-
-    return SliverPadding(
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       padding: EdgeInsets.symmetric(horizontal: context.space.md),
-      sliver: SliverGrid(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 12,
-          mainAxisSpacing: 12,
-          childAspectRatio: 0.62,
-        ),
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            return FoodCard(food: foods[index], isSkeleton: isSkeleton);
-          },
-          childCount: foods.length,
-        ),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: context.space.smMd,
+        mainAxisSpacing: context.space.smMd,
+        childAspectRatio: 0.62,
       ),
+      itemCount: foods.length,
+      itemBuilder: (context, index) {
+        return FoodCard(food: foods[index], isSkeleton: isSkeleton);
+      },
     );
   }
 }

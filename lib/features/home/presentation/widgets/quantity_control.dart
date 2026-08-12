@@ -64,7 +64,7 @@ class _ControlButton extends StatelessWidget {
         ),
         child: Icon(
           icon,
-          size: 18,
+          size: context.space.iconSmXs,
           color: context.color.textOnPrimary,
         ),
       ),

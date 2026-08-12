@@ -54,19 +54,34 @@ Text(
 ### Spacing
 
 ```dart
+context.space.xxs // 2.0
 context.space.xs // 4.0
+context.space.xsSm // 6.0
 context.space.sm // 8.0
+context.space.smXs // 10.0
+context.space.smMd // 12.0
 context.space.md // 16.0
+context.space.mdLg // 20.0
 context.space.lg // 24.0
 context.space.xl // 32.0
 context.space.xxl // 48.0
 
+context.space.fontSizeXxs // 11.0
 context.space.fontSizeXs // 12.0
+context.space.fontSizeXsSm // 13.0
 context.space.fontSizeSm // 14.0
 context.space.fontSizeMd // 16.0
 context.space.fontSizeLg // 18.0
 context.space.fontSizeXl // 20.0
+context.space.fontSizeTitleSm // 22.0
 context.space.fontSizeXxl // 24.0
+
+context.space.iconXxs // 10.0
+context.space.iconXs // 14.0
+context.space.iconSm // 22.0
+context.space.iconMd // 24.0
+context.space.iconLg // 32.0
+context.space.iconXxl // 48.0
 ```
 
 ```dart
