@@ -5,6 +5,10 @@ class BannerModel {
     required this.id,
     required this.imageUrl,
     required this.sortOrder,
+    this.badge = '',
+    this.title = '',
+    this.subtitle = '',
+    this.isActive = true,
   });
 
   factory BannerModel.fromFirestore(
@@ -15,12 +19,20 @@ class BannerModel {
       id: documentId,
       imageUrl: data['imageUrl'] as String? ?? '',
       sortOrder: data['sortOrder'] as int? ?? 0,
+      badge: data['badge'] as String? ?? '',
+      title: data['title'] as String? ?? '',
+      subtitle: data['subtitle'] as String? ?? '',
+      isActive: data['isActive'] as bool? ?? true,
     );
   }
 
   final String id;
   final String imageUrl;
   final int sortOrder;
+  final String badge;
+  final String title;
+  final String subtitle;
+  final bool isActive;
 
   static Future<List<BannerModel>> fetchAll(
     FirebaseFirestore firestore,
@@ -31,6 +43,7 @@ class BannerModel {
         .get();
     return snapshot.docs
         .map((doc) => BannerModel.fromFirestore(doc.data(), documentId: doc.id))
+        .where((banner) => banner.isActive)
         .toList();
   }
 }

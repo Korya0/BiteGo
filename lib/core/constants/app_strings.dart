@@ -94,13 +94,18 @@ class AppStrings {
   // Home.
   static const homeTitle = 'Home';
   static const homeSectionPopularFoods = 'Popular Foods';
-  static const homeGreeting = 'Good day! 👋';
+  static const homeFindByCategory = 'Find by Category';
+  static const homeCategoryAll = 'All';
   static const homeEmptyFoods = 'No food items found';
   static const homeRetry = 'Try Again';
   static const logoutTitle = 'Log Out';
   static const logoutMessage = 'Are you sure you want to log out?';
   static const logoutConfirm = 'Log Out';
   static const logoutCancel = 'Cancel';
+
+  // Profile.
+  static const profileAnonymous = 'Guest';
+  static const profileEmailNotAvailable = 'No email available';
 
   // Food Details.
   static const foodDetailsQuantity = 'Quantity';

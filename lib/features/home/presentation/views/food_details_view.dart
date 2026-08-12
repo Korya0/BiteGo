@@ -1,5 +1,6 @@
 import 'package:bite_go/core/common/app_button.dart';
 import 'package:bite_go/core/common/app_gap.dart';
+import 'package:bite_go/core/common/image_with_shimmer.dart';
 import 'package:bite_go/core/common/app_snack_bar.dart';
 import 'package:bite_go/core/utils/context_extension.dart';
 import 'package:bite_go/features/home/presentation/cubit/food_details_cubit.dart';
@@ -71,20 +72,7 @@ class _FoodDetailsAppBar extends StatelessWidget {
                   ),
                 ),
               )
-            : Image.network(
-                imageUrl,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => ColoredBox(
-                  color: context.color.backgroundSecondary,
-                  child: Center(
-                    child: Icon(
-                      Icons.image_not_supported_outlined,
-                      color: context.color.iconSecondary,
-                      size: 48,
-                    ),
-                  ),
-                ),
-              ),
+            : ImageWithShimmer(imageUrl: imageUrl),
       ),
     );
   }

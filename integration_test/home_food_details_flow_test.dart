@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:bite_go/core/common/app_button.dart';
 import 'package:bite_go/core/constants/app_strings.dart';
 import 'package:bite_go/features/home/presentation/widgets/food_card.dart';
-import 'package:bite_go/features/home/presentation/widgets/home_category_chips.dart';
+import 'package:bite_go/features/home/presentation/widgets/home_category_section.dart';
 import 'package:bite_go/features/home/presentation/widgets/quantity_control.dart';
 import 'package:bite_go/main.dart' as app;
 import 'package:flutter/material.dart';
@@ -68,8 +68,15 @@ Finder addToCartButton() => find.byWidgetPredicate(
     );
 
 Finder chipText(String label) => find.descendant(
-      of: find.byType(HomeCategoryChips),
+      of: find.byType(HomeCategorySection),
       matching: find.text(label),
+    );
+
+Finder categoryLabels() => find.byWidgetPredicate(
+      (w) =>
+          w is Text &&
+          w.key is ValueKey<String> &&
+          (w.key as ValueKey<String>).value.startsWith('category_label_'),
     );
 
 void main() {
@@ -116,8 +123,6 @@ void main() {
       find.byType(FoodCard),
       timeout: const Duration(seconds: 60),
     );
-    expect(find.text(AppStrings.homeGreeting), findsOneWidget);
-    expect(find.text(_username), findsOneWidget);
     expect(find.byType(FoodCard), findsWidgets);
     debugPrint('E2E HOME M10 PASS: banners/categories/foods rendered');
 
@@ -135,6 +140,12 @@ void main() {
     await tester.pump(const Duration(milliseconds: 500));
     expect(find.text('Cart'), findsNWidgets(2));
 
+    await tester.tap(find.text('Profile'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text(_username), findsOneWidget);
+    expect(find.text(AppStrings.logoutTitle), findsOneWidget);
+    debugPrint('E2E HOME M11 PASS: profile tab shows user and logout button');
+
     await tester.tap(find.text('Home'));
     await tester.pump(const Duration(milliseconds: 500));
     expect(find.text(AppStrings.homeSectionPopularFoods), findsOneWidget);
@@ -143,10 +154,7 @@ void main() {
 
     debugPrint('E2E HOME M12: category filtering');
     final categoryTexts = tester
-        .widgetList<Text>(find.descendant(
-          of: find.byType(HomeCategoryChips),
-          matching: find.byType(Text),
-        ))
+        .widgetList<Text>(categoryLabels())
         .map((t) => t.data)
         .whereType<String>()
         .toList();

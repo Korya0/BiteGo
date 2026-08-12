@@ -30,4 +30,8 @@ class AppColors {
   Color get disabledButtonBackground => const Color(0xFFBDBDBD);
   Color get secondaryScaffoldBackgroundColor => backgroundSecondary;
   Color get scaffoldBackgroundColor => backgroundPrimary;
+
+  // Image loading placeholders.
+  Color get shimmerBase => const Color(0xFFE8E8E8);
+  Color get shimmerHighlight => const Color(0xFFF5F5F5);
 }

@@ -24,6 +24,10 @@ final BannerModel tBanner = BannerModel(
   id: 'b1',
   imageUrl: 'https://example.com/banner.png',
   sortOrder: 1,
+  badge: 'Fruitsplode',
+  title: 'Chill & Sip',
+  subtitle: 'Fresh beverages to energize all day',
+  isActive: true,
 );
 
 final CategoryModel tCategory = CategoryModel(

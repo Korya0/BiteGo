@@ -18,6 +18,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
         .get();
     return snapshot.docs
         .map((doc) => BannerModel.fromFirestore(doc.data(), documentId: doc.id))
+        .where((banner) => banner.isActive)
         .toList();
   }
 
