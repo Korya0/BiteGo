@@ -6,14 +6,10 @@ import 'package:bite_go/core/utils/context_extension.dart';
 import 'package:bite_go/features/home/data/models/food_model.dart';
 import 'package:bite_go/features/home/presentation/cubit/food_details_cubit.dart';
 import 'package:bite_go/features/home/presentation/cubit/food_details_state.dart';
-import 'package:bite_go/features/home/presentation/widgets/quantity_control.dart';
+import 'package:bite_go/features/home/presentation/widgets/home_success_view/quantity_control.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-/// Shows the food details dialog for the given [food].
-///
-/// Replaces the old food details route: opens from a food card via a
-/// regular tap or a long press.
 Future<void> showFoodDetailsDialog(
   BuildContext context,
   FoodModel food,
@@ -22,6 +18,14 @@ Future<void> showFoodDetailsDialog(
     context: context,
     builder: (context) => FoodDetailsDialog(food: food),
   );
+}
+
+String _formatPrice(double price) {
+  final p = price.toInt();
+  if (p >= 1000) {
+    return '${(p / 1000).toStringAsFixed(p % 1000 == 0 ? 0 : 1)}k IQD';
+  }
+  return '$p IQD';
 }
 
 class FoodDetailsDialog extends StatelessWidget {
@@ -50,7 +54,7 @@ class FoodDetailsDialog extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      _DialogImage(imageUrl: state.food.imageUrl),
+                      _DialogHeader(imageUrl: state.food.imageUrl),
                       Flexible(
                         child: SingleChildScrollView(
                           padding: EdgeInsets.fromLTRB(
@@ -59,7 +63,25 @@ class FoodDetailsDialog extends StatelessWidget {
                             context.space.md,
                             context.space.xl,
                           ),
-                          child: _DialogContent(state: state),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _DialogInfo(food: state.food),
+                              AppGap.h(context.space.xl),
+                              _DialogQuantity(
+                                quantity: state.quantity,
+                                onIncrement: () =>
+                                    context.read<FoodDetailsCubit>().increment(),
+                                onDecrement: () =>
+                                    context.read<FoodDetailsCubit>().decrement(),
+                              ),
+                              AppGap.h(context.space.xl),
+                              _DialogAddToCart(
+                                food: state.food,
+                                totalPrice: state.food.price * state.quantity,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -74,8 +96,8 @@ class FoodDetailsDialog extends StatelessWidget {
   }
 }
 
-class _DialogImage extends StatelessWidget {
-  const _DialogImage({required this.imageUrl});
+class _DialogHeader extends StatelessWidget {
+  const _DialogHeader({required this.imageUrl});
 
   final String imageUrl;
 
@@ -99,7 +121,6 @@ class _DialogImage extends StatelessWidget {
             )
           else
             ImageWithShimmer(imageUrl: imageUrl),
-          // Close button.
           Positioned(
             top: context.space.md,
             right: context.space.md,
@@ -122,16 +143,13 @@ class _DialogImage extends StatelessWidget {
   }
 }
 
-class _DialogContent extends StatelessWidget {
-  const _DialogContent({required this.state});
+class _DialogInfo extends StatelessWidget {
+  const _DialogInfo({required this.food});
 
-  final FoodDetailsState state;
+  final FoodModel food;
 
   @override
   Widget build(BuildContext context) {
-    final food = state.food;
-    final totalPrice = food.price * state.quantity;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -165,55 +183,66 @@ class _DialogContent extends StatelessWidget {
           style: context.textStyle.body.copyWith(
             fontSize: context.space.fontSizeMd,
             color: context.color.textSecondary,
-            height: 1.5,
           ),
-        ),
-        AppGap.h(context.space.xl),
-        Row(
-          children: [
-            Text(
-              AppStrings.foodDetailsQuantity,
-              style: context.textStyle.subtitle.copyWith(
-                fontSize: context.space.fontSizeMd,
-                color: context.color.textPrimary,
-              ),
-            ),
-            const Spacer(),
-            QuantityControl(
-              quantity: state.quantity,
-              onIncrement: () =>
-                  context.read<FoodDetailsCubit>().increment(),
-              onDecrement: () =>
-                  context.read<FoodDetailsCubit>().decrement(),
-            ),
-          ],
-        ),
-        AppGap.h(context.space.xl),
-        AppButton.primary(
-          text:
-              '${AppStrings.foodDetailsAddToCart} — ${_formatPrice(totalPrice)}',
-          onPressed: () {
-            // Close the dialog first so the confirmation snackbar is visible
-            // on the home screen instead of behind the modal barrier.
-            final messenger = ScaffoldMessenger.of(context);
-            Navigator.of(context).pop();
-            messenger
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                SnackBar(content: Text('${food.name} added to cart!')),
-              );
-          },
         ),
       ],
     );
   }
+}
 
-  String _formatPrice(double price) {
-    final p = price.toInt();
-    if (p >= 1000) {
-      return '${(p / 1000).toStringAsFixed(p % 1000 == 0 ? 0 : 1)}k IQD';
-    }
-    return '$p IQD';
+class _DialogQuantity extends StatelessWidget {
+  const _DialogQuantity({
+    required this.quantity,
+    required this.onIncrement,
+    required this.onDecrement,
+  });
+
+  final int quantity;
+  final VoidCallback onIncrement;
+  final VoidCallback onDecrement;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text(
+          AppStrings.foodDetailsQuantity,
+          style: context.textStyle.subtitle.copyWith(
+            fontSize: context.space.fontSizeMd,
+            color: context.color.textPrimary,
+          ),
+        ),
+        const Spacer(),
+        QuantityControl(
+          quantity: quantity,
+          onIncrement: onIncrement,
+          onDecrement: onDecrement,
+        ),
+      ],
+    );
+  }
+}
+
+class _DialogAddToCart extends StatelessWidget {
+  const _DialogAddToCart({required this.food, required this.totalPrice});
+
+  final FoodModel food;
+  final double totalPrice;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppButton.primary(
+      text: '${AppStrings.foodDetailsAddToCart} — ${_formatPrice(totalPrice)}',
+      onPressed: () {
+        final messenger = ScaffoldMessenger.of(context);
+        Navigator.of(context).pop();
+        messenger
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            SnackBar(content: Text('${food.name} added to cart!')),
+          );
+      },
+    );
   }
 }
 

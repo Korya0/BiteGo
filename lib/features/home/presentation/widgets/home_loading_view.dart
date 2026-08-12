@@ -2,7 +2,7 @@ import 'package:bite_go/core/utils/context_extension.dart';
 import 'package:bite_go/features/home/data/models/banner_model.dart';
 import 'package:bite_go/features/home/data/models/category_model.dart';
 import 'package:bite_go/features/home/data/models/food_model.dart';
-import 'package:bite_go/features/home/presentation/widgets/home_success_view.dart';
+import 'package:bite_go/features/home/presentation/widgets/home_success_view/home_success_view.dart';
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 

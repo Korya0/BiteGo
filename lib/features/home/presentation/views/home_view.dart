@@ -2,7 +2,7 @@ import 'package:bite_go/features/home/presentation/cubit/home_cubit.dart';
 import 'package:bite_go/features/home/presentation/cubit/home_state.dart';
 import 'package:bite_go/features/home/presentation/widgets/home_error_view.dart';
 import 'package:bite_go/features/home/presentation/widgets/home_loading_view.dart';
-import 'package:bite_go/features/home/presentation/widgets/home_success_view.dart';
+import 'package:bite_go/features/home/presentation/widgets/home_success_view/home_success_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

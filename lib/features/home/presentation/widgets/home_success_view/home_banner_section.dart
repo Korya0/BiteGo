@@ -5,16 +5,16 @@ import 'package:bite_go/features/home/data/models/banner_model.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
-class HomeBannerCarousel extends StatefulWidget {
-  const HomeBannerCarousel({required this.banners, super.key});
+class HomeBannerSection extends StatefulWidget {
+  const HomeBannerSection({required this.banners, super.key});
 
   final List<BannerModel> banners;
 
   @override
-  State<HomeBannerCarousel> createState() => _HomeBannerCarouselState();
+  State<HomeBannerSection> createState() => _HomeBannerSectionState();
 }
 
-class _HomeBannerCarouselState extends State<HomeBannerCarousel> {
+class _HomeBannerSectionState extends State<HomeBannerSection> {
   int _currentIndex = 0;
 
   @override
@@ -36,33 +36,16 @@ class _HomeBannerCarouselState extends State<HomeBannerCarousel> {
               },
             ),
             items: widget.banners.map((banner) {
-              return _BannerCard(banner: banner);
+              return _BannerData(banner: banner);
             }).toList(),
           ),
-      
           if (widget.banners.length > 1)
             Positioned(
               right: context.space.md,
               bottom: context.space.md,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: List.generate(widget.banners.length, (index) {
-                  final isActive = index == _currentIndex;
-                  return AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    margin: EdgeInsets.symmetric(horizontal: context.space.xs),
-                    width: isActive ? context.space.md : context.space.xsSm,
-                    height: context.space.xsSm,
-                    decoration: BoxDecoration(
-                      color: isActive
-                          ? context.color.textOnPrimary
-                          : context.color.textOnPrimary.withValues(
-                              alpha: context.opacity.disabled,
-                            ),
-                      borderRadius: BorderRadius.circular(context.radius.xxl),
-                    ),
-                  );
-                }),
+              child: _BannerDots(
+                count: widget.banners.length,
+                activeIndex: _currentIndex,
               ),
             ),
         ],
@@ -71,8 +54,8 @@ class _HomeBannerCarouselState extends State<HomeBannerCarousel> {
   }
 }
 
-class _BannerCard extends StatelessWidget {
-  const _BannerCard({required this.banner});
+class _BannerData extends StatelessWidget {
+  const _BannerData({required this.banner});
 
   final BannerModel banner;
 
@@ -82,20 +65,7 @@ class _BannerCard extends StatelessWidget {
       fit: StackFit.expand,
       children: [
         ImageWithShimmer(imageUrl: banner.imageUrl),
-        DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: const Alignment(0, 0.32),
-              end: const Alignment(1, 0.68),
-              colors: [
-                context.color.iconBlack.withValues(
-                  alpha: context.opacity.medium,
-                ),
-                context.color.iconBlack.withValues(alpha: context.opacity.low),
-              ],
-            ),
-          ),
-        ),
+        const _BannerBackground(),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: context.space.lg),
           child: Column(
@@ -134,6 +104,26 @@ class _BannerCard extends StatelessWidget {
   }
 }
 
+class _BannerBackground extends StatelessWidget {
+  const _BannerBackground();
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: const Alignment(0, 0.32),
+          end: const Alignment(1, 0.68),
+          colors: [
+            context.color.iconBlack.withValues(alpha: context.opacity.medium),
+            context.color.iconBlack.withValues(alpha: context.opacity.low),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _BannerBadge extends StatelessWidget {
   const _BannerBadge({required this.text});
 
@@ -159,6 +149,37 @@ class _BannerBadge extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _BannerDots extends StatelessWidget {
+  const _BannerDots({required this.count, required this.activeIndex});
+
+  final int count;
+  final int activeIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: List.generate(count, (index) {
+        final isActive = index == activeIndex;
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          margin: EdgeInsets.symmetric(horizontal: context.space.xs),
+          width: isActive ? context.space.md : context.space.xsSm,
+          height: context.space.xsSm,
+          decoration: BoxDecoration(
+            color: isActive
+                ? context.color.textOnPrimary
+                : context.color.textOnPrimary.withValues(
+                    alpha: context.opacity.disabled,
+                  ),
+            borderRadius: BorderRadius.circular(context.radius.xxl),
+          ),
+        );
+      }),
     );
   }
 }
