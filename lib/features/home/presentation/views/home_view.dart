@@ -2,6 +2,7 @@ import 'package:bite_go/features/home/presentation/cubit/home_cubit.dart';
 import 'package:bite_go/features/home/presentation/cubit/home_state.dart';
 import 'package:bite_go/features/home/presentation/widgets/home_error_view.dart';
 import 'package:bite_go/features/home/presentation/widgets/home_loading_view.dart';
+import 'package:bite_go/features/home/presentation/widgets/home_success_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,7 +19,20 @@ class HomeView extends StatelessWidget {
             message: failure.message,
             onRetry: () => context.read<HomeCubit>().loadHomeData(),
           ),
-          HomeSuccess() => const HomeLoadingView(),
+          HomeSuccess(
+            :final banners,
+            :final categories,
+            :final foods,
+            :final selectedCategoryId,
+          ) =>
+            HomeSuccessView(
+              banners: banners,
+              categories: categories,
+              foods: foods,
+              selectedCategoryId: selectedCategoryId,
+              onCategorySelected: (categoryId) =>
+                  context.read<HomeCubit>().selectCategory(categoryId),
+            ),
         };
       },
     );
