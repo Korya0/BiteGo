@@ -25,7 +25,7 @@
     </td>
     <td valign="top" style="border: 1px solid #d0d7de; padding: 16px;">
       <b style="color:#FE8C00;">02. Home</b><br><br>
-      <b>Status:</b> ⬜ Not Started<br><br>
+      <b>Status:</b> ⬅️ In progress <br><br>
       <b>Contains:</b><br>
       • Food Types<br>
       • Food List
