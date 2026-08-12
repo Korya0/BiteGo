@@ -11,6 +11,11 @@ import '../../features/authentication/presentation/cubit/auth_session_cubit.dart
 import '../../features/authentication/presentation/cubit/forgot_password_cubit.dart';
 import '../../features/authentication/presentation/cubit/login_cubit.dart';
 import '../../features/authentication/presentation/cubit/sign_up_cubit.dart';
+import '../../features/home/data/datasources/home_remote_data_source.dart';
+import '../../features/home/data/datasources/home_remote_data_source_impl.dart';
+import '../../features/home/data/repositories/home_repository.dart';
+import '../../features/home/data/repositories/home_repository_impl.dart';
+import '../../features/home/presentation/cubit/home_cubit.dart';
 import '../logging/app_logger.dart';
 import '../logging/error_reporter.dart';
 import '../logging/reporters/firebase_crashlytics_reporter.dart';
@@ -55,6 +60,18 @@ Future<void> setupDependencies() async {
   );
   getIt.registerFactory<ForgotPasswordCubit>(
     () => ForgotPasswordCubit(authRepository: getIt<AuthRepository>()),
+  );
+  getIt.registerLazySingleton<HomeRemoteDataSource>(
+    () => HomeRemoteDataSourceImpl(firestore: getIt<FirebaseFirestore>()),
+  );
+  getIt.registerLazySingleton<HomeRepository>(
+    () => HomeRepositoryImpl(
+      homeRemoteDataSource: getIt<HomeRemoteDataSource>(),
+      appLogger: getIt<AppLogger>(),
+    ),
+  );
+  getIt.registerFactory<HomeCubit>(
+    () => HomeCubit(homeRepository: getIt<HomeRepository>()),
   );
   getIt.registerSingleton<AppLogger>(
     AppLogger(

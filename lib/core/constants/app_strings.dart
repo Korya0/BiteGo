@@ -93,10 +93,18 @@ class AppStrings {
 
   // Home.
   static const homeTitle = 'Home';
+  static const homeSectionPopularFoods = 'Popular Foods';
+  static const homeGreeting = 'Good day! 👋';
+  static const homeEmptyFoods = 'No food items found';
+  static const homeRetry = 'Try Again';
   static const logoutTitle = 'Log Out';
   static const logoutMessage = 'Are you sure you want to log out?';
   static const logoutConfirm = 'Log Out';
   static const logoutCancel = 'Cancel';
+
+  // Food Details.
+  static const foodDetailsQuantity = 'Quantity';
+  static const foodDetailsAddToCart = 'Add to Cart';
 
   // Forgot password feedback.
   static const forgotPasswordEmailSent =

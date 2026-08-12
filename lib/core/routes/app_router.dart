@@ -11,13 +11,17 @@ import 'package:bite_go/features/authentication/presentation/views/forgot_passwo
 import 'package:bite_go/features/authentication/presentation/views/login_view.dart';
 import 'package:bite_go/features/authentication/presentation/views/pre_authentication_view.dart';
 import 'package:bite_go/features/authentication/presentation/views/sign_up_view.dart';
+import 'package:bite_go/features/food_details/presentation/cubit/food_details_cubit.dart';
+import 'package:bite_go/features/food_details/presentation/views/food_details_view.dart';
+import 'package:bite_go/features/home/data/models/food_model.dart';
+import 'package:bite_go/features/home/presentation/cubit/home_cubit.dart';
 import 'package:bite_go/features/home/presentation/views/home_view.dart';
 import 'package:bite_go/features/splash/presentation/views/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-const Set<String> _protectedRoutes = {AppRoutes.home};
+const Set<String> _protectedRoutes = {AppRoutes.home, AppRoutes.foodDetails};
 
 const Set<String> _authRoutes = {
   AppRoutes.auth,
@@ -54,12 +58,14 @@ GoRouter createAppRouter(
   LoginCubit Function()? loginCubitFactory,
   SignUpCubit Function()? signUpCubitFactory,
   ForgotPasswordCubit Function()? forgotPasswordCubitFactory,
+  HomeCubit Function()? homeCubitFactory,
 }) {
   final routerRefresh = _RouterRefresh(authSessionCubit);
   final loginFactory = loginCubitFactory ?? () => getIt<LoginCubit>();
   final signUpFactory = signUpCubitFactory ?? () => getIt<SignUpCubit>();
   final forgotPasswordFactory =
       forgotPasswordCubitFactory ?? () => getIt<ForgotPasswordCubit>();
+  final homeFactory = homeCubitFactory ?? () => getIt<HomeCubit>();
   return GoRouter(
     initialLocation: AppRoutes.splash,
     refreshListenable: routerRefresh,
@@ -78,7 +84,20 @@ GoRouter createAppRouter(
       ),
       GoRoute(
         path: AppRoutes.home,
-        builder: (context, state) => const HomeView(),
+        builder: (context, state) => BlocProvider(
+          create: (context) => homeFactory()..loadHomeData(),
+          child: const HomeView(),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.foodDetails,
+        builder: (context, state) {
+          final food = state.extra as FoodModel;
+          return BlocProvider(
+            create: (context) => FoodDetailsCubit(food: food),
+            child: const FoodDetailsView(),
+          );
+        },
       ),
       GoRoute(
         path: AppRoutes.auth,

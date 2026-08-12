@@ -7,6 +7,11 @@ import 'package:bite_go/core/utils/result.dart';
 import 'package:bite_go/features/authentication/data/datasources/auth_remote_data_source.dart';
 import 'package:bite_go/features/authentication/data/models/user_model.dart';
 import 'package:bite_go/features/authentication/data/repositories/auth_repository.dart';
+import 'package:bite_go/features/home/data/datasources/home_remote_data_source.dart';
+import 'package:bite_go/features/home/data/models/banner_model.dart';
+import 'package:bite_go/features/home/data/models/category_model.dart';
+import 'package:bite_go/features/home/data/models/food_model.dart';
+import 'package:bite_go/features/home/data/repositories/home_repository.dart';
 
 final UserModel tUser = UserModel(
   uid: 'u1',
@@ -14,6 +19,95 @@ final UserModel tUser = UserModel(
   username: 'user1',
   createdAt: DateTime.utc(2024, 1, 1),
 );
+
+final BannerModel tBanner = BannerModel(
+  id: 'b1',
+  imageUrl: 'https://example.com/banner.png',
+  sortOrder: 1,
+);
+
+final CategoryModel tCategory = CategoryModel(
+  id: 'pizza',
+  name: 'Pizza',
+  sortOrder: 1,
+);
+
+final FoodModel tFood = FoodModel(
+  id: 'f1',
+  name: 'BBQ Chicken Pizza',
+  description: 'Grilled chicken, BBQ sauce, red onions, cilantro',
+  imageUrl: 'https://example.com/food.png',
+  price: 20000,
+  rating: 4.6,
+  categoryId: 'pizza',
+  isAvailable: true,
+  sortOrder: 1,
+);
+
+class FakeHomeRepository implements HomeRepository {
+  Result<List<BannerModel>> bannersResult = const Success(<BannerModel>[]);
+  Result<List<CategoryModel>> categoriesResult = const Success(<CategoryModel>[]);
+  Result<List<FoodModel>> foodsResult = const Success(<FoodModel>[]);
+
+  int getBannersCalls = 0;
+  int getCategoriesCalls = 0;
+  int getFoodsCalls = 0;
+
+  @override
+  Future<Result<List<BannerModel>>> getBanners() async {
+    getBannersCalls++;
+    return bannersResult;
+  }
+
+  @override
+  Future<Result<List<CategoryModel>>> getCategories() async {
+    getCategoriesCalls++;
+    return categoriesResult;
+  }
+
+  @override
+  Future<Result<List<FoodModel>>> getFoods() async {
+    getFoodsCalls++;
+    return foodsResult;
+  }
+}
+
+class FakeHomeRemoteDataSource implements HomeRemoteDataSource {
+  Object? bannersError;
+  Object? categoriesError;
+  Object? foodsError;
+
+  List<BannerModel> banners = [tBanner];
+  List<CategoryModel> categories = [tCategory];
+  List<FoodModel> foods = [tFood];
+
+  @override
+  Future<List<BannerModel>> getBanners() async {
+    final error = bannersError;
+    if (error != null) {
+      throw error;
+    }
+    return banners;
+  }
+
+  @override
+  Future<List<CategoryModel>> getCategories() async {
+    final error = categoriesError;
+    if (error != null) {
+      throw error;
+    }
+    return categories;
+  }
+
+  @override
+  Future<List<FoodModel>> getFoods() async {
+    final error = foodsError;
+    if (error != null) {
+      throw error;
+    }
+    return foods;
+  }
+}
 
 class FakeErrorReporter implements ErrorReporter {
   final List<Object> reportedErrors = [];

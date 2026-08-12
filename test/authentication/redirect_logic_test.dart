@@ -106,14 +106,20 @@ void main() {
       });
 
       test('redirects protected routes to auth (deep link guard)', () {
-        expect(
-          redirectBasedOnAuthState(
-            sessionState: unauthenticated,
-            splashCompleted: true,
-            location: AppRoutes.home,
-          ),
-          AppRoutes.auth,
-        );
+        for (final location in [
+          AppRoutes.home,
+          AppRoutes.foodDetails,
+        ]) {
+          expect(
+            redirectBasedOnAuthState(
+              sessionState: unauthenticated,
+              splashCompleted: true,
+              location: location,
+            ),
+            AppRoutes.auth,
+            reason: 'location $location',
+          );
+        }
       });
     });
 

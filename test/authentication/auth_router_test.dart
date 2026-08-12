@@ -8,6 +8,7 @@ import 'package:bite_go/features/authentication/presentation/cubit/auth_session_
 import 'package:bite_go/features/authentication/presentation/cubit/forgot_password_cubit.dart';
 import 'package:bite_go/features/authentication/presentation/cubit/login_cubit.dart';
 import 'package:bite_go/features/authentication/presentation/cubit/sign_up_cubit.dart';
+import 'package:bite_go/features/home/presentation/cubit/home_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -23,17 +24,20 @@ class _AuthRouterHarness {
       authRepository: repository,
       errorReporter: FakeErrorReporter(),
     );
+    homeRepository = FakeHomeRepository();
     router = createAppRouter(
       cubit,
       loginCubitFactory: () => LoginCubit(authRepository: repository),
       signUpCubitFactory: () => SignUpCubit(authRepository: repository),
       forgotPasswordCubitFactory: () =>
           ForgotPasswordCubit(authRepository: repository),
+      homeCubitFactory: () => HomeCubit(homeRepository: homeRepository),
     );
   }
 
   late final StreamController<Result<UserModel?>> controller;
   late final FakeAuthRepository repository;
+  late final FakeHomeRepository homeRepository;
   late final AuthSessionCubit cubit;
   late final GoRouter router;
 
