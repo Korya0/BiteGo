@@ -14,7 +14,7 @@ void main() {
       MaterialApp(
         home: Scaffold(
           body: AppEmptyState(
-            assetPath: AppAssets.svgsCouldntFindResult,
+            assetPath: AppAssets.svgsEmptyState,
             title: 'Ouch! Hungry',
             message: 'Seems like you have not ordered any food yet',
             actionLabel: 'Find Foods',
@@ -40,7 +40,7 @@ void main() {
       const MaterialApp(
         home: Scaffold(
           body: AppEmptyState(
-            assetPath: AppAssets.svgsCouldntFindResult,
+            assetPath: AppAssets.svgsEmptyState,
             message: 'No results found',
           ),
         ),

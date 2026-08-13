@@ -174,7 +174,7 @@ class _SearchSuccessContent extends StatelessWidget {
           )
         : showCenteredEmpty
         ? const AppEmptyState(
-            assetPath: AppAssets.svgsCouldntFindResult,
+            assetPath: AppAssets.svgsEmptyState,
             message: AppStrings.searchEmptyResult,
           )
         : _SearchResultsGrid(foods: foods);

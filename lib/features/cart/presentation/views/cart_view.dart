@@ -28,7 +28,7 @@ class CartView extends StatelessWidget {
           builder: (context, state) {
             if (state.items.isEmpty) {
               return AppEmptyState(
-                assetPath: AppAssets.svgsEmptyCart,
+                assetPath: AppAssets.svgsEmptyState,
                 title: AppStrings.cartEmptyTitle,
                 message: AppStrings.cartEmptyMessage,
                 actionLabel: AppStrings.cartFindFoods,
