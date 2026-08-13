@@ -1,6 +1,7 @@
 ﻿import 'package:bite_go/core/common/app_gap.dart';
 import 'package:bite_go/core/common/image_with_shimmer.dart';
 import 'package:bite_go/core/utils/context_extension.dart';
+import 'package:bite_go/core/utils/price_formatter.dart';
 import 'package:bite_go/features/home/data/models/food_model.dart';
 import 'package:bite_go/features/home/presentation/widgets/home_success_view/food_details_dialog.dart';
 import 'package:flutter/material.dart';
@@ -103,7 +104,7 @@ class _CardInfo extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                _formatPrice(food.price),
+                formatPrice(food.price),
                 style: context.textStyle.title.copyWith(
                   fontSize: context.fontSize.xsSm,
                   color: context.color.primary,
@@ -116,11 +117,4 @@ class _CardInfo extends StatelessWidget {
     );
   }
 
-  String _formatPrice(double price) {
-    final p = price.toInt();
-    if (p >= 1000) {
-      return '${(p / 1000).toStringAsFixed(p % 1000 == 0 ? 0 : 1)}k';
-    }
-    return '$p';
-  }
 }

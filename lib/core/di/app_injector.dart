@@ -11,6 +11,7 @@ import '../../features/authentication/presentation/cubit/auth_session_cubit.dart
 import '../../features/authentication/presentation/cubit/forgot_password_cubit.dart';
 import '../../features/authentication/presentation/cubit/login_cubit.dart';
 import '../../features/authentication/presentation/cubit/sign_up_cubit.dart';
+import '../../features/cart/presentation/cubit/cart_cubit.dart';
 import '../../features/home/data/datasources/home_remote_data_source.dart';
 import '../../features/home/data/datasources/home_remote_data_source_impl.dart';
 import '../../features/home/data/repositories/home_repository.dart';
@@ -79,6 +80,9 @@ Future<void> setupDependencies() async {
       homeRepository: getIt<HomeRepository>(),
       localStorage: getIt<LocalStorage>(),
     ),
+  );
+  getIt.registerLazySingleton<CartCubit>(
+    () => CartCubit(localStorage: getIt<LocalStorage>()),
   );
   getIt.registerSingleton<AppLogger>(
     AppLogger(
