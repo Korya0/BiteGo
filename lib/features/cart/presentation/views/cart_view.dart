@@ -1,5 +1,5 @@
 import 'package:bite_go/core/common/app_app_bar.dart';
-import 'package:bite_go/core/common/app_snack_bar.dart';
+import 'package:bite_go/core/common/app_toast.dart';
 import 'package:bite_go/core/constants/app_strings.dart';
 import 'package:bite_go/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:bite_go/features/cart/presentation/cubit/cart_state.dart';
@@ -32,7 +32,7 @@ class CartView extends StatelessWidget {
                           context.read<CartCubit>().decrement(foodId),
                       onRemove: (foodId) =>
                           context.read<CartCubit>().removeItem(foodId),
-                      onOrderNow: () => AppSnackBar.show(
+                      onOrderNow: () => AppToast.show(
                         context: context,
                         message: AppStrings.cartOrderPlaced,
                       ),

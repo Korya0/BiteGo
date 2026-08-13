@@ -23,7 +23,7 @@ class CartEmptyView extends StatelessWidget {
                 title: AppStrings.cartEmptyTitle,
                 message: AppStrings.cartEmptyMessage,
                 actionLabel: AppStrings.cartFindFoods,
-                onActionPressed: () => context.go(AppRoutes.search),
+                onActionPressed: () => context.go(AppRoutes.home),
               ),
             ),
           ),

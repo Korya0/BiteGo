@@ -1,10 +1,12 @@
 import 'package:bite_go/core/common/app_gap.dart';
 import 'package:bite_go/core/common/image_with_shimmer.dart';
+import 'package:bite_go/core/constants/app_assets.dart';
 import 'package:bite_go/core/utils/context_extension.dart';
 import 'package:bite_go/core/utils/price_formatter.dart';
 import 'package:bite_go/features/cart/data/models/cart_item.dart';
 import 'package:bite_go/features/home/presentation/widgets/home_success_view/quantity_control.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class CartItemCard extends StatelessWidget {
   const CartItemCard({
@@ -74,9 +76,12 @@ class CartItemCard extends StatelessWidget {
                       GestureDetector(
                         onTap: onRemove,
                         behavior: HitTestBehavior.opaque,
-                        child: Icon(
-                          Icons.delete_outline_rounded,
-                          color: context.color.iconError,
+                        child: SvgPicture.asset(
+                          AppAssets.svgsRemove,
+                          key: const Key('cart_remove_item'),
+                          width: context.iconSize.sm,
+                          height: context.iconSize.sm,
+                          fit: BoxFit.contain,
                         ),
                       ),
                     ],

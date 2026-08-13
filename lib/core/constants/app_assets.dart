@@ -16,6 +16,8 @@ class AppAssets {
 
   static const String svgsEmptyState = '$_svgs/empty_state.svg';
 
+  static const String svgsRemove = '$_svgs/remove.svg';
+
   static const String svgsIndicatorsBurger1 =
       '$_svgs/pre_auth/burger_indicator_1.svg';
   static const String svgsIndicatorsBurger2 =

@@ -25,29 +25,58 @@ class CartSuccessView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: context.screenPadding,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          for (var index = 0; index < state.items.length; index++) ...[
-            if (index > 0) AppGap.h(context.space.smMd),
-            CartItemCard(
-              item: state.items[index],
-              onIncrement: () => onIncrement(state.items[index].food.id),
-              onDecrement: () => onDecrement(state.items[index].food.id),
-              onRemove: () => onRemove(state.items[index].food.id),
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.separated(
+            padding: EdgeInsets.fromLTRB(
+              context.space.md,
+              context.space.md,
+              context.space.md,
+              context.space.lg,
             ),
-          ],
-          AppGap.h(context.space.lg),
-          PaymentSummarySection(state: state),
-          AppGap.h(context.space.lg),
-          AppButton.primary(
-            text: AppStrings.cartOrderNow,
-            onPressed: onOrderNow,
+            itemCount: state.items.length,
+            itemBuilder: (context, index) {
+              final item = state.items[index];
+              return CartItemCard(
+                item: item,
+                onIncrement: () => onIncrement(item.food.id),
+                onDecrement: () => onDecrement(item.food.id),
+                onRemove: () => onRemove(item.food.id),
+              );
+            },
+            separatorBuilder: (context, index) =>
+                AppGap.h(context.space.smMd),
           ),
-        ],
-      ),
+        ),
+        DecoratedBox(
+          decoration: BoxDecoration(
+            color: context.color.backgroundPrimary,
+            border: Border(
+              top: BorderSide(color: context.color.disabledButtonBackground),
+            ),
+          ),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(
+              context.space.md,
+              context.space.md,
+              context.space.md,
+              context.space.md,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                PaymentSummarySection(state: state),
+                AppGap.h(context.space.md),
+                AppButton.primary(
+                  text: AppStrings.cartOrderNow,
+                  onPressed: onOrderNow,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

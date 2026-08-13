@@ -1,3 +1,4 @@
+import 'package:bite_go/core/common/app_button.dart';
 import 'package:bite_go/core/common/app_empty_state.dart';
 import 'package:bite_go/core/constants/app_strings.dart';
 import 'package:bite_go/core/routes/app_routes.dart';
@@ -46,9 +47,9 @@ void main() {
           builder: (context, state) => const CartView(),
         ),
         GoRoute(
-          path: AppRoutes.search,
+          path: AppRoutes.home,
           builder: (context, state) => const Scaffold(
-            body: Center(child: Text('Search route')),
+            body: Center(child: Text('Home route')),
           ),
         ),
       ],
@@ -88,14 +89,14 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('Find Foods navigates to the search screen', (tester) async {
+  testWidgets('Find Foods navigates to the home screen', (tester) async {
     await pumpCartView(tester);
 
     await tester.tap(find.text(AppStrings.cartFindFoods));
     await tester.pump(const Duration(milliseconds: 400));
     await tester.pump(const Duration(milliseconds: 400));
 
-    expect(find.text('Search route'), findsOneWidget);
+    expect(find.text('Home route'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -140,12 +141,55 @@ void main() {
 
     await pumpCartView(tester);
 
-    await tester.tap(find.byIcon(Icons.delete_outline_rounded));
+    await tester.tap(find.byKey(const Key('cart_remove_item')));
     await tester.pump(const Duration(milliseconds: 400));
 
     expect(find.byType(CartItemCard), findsNothing);
     expect(find.byType(AppEmptyState), findsOneWidget);
     expect(find.text(AppStrings.cartEmptyMessage), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('payment summary and order button stay visible with a long list', (
+    tester,
+  ) async {
+    for (var i = 0; i < 20; i++) {
+      cubit.addItem(
+        FoodModel(
+          id: 'food-$i',
+          name: 'Food $i',
+          description: 'Description',
+          imageUrl: '',
+          price: 5000,
+          rating: 4.5,
+          categoryId: 'cat',
+          isAvailable: true,
+          sortOrder: i,
+        ),
+      );
+    }
+
+    await pumpCartView(tester);
+
+    expect(find.byType(AppButton).hitTestable(), findsOneWidget);
+    expect(find.byType(PaymentSummarySection).hitTestable(), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('ordering shows a top toast instead of a snackbar', (tester) async {
+    cubit.addItem(burger);
+
+    await pumpCartView(tester);
+
+    await tester.tap(find.text(AppStrings.cartOrderNow));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(find.text(AppStrings.cartOrderPlaced), findsOneWidget);
+
+    await tester.pump(const Duration(seconds: 3));
+    await tester.pump(const Duration(milliseconds: 100));
     expect(tester.takeException(), isNull);
   });
 }
