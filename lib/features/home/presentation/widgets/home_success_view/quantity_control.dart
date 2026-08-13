@@ -1,4 +1,4 @@
-import 'package:bite_go/core/common/app_gap.dart';
+﻿import 'package:bite_go/core/common/app_gap.dart';
 import 'package:bite_go/core/utils/context_extension.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +27,7 @@ class QuantityControl extends StatelessWidget {
         Text(
           '$quantity',
           style: context.textStyle.title.copyWith(
-            fontSize: context.space.fontSizeLg,
+            fontSize: context.fontSize.lg,
             color: context.color.textPrimary,
           ),
         ),
@@ -64,7 +64,7 @@ class _ControlButton extends StatelessWidget {
         ),
         child: Icon(
           icon,
-          size: context.space.iconSmXs,
+          size: context.iconSize.smXs,
           color: context.color.textOnPrimary,
         ),
       ),

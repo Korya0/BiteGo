@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 
 import 'package:bite_go/core/common/app_button.dart';
 import 'package:bite_go/core/common/app_dialog.dart';
@@ -99,7 +99,7 @@ class _FooterButtons extends StatelessWidget {
               onPressed: onEmailPressed,
               leading: Icon(
                 Icons.email_outlined,
-                size: context.space.iconSm,
+                size: context.iconSize.sm,
                 color: context.color.textOnPrimary,
               ),
             )
@@ -119,7 +119,7 @@ class _FooterButtons extends StatelessWidget {
                 Text(
                   AppStrings.preAuthAlreadyHaveAccount,
                   style: context.textStyle.body.copyWith(
-                    fontSize: context.space.fontSizeSm,
+                    fontSize: context.fontSize.sm,
                     color: context.color.textPrimary,
                   ),
                 ),
@@ -127,7 +127,7 @@ class _FooterButtons extends StatelessWidget {
                   text: AppStrings.preAuthLogIn,
                   onPressed: onLoginPressed,
                   textStyle: context.textStyle.subtitle.copyWith(
-                    fontSize: context.space.fontSizeSm,
+                    fontSize: context.fontSize.sm,
                     color: context.color.primary,
                   ),
                   padding: EdgeInsets.symmetric(
@@ -235,7 +235,7 @@ class _CarouselSectionState extends State<_CarouselSection> {
                 slide.title,
                 textAlign: TextAlign.center,
                 style: context.textStyle.title.copyWith(
-                  fontSize: context.space.fontSizeTitleSm,
+                  fontSize: context.fontSize.titleSm,
                   color: context.color.textPrimary,
                 ),
               ),
@@ -245,7 +245,7 @@ class _CarouselSectionState extends State<_CarouselSection> {
                 slide.subtitle,
                 textAlign: TextAlign.center,
                 style: context.textStyle.body.copyWith(
-                  fontSize: context.space.fontSizeSm,
+                  fontSize: context.fontSize.sm,
                   color: context.color.textSecondary,
                 ),
               ),
@@ -254,7 +254,7 @@ class _CarouselSectionState extends State<_CarouselSection> {
         ),
 
         SizedBox(
-          height: context.space.iconSm * _slides.length,
+          height: context.iconSize.sm * _slides.length,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.end,

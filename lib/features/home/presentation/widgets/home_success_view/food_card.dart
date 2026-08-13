@@ -1,4 +1,4 @@
-import 'package:bite_go/core/common/app_gap.dart';
+﻿import 'package:bite_go/core/common/app_gap.dart';
 import 'package:bite_go/core/common/image_with_shimmer.dart';
 import 'package:bite_go/core/utils/context_extension.dart';
 import 'package:bite_go/features/home/data/models/food_model.dart';
@@ -69,7 +69,7 @@ class _CardInfo extends StatelessWidget {
           Text(
             food.name,
             style: context.textStyle.title.copyWith(
-              fontSize: context.space.fontSizeXsSm,
+              fontSize: context.fontSize.xsSm,
               color: context.color.textPrimaryStrong,
             ),
             maxLines: 1,
@@ -79,7 +79,7 @@ class _CardInfo extends StatelessWidget {
           Text(
             food.description,
             style: context.textStyle.body.copyWith(
-              fontSize: context.space.fontSizeXxs,
+              fontSize: context.fontSize.xxs,
               color: context.color.textTertiary,
             ),
             maxLines: 2,
@@ -90,14 +90,14 @@ class _CardInfo extends StatelessWidget {
             children: [
               Icon(
                 Icons.star_rounded,
-                size: context.space.iconXxs,
+                size: context.iconSize.xxs,
                 color: context.color.starYellow,
               ),
               AppGap.w(context.space.xxs),
               Text(
                 food.rating.toStringAsFixed(1),
                 style: context.textStyle.subtitle.copyWith(
-                  fontSize: context.space.fontSizeXxs,
+                  fontSize: context.fontSize.xxs,
                   color: context.color.textMuted,
                 ),
               ),
@@ -105,7 +105,7 @@ class _CardInfo extends StatelessWidget {
               Text(
                 _formatPrice(food.price),
                 style: context.textStyle.title.copyWith(
-                  fontSize: context.space.fontSizeXsSm,
+                  fontSize: context.fontSize.xsSm,
                   color: context.color.primary,
                 ),
               ),

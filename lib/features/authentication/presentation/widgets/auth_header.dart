@@ -1,4 +1,4 @@
-import 'package:bite_go/core/common/app_gap.dart';
+﻿import 'package:bite_go/core/common/app_gap.dart';
 import 'package:bite_go/core/utils/context_extension.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +21,7 @@ class AuthHeader extends StatelessWidget {
         Text(
           title,
           style: context.textStyle.title.copyWith(
-            fontSize: context.space.fontSizeXxl,
+            fontSize: context.fontSize.xxl,
             color: context.color.textPrimary,
           ),
         ),
@@ -30,7 +30,7 @@ class AuthHeader extends StatelessWidget {
           Text(
             subtitle!,
             style: context.textStyle.body.copyWith(
-              fontSize: context.space.fontSizeSm,
+              fontSize: context.fontSize.sm,
               color: context.color.textSecondary,
             ),
           ),

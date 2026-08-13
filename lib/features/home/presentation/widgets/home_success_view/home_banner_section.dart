@@ -1,4 +1,4 @@
-import 'package:bite_go/core/common/app_gap.dart';
+﻿import 'package:bite_go/core/common/app_gap.dart';
 import 'package:bite_go/core/common/image_with_shimmer.dart';
 import 'package:bite_go/core/utils/context_extension.dart';
 import 'package:bite_go/features/home/data/models/banner_model.dart';
@@ -80,7 +80,7 @@ class _BannerData extends StatelessWidget {
                 Text(
                   banner.title,
                   style: context.textStyle.title.copyWith(
-                    fontSize: context.space.fontSizeXl,
+                    fontSize: context.fontSize.xl,
                     color: context.color.textOnPrimary,
                   ),
                 ),
@@ -89,7 +89,7 @@ class _BannerData extends StatelessWidget {
                 Text(
                   banner.subtitle,
                   style: context.textStyle.body.copyWith(
-                    fontSize: context.space.fontSizeXs,
+                    fontSize: context.fontSize.xs,
                     color: context.color.textOnPrimary.withValues(
                       alpha: context.opacity.medium,
                     ),
@@ -144,7 +144,7 @@ class _BannerBadge extends StatelessWidget {
         child: Text(
           text,
           style: context.textStyle.title.copyWith(
-            fontSize: context.space.fontSizeXxs,
+            fontSize: context.fontSize.xxs,
             color: context.color.textOnPrimary,
           ),
         ),

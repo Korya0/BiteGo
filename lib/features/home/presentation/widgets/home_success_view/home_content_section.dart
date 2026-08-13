@@ -1,4 +1,4 @@
-import 'package:bite_go/core/common/app_gap.dart';
+﻿import 'package:bite_go/core/common/app_gap.dart';
 import 'package:bite_go/core/constants/app_strings.dart';
 import 'package:bite_go/core/utils/context_extension.dart';
 import 'package:bite_go/features/home/data/models/category_model.dart';
@@ -46,7 +46,7 @@ class _SectionHeader extends StatelessWidget {
     return Text(
       title,
       style: context.textStyle.title.copyWith(
-        fontSize: context.space.fontSizeLg,
+        fontSize: context.fontSize.lg,
         color: context.color.textPrimary,
       ),
     );
@@ -143,7 +143,7 @@ class _CategoryChip extends StatelessWidget {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: context.textStyle.subtitle.copyWith(
-            fontSize: context.space.fontSizeSm,
+            fontSize: context.fontSize.sm,
             color: isSelected
                 ? context.color.textOnPrimary
                 : context.color.textSecondary,
@@ -213,7 +213,7 @@ class _EmptyFoodsView extends StatelessWidget {
           children: [
             Icon(
               Icons.no_food_rounded,
-              size: context.space.iconLg,
+              size: context.iconSize.lg,
               color: context.color.iconSecondary,
             ),
             AppGap.h(context.space.sm),

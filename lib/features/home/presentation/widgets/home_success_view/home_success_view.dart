@@ -1,3 +1,4 @@
+﻿import 'package:bite_go/core/common/app_icon_button.dart';
 import 'package:bite_go/core/utils/context_extension.dart';
 import 'package:bite_go/features/home/data/models/banner_model.dart';
 import 'package:bite_go/features/home/data/models/category_model.dart';
@@ -13,6 +14,7 @@ class HomeSuccessView extends StatelessWidget {
     required this.foods,
     required this.selectedCategoryId,
     required this.onCategorySelected,
+    this.onSearchPressed,
     super.key,
   });
 
@@ -21,13 +23,29 @@ class HomeSuccessView extends StatelessWidget {
   final List<FoodModel> foods;
   final String? selectedCategoryId;
   final void Function(String? categoryId) onCategorySelected;
+  final VoidCallback? onSearchPressed;
 
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: [
         if (banners.isNotEmpty)
-          SliverToBoxAdapter(child: HomeBannerSection(banners: banners)),
+          SliverToBoxAdapter(
+            child: Stack(
+              children: [
+                HomeBannerSection(banners: banners),
+                if (onSearchPressed != null)
+                  Positioned(
+                    top: context.space.md,
+                    right: context.space.md,
+                    child: AppIconButton(
+                      onPressed: onSearchPressed!,
+                      icon: Icons.search_rounded,
+                    ),
+                  ),
+              ],
+            ),
+          ),
         SliverToBoxAdapter(
           child: HomeContentSection(
             categories: categories,

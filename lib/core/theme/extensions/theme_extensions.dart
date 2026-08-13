@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../colors/app_colors.dart';
+import '../fonts/app_font_size.dart';
 import '../fonts/app_text_styles.dart';
+import '../spacing/app_icon_size.dart';
 import '../spacing/app_spacing.dart';
 import '../spacing/app_radius.dart';
 import '../spacing/app_shadow.dart';
@@ -12,6 +14,14 @@ extension ColorExtension on BuildContext {
 
 extension TextStyleExtension on BuildContext {
   AppTextStyles get textStyle => const AppTextStyles();
+}
+
+extension FontSizeExtension on BuildContext {
+  AppFontSize get fontSize => const AppFontSize();
+}
+
+extension IconSizeExtension on BuildContext {
+  AppIconSize get iconSize => const AppIconSize();
 }
 
 extension SpaceExtension on BuildContext {

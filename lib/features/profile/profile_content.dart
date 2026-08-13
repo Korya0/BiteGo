@@ -1,4 +1,4 @@
-import 'package:bite_go/core/common/app_button.dart';
+﻿import 'package:bite_go/core/common/app_button.dart';
 import 'package:bite_go/core/common/app_gap.dart';
 import 'package:bite_go/core/constants/app_strings.dart';
 import 'package:bite_go/core/utils/context_extension.dart';
@@ -38,7 +38,7 @@ class ProfileContent extends StatelessWidget {
                 child: Text(
                   _initialFor(username),
                   style: context.textStyle.title.copyWith(
-                    fontSize: context.space.fontSizeXxl,
+                    fontSize: context.fontSize.xxl,
                     color: context.color.textOnPrimary,
                   ),
                 ),
@@ -49,7 +49,7 @@ class ProfileContent extends StatelessWidget {
               username.isEmpty ? AppStrings.profileAnonymous : username,
               textAlign: TextAlign.center,
               style: context.textStyle.title.copyWith(
-                fontSize: context.space.fontSizeXl,
+                fontSize: context.fontSize.xl,
                 color: context.color.textPrimary,
               ),
             ),
@@ -60,7 +60,7 @@ class ProfileContent extends StatelessWidget {
                   : email,
               textAlign: TextAlign.center,
               style: context.textStyle.body.copyWith(
-                fontSize: context.space.fontSizeSm,
+                fontSize: context.fontSize.sm,
                 color: context.color.textSecondary,
               ),
             ),
@@ -69,7 +69,7 @@ class ProfileContent extends StatelessWidget {
               text: AppStrings.logoutTitle,
               leading: Icon(
                 Icons.logout_rounded,
-                size: context.space.iconSm,
+                size: context.iconSize.sm,
               ),
               onPressed: onLogout,
             ),

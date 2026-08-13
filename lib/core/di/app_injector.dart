@@ -16,6 +16,7 @@ import '../../features/home/data/datasources/home_remote_data_source_impl.dart';
 import '../../features/home/data/repositories/home_repository.dart';
 import '../../features/home/data/repositories/home_repository_impl.dart';
 import '../../features/home/presentation/cubit/home_cubit.dart';
+import '../../features/search/presentation/cubit/search_cubit.dart';
 import '../logging/app_logger.dart';
 import '../logging/error_reporter.dart';
 import '../logging/reporters/firebase_crashlytics_reporter.dart';
@@ -72,6 +73,12 @@ Future<void> setupDependencies() async {
   );
   getIt.registerFactory<HomeCubit>(
     () => HomeCubit(homeRepository: getIt<HomeRepository>()),
+  );
+  getIt.registerFactory<SearchCubit>(
+    () => SearchCubit(
+      homeRepository: getIt<HomeRepository>(),
+      localStorage: getIt<LocalStorage>(),
+    ),
   );
   getIt.registerSingleton<AppLogger>(
     AppLogger(

@@ -1,4 +1,4 @@
-import 'package:bite_go/core/common/app_button.dart';
+﻿import 'package:bite_go/core/common/app_button.dart';
 import 'package:bite_go/core/constants/app_assets.dart';
 import 'package:bite_go/core/constants/app_strings.dart';
 import 'package:bite_go/core/utils/context_extension.dart';
@@ -23,8 +23,8 @@ class GoogleSignInButton extends StatelessWidget {
       isLoading: isLoading,
       leading: SvgPicture.asset(
         AppAssets.svgsGoogle,
-        height: context.space.iconSm,
-        width: context.space.iconSm,
+        height: context.iconSize.sm,
+        width: context.iconSize.sm,
         colorFilter: ColorFilter.mode(
           context.color.textOnPrimary,
           BlendMode.srcIn,

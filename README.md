@@ -12,9 +12,9 @@
 
 ### Home
 
-| Home | Food Details |
-|:---:|:---:|
-| <img src="screen_shots/home/home.png" width="160"/> | <img src="screen_shots/home/food_detial.png" width="160"/> |
+| Home | Food Details | Search |
+|:---:|:---:|:---:|
+| <img src="screen_shots/home/home.png" width="160"/> | <img src="screen_shots/home/food_detial.png" width="160"/> | <img src="screen_shots/search/search.png" width="160"/> |
 
 # Project Roadmap
 
@@ -49,7 +49,7 @@
     </td>
     <td valign="top" style="border: 1px solid #d0d7de; padding: 16px;">
       <b style="color:#FE8C00;">04. Search</b><br><br>
-      <b>Status:</b> ⬜ Not Started<br><br>
+      <b>Status:</b> ✅ Completed<br><br>
       <b>Contains:</b><br>
       • Search Food<br>
       • Search Results

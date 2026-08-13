@@ -116,6 +116,16 @@ class AppStrings {
   static const foodDetailsQuantity = 'Quantity';
   static const foodDetailsAddToCart = 'Add to Cart';
 
+  // Search.
+  static const searchTitle = 'Search Food';
+  static const searchHint = 'Search Food';
+  static const searchRecentSearches = 'Recent searches';
+  static const searchDelete = 'Delete';
+  static const searchMyRecentOrders = 'My recent orders';
+  static const searchEmptyResult =
+      "We couldn't find any result! Please check your search for any typos "
+      'or spelling errors, or try a different search term.';
+
   // Forgot password feedback.
   static const forgotPasswordEmailSent =
       'Password reset email sent. Check your inbox and follow the link to set a new password.';

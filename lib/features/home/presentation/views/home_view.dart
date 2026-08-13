@@ -1,3 +1,4 @@
+import 'package:bite_go/core/routes/app_routes.dart';
 import 'package:bite_go/features/home/presentation/cubit/home_cubit.dart';
 import 'package:bite_go/features/home/presentation/cubit/home_state.dart';
 import 'package:bite_go/features/home/presentation/widgets/home_error_view.dart';
@@ -5,6 +6,7 @@ import 'package:bite_go/features/home/presentation/widgets/home_loading_view.dar
 import 'package:bite_go/features/home/presentation/widgets/home_success_view/home_success_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -32,6 +34,7 @@ class HomeView extends StatelessWidget {
               selectedCategoryId: selectedCategoryId,
               onCategorySelected: (categoryId) =>
                   context.read<HomeCubit>().selectCategory(categoryId),
+              onSearchPressed: () => context.push(AppRoutes.search),
             ),
         };
       },

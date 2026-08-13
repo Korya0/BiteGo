@@ -1,4 +1,4 @@
-import 'package:bite_go/core/utils/context_extension.dart';
+﻿import 'package:bite_go/core/utils/context_extension.dart';
 import 'package:flutter/material.dart';
 
 class AuthErrorText extends StatelessWidget {
@@ -24,7 +24,7 @@ class AuthErrorText extends StatelessWidget {
           text,
           textAlign: TextAlign.start,
           style: context.textStyle.caption.copyWith(
-            fontSize: context.space.fontSizeSm,
+            fontSize: context.fontSize.sm,
             color: context.color.error,
           ),
         ),

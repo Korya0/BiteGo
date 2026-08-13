@@ -17,6 +17,8 @@ import 'package:bite_go/features/cart/cart_view.dart';
 import 'package:bite_go/features/home/presentation/cubit/home_cubit.dart';
 import 'package:bite_go/features/home/presentation/views/home_view.dart';
 import 'package:bite_go/features/profile/profile_view.dart';
+import 'package:bite_go/features/search/presentation/cubit/search_cubit.dart';
+import 'package:bite_go/features/search/presentation/views/search_view.dart';
 import 'package:bite_go/features/splash/presentation/views/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -62,6 +64,7 @@ GoRouter createAppRouter(
   SignUpCubit Function()? signUpCubitFactory,
   ForgotPasswordCubit Function()? forgotPasswordCubitFactory,
   HomeCubit Function()? homeCubitFactory,
+  SearchCubit Function()? searchCubitFactory,
 }) {
   final routerRefresh = _RouterRefresh(authSessionCubit);
   final loginFactory = loginCubitFactory ?? () => getIt<LoginCubit>();
@@ -69,6 +72,7 @@ GoRouter createAppRouter(
   final forgotPasswordFactory =
       forgotPasswordCubitFactory ?? () => getIt<ForgotPasswordCubit>();
   final homeFactory = homeCubitFactory ?? () => getIt<HomeCubit>();
+  final searchFactory = searchCubitFactory ?? () => getIt<SearchCubit>();
   return GoRouter(
     initialLocation: AppRoutes.splash,
     refreshListenable: routerRefresh,
@@ -100,6 +104,30 @@ GoRouter createAppRouter(
               ],
             ),
         ],
+      ),
+      GoRoute(
+        path: AppRoutes.search,
+        pageBuilder: (context, state) => CustomTransitionPage<void>(
+          transitionDuration: const Duration(milliseconds: 300),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            final curvedAnimation = CurvedAnimation(
+              parent: animation,
+              curve: Curves.easeOutCubic,
+              reverseCurve: Curves.easeInCubic,
+            );
+            return SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(0, 1),
+                end: Offset.zero,
+              ).animate(curvedAnimation),
+              child: child,
+            );
+          },
+          child: BlocProvider(
+            create: (context) => searchFactory()..loadData(),
+            child: const SearchView(),
+          ),
+        ),
       ),
       GoRoute(
         path: AppRoutes.auth,

@@ -14,6 +14,8 @@ class AppAssets {
   static const String svgsGoogle = '$_svgs/google.svg';
   static const String svgsWhatsapp = '$_svgs/whatsapp.svg';
 
+  static const String svgsCouldntFindResult = "$_svgs/couldn't_find__result!.svg";
+
   static const String svgsIndicatorsBurger1 =
       '$_svgs/pre_auth/burger_indicator_1.svg';
   static const String svgsIndicatorsBurger2 =

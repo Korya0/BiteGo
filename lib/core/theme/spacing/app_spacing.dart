@@ -20,32 +20,6 @@ class AppSpace {
   double get smMd => 12.0;
   double get mdLg => 20.0;
 
-  // Font sizes, ordered smallest to largest:
-  // fontSizeXxs(11) < fontSizeXs(12) < fontSizeXsSm(13) < fontSizeSm(14) <
-  // fontSizeMd(16) < fontSizeLg(18) < fontSizeXl(20) < fontSizeTitleSm(22) <
-  // fontSizeXxl(24).
-  double get fontSizeXxs => 11.0;
-  double get fontSizeXs => 12.0;
-  double get fontSizeXsSm => 13.0;
-  double get fontSizeSm => 14.0;
-  double get fontSizeMd => 16.0;
-  double get fontSizeLg => 18.0;
-  double get fontSizeXl => 20.0;
-  double get fontSizeTitleSm => 22.0;
-  double get fontSizeXxl => 24.0;
-
-  // Icon sizes, ordered smallest to largest:
-  // iconXxs(10) < iconXs(14) < iconXsSm(16) < iconSmXs(18) < iconSm(22) <
-  // iconMd(24) < iconLg(32) < iconXxl(48).
-  double get iconXxs => 10.0;
-  double get iconXs => 14.0;
-  double get iconXsSm => 16.0;
-  double get iconSmXs => 18.0;
-  double get iconSm => 22.0;
-  double get iconMd => 24.0;
-  double get iconLg => 32.0;
-  double get iconXxl => 48.0;
-
   EdgeInsets all(double value) => EdgeInsets.all(value);
 
   EdgeInsets symmetric({double horizontal = 0, double vertical = 0}) =>

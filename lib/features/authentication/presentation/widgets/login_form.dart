@@ -1,4 +1,4 @@
-import 'package:bite_go/core/common/app_button.dart';
+﻿import 'package:bite_go/core/common/app_button.dart';
 import 'package:bite_go/core/common/app_gap.dart';
 import 'package:bite_go/core/common/app_text_button.dart';
 import 'package:bite_go/core/common/app_text_field.dart';
@@ -159,7 +159,7 @@ class _LoginFields extends StatelessWidget {
             text: AppStrings.loginForgotPassword,
             onPressed: () => context.push(AppRoutes.authForgotPassword),
             textStyle: context.textStyle.subtitle.copyWith(
-              fontSize: context.space.fontSizeSm,
+              fontSize: context.fontSize.sm,
               color: context.color.primary,
             ),
             padding: EdgeInsets.symmetric(

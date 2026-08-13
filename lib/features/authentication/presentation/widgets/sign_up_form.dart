@@ -1,4 +1,4 @@
-import 'package:bite_go/core/common/app_button.dart';
+﻿import 'package:bite_go/core/common/app_button.dart';
 import 'package:bite_go/core/common/app_gap.dart';
 import 'package:bite_go/core/common/app_text_field.dart';
 import 'package:bite_go/core/constants/app_strings.dart';
@@ -180,7 +180,7 @@ class _TermsText extends StatelessWidget {
     return Text.rich(
       TextSpan(
         style: context.textStyle.caption.copyWith(
-          fontSize: context.space.fontSizeXs,
+          fontSize: context.fontSize.xs,
           color: context.color.textSecondary,
         ),
         children: [
@@ -193,7 +193,7 @@ class _TermsText extends StatelessWidget {
               child: Text(
                 AppStrings.signUpTermsLink,
                 style: context.textStyle.subtitle.copyWith(
-                  fontSize: context.space.fontSizeXs,
+                  fontSize: context.fontSize.xs,
                   color: context.color.primary,
                   decoration: TextDecoration.underline,
                   decorationColor: context.color.primary,
@@ -210,7 +210,7 @@ class _TermsText extends StatelessWidget {
               child: Text(
                 AppStrings.signUpPrivacyLink,
                 style: context.textStyle.subtitle.copyWith(
-                  fontSize: context.space.fontSizeXs,
+                  fontSize: context.fontSize.xs,
                   color: context.color.primary,
                   decoration: TextDecoration.underline,
                   decorationColor: context.color.primary,

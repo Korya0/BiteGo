@@ -1,4 +1,4 @@
-import 'package:bite_go/core/constants/app_strings.dart';
+﻿import 'package:bite_go/core/constants/app_strings.dart';
 import 'package:bite_go/core/utils/context_extension.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +13,7 @@ class CartView extends StatelessWidget {
         child: Text(
           AppStrings.bottomNavCart,
           style: context.textStyle.title.copyWith(
-            fontSize: context.space.fontSizeXl,
+            fontSize: context.fontSize.xl,
             color: context.color.textSecondary,
           ),
         ),

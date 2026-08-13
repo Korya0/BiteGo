@@ -1,4 +1,4 @@
-import 'package:bite_go/core/common/app_gap.dart';
+﻿import 'package:bite_go/core/common/app_gap.dart';
 import 'package:bite_go/core/common/bottom_nav_bar/bottom_nav_tabs.dart';
 import 'package:bite_go/core/utils/context_extension.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +60,7 @@ class _NavItem extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(tab.icon, color: color, size: context.space.iconMd),
+              Icon(tab.icon, color: color, size: context.iconSize.md),
               const AppGap.h(2),
               Text(
                 tab.label,

@@ -1,4 +1,4 @@
-import 'package:bite_go/core/common/app_button.dart';
+﻿import 'package:bite_go/core/common/app_button.dart';
 import 'package:bite_go/core/common/app_gap.dart';
 import 'package:bite_go/core/common/image_with_shimmer.dart';
 import 'package:bite_go/core/constants/app_strings.dart';
@@ -115,7 +115,7 @@ class _DialogHeader extends StatelessWidget {
                 child: Icon(
                   Icons.image_not_supported_outlined,
                   color: context.color.iconSecondary,
-                  size: context.space.iconXxl,
+                  size: context.iconSize.xxl,
                 ),
               ),
             )
@@ -160,7 +160,7 @@ class _DialogInfo extends StatelessWidget {
               child: Text(
                 food.name,
                 style: context.textStyle.title.copyWith(
-                  fontSize: context.space.fontSizeTitleSm,
+                  fontSize: context.fontSize.titleSm,
                   color: context.color.textPrimary,
                 ),
               ),
@@ -173,7 +173,7 @@ class _DialogInfo extends StatelessWidget {
         Text(
           _formatPrice(food.price),
           style: context.textStyle.title.copyWith(
-            fontSize: context.space.fontSizeXl,
+            fontSize: context.fontSize.xl,
             color: context.color.primary,
           ),
         ),
@@ -181,7 +181,7 @@ class _DialogInfo extends StatelessWidget {
         Text(
           food.description,
           style: context.textStyle.body.copyWith(
-            fontSize: context.space.fontSizeMd,
+            fontSize: context.fontSize.md,
             color: context.color.textSecondary,
           ),
         ),
@@ -208,7 +208,7 @@ class _DialogQuantity extends StatelessWidget {
         Text(
           AppStrings.foodDetailsQuantity,
           style: context.textStyle.subtitle.copyWith(
-            fontSize: context.space.fontSizeMd,
+            fontSize: context.fontSize.md,
             color: context.color.textPrimary,
           ),
         ),
@@ -232,7 +232,7 @@ class _DialogAddToCart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppButton.primary(
-      text: '${AppStrings.foodDetailsAddToCart} — ${_formatPrice(totalPrice)}',
+      text: '${AppStrings.foodDetailsAddToCart} â€” ${_formatPrice(totalPrice)}',
       onPressed: () {
         final messenger = ScaffoldMessenger.of(context);
         Navigator.of(context).pop();
@@ -268,14 +268,14 @@ class _RatingBadge extends StatelessWidget {
           children: [
             Icon(
               Icons.star_rounded,
-              size: context.space.iconXsSm,
+              size: context.iconSize.xsSm,
               color: context.color.starYellow,
             ),
             AppGap.w(context.space.xs),
             Text(
               rating.toStringAsFixed(1),
               style: context.textStyle.subtitle.copyWith(
-                fontSize: context.space.fontSizeSm,
+                fontSize: context.fontSize.sm,
                 color: context.color.textPrimary,
               ),
             ),
