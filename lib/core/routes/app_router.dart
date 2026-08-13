@@ -13,7 +13,7 @@ import 'package:bite_go/features/authentication/presentation/views/forgot_passwo
 import 'package:bite_go/features/authentication/presentation/views/login_view.dart';
 import 'package:bite_go/features/authentication/presentation/views/pre_authentication_view.dart';
 import 'package:bite_go/features/authentication/presentation/views/sign_up_view.dart';
-import 'package:bite_go/features/cart/cart_view.dart';
+import 'package:bite_go/features/cart/presentation/views/cart_view.dart';
 import 'package:bite_go/features/home/presentation/cubit/home_cubit.dart';
 import 'package:bite_go/features/home/presentation/views/home_view.dart';
 import 'package:bite_go/features/profile/profile_view.dart';

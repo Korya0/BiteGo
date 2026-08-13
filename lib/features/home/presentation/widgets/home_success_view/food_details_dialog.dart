@@ -1,8 +1,10 @@
-﻿import 'package:bite_go/core/common/app_button.dart';
+import 'package:bite_go/core/common/app_button.dart';
 import 'package:bite_go/core/common/app_gap.dart';
 import 'package:bite_go/core/common/image_with_shimmer.dart';
 import 'package:bite_go/core/constants/app_strings.dart';
 import 'package:bite_go/core/utils/context_extension.dart';
+import 'package:bite_go/core/utils/price_formatter.dart';
+import 'package:bite_go/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:bite_go/features/home/data/models/food_model.dart';
 import 'package:bite_go/features/home/presentation/cubit/food_details_cubit.dart';
 import 'package:bite_go/features/home/presentation/cubit/food_details_state.dart';
@@ -18,14 +20,6 @@ Future<void> showFoodDetailsDialog(
     context: context,
     builder: (context) => FoodDetailsDialog(food: food),
   );
-}
-
-String _formatPrice(double price) {
-  final p = price.toInt();
-  if (p >= 1000) {
-    return '${(p / 1000).toStringAsFixed(p % 1000 == 0 ? 0 : 1)}k IQD';
-  }
-  return '$p IQD';
 }
 
 class FoodDetailsDialog extends StatelessWidget {
@@ -78,6 +72,7 @@ class FoodDetailsDialog extends StatelessWidget {
                               AppGap.h(context.space.xl),
                               _DialogAddToCart(
                                 food: state.food,
+                                quantity: state.quantity,
                                 totalPrice: state.food.price * state.quantity,
                               ),
                             ],
@@ -171,7 +166,7 @@ class _DialogInfo extends StatelessWidget {
         ),
         AppGap.h(context.space.sm),
         Text(
-          _formatPrice(food.price),
+          formatPrice(food.price, withUnit: true),
           style: context.textStyle.title.copyWith(
             fontSize: context.fontSize.xl,
             color: context.color.primary,
@@ -224,22 +219,28 @@ class _DialogQuantity extends StatelessWidget {
 }
 
 class _DialogAddToCart extends StatelessWidget {
-  const _DialogAddToCart({required this.food, required this.totalPrice});
+  const _DialogAddToCart({
+    required this.food,
+    required this.quantity,
+    required this.totalPrice,
+  });
 
   final FoodModel food;
+  final int quantity;
   final double totalPrice;
 
   @override
   Widget build(BuildContext context) {
     return AppButton.primary(
-      text: '${AppStrings.foodDetailsAddToCart} â€” ${_formatPrice(totalPrice)}',
+      text: '${AppStrings.foodDetailsAddToCart} — ${formatPrice(totalPrice, withUnit: true)}',
       onPressed: () {
         final messenger = ScaffoldMessenger.of(context);
+        context.read<CartCubit>().addItem(food, quantity: quantity);
         Navigator.of(context).pop();
         messenger
           ..hideCurrentSnackBar()
           ..showSnackBar(
-            SnackBar(content: Text('${food.name} added to cart!')),
+            SnackBar(content: Text('${food.name} ${AppStrings.cartAddedToCart}')),
           );
       },
     );
