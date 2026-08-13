@@ -2,8 +2,16 @@ import 'package:bite_go/features/cart/data/models/cart_item.dart';
 import 'package:flutter/foundation.dart';
 
 @immutable
-class CartState {
-  const CartState({required this.items});
+sealed class CartState {
+  const CartState();
+}
+
+final class CartLoading extends CartState {
+  const CartLoading();
+}
+
+final class CartSuccess extends CartState {
+  const CartSuccess({required this.items});
 
   final List<CartItem> items;
 
@@ -14,8 +22,4 @@ class CartState {
   double get deliveryFee => 0;
 
   double get total => subtotal + deliveryFee;
-
-  CartState copyWith({List<CartItem>? items}) {
-    return CartState(items: items ?? this.items);
-  }
 }

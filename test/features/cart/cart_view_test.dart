@@ -4,12 +4,14 @@ import 'package:bite_go/core/routes/app_routes.dart';
 import 'package:bite_go/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:bite_go/features/cart/presentation/views/cart_view.dart';
 import 'package:bite_go/features/cart/presentation/widgets/cart_item_card.dart';
+import 'package:bite_go/features/cart/presentation/widgets/cart_loading_view.dart';
 import 'package:bite_go/features/cart/presentation/widgets/payment_summary_section.dart';
 import 'package:bite_go/features/home/data/models/food_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../search/search_test_doubles.dart' show FakeLocalStorage;
 
@@ -28,8 +30,9 @@ void main() {
     sortOrder: 1,
   );
 
-  setUp(() {
+  setUp(() async {
     cubit = CartCubit(localStorage: FakeLocalStorage());
+    await pumpEventQueue();
   });
 
   tearDown(() => cubit.close());
@@ -67,6 +70,21 @@ void main() {
     expect(find.text(AppStrings.cartEmptyMessage), findsOneWidget);
     expect(find.text(AppStrings.cartFindFoods), findsOneWidget);
     expect(find.byType(CartItemCard), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('loading state shows a skeleton mirroring the filled cart', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      const MaterialApp(home: Scaffold(body: CartLoadingView())),
+    );
+    await tester.pump(const Duration(milliseconds: 400));
+
+    expect(find.bySubtype<Skeletonizer>(), findsOneWidget);
+    expect(find.byType(CartItemCard), findsNWidgets(2));
+    expect(find.byType(PaymentSummarySection), findsOneWidget);
+    expect(find.text(AppStrings.cartOrderNow), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 

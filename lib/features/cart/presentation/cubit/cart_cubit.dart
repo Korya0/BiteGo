@@ -7,23 +7,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class CartCubit extends Cubit<CartState> {
   CartCubit({required LocalStorage localStorage})
       : _localStorage = localStorage,
-        super(CartState(items: _loadItems(localStorage)));
+        super(const CartLoading()) {
+    loadData();
+  }
 
   final LocalStorage _localStorage;
 
-  static List<CartItem> _loadItems(LocalStorage localStorage) {
-    final raw = localStorage.read<List<dynamic>>(LocalStorageKeys.cartItems);
-    if (raw == null) {
-      return const [];
+  Future<void> loadData() async {
+    final items = await Future<List<CartItem>>(() => _loadItems());
+    if (isClosed || state is! CartLoading) {
+      return;
     }
-    return raw
-        .whereType<Map>()
-        .map((entry) => CartItem.fromJson(Map<String, dynamic>.from(entry)))
-        .toList();
+    emit(CartSuccess(items: items));
   }
 
   void addItem(FoodModel food, {int quantity = 1}) {
-    final items = [...state.items];
+    final current = state;
+    final items = current is CartSuccess ? [...current.items] : <CartItem>[];
     final index = items.indexWhere((item) => item.food.id == food.id);
     if (index >= 0) {
       items[index] = items[index].copyWith(
@@ -36,7 +36,11 @@ class CartCubit extends Cubit<CartState> {
   }
 
   void increment(String foodId) {
-    final items = [...state.items];
+    final current = state;
+    if (current is! CartSuccess) {
+      return;
+    }
+    final items = [...current.items];
     final index = items.indexWhere((item) => item.food.id == foodId);
     if (index < 0) {
       return;
@@ -46,7 +50,11 @@ class CartCubit extends Cubit<CartState> {
   }
 
   void decrement(String foodId) {
-    final items = [...state.items];
+    final current = state;
+    if (current is! CartSuccess) {
+      return;
+    }
+    final items = [...current.items];
     final index = items.indexWhere((item) => item.food.id == foodId);
     if (index < 0 || items[index].quantity <= 1) {
       return;
@@ -56,17 +64,32 @@ class CartCubit extends Cubit<CartState> {
   }
 
   void removeItem(String foodId) {
-    final items = state.items
+    final current = state;
+    if (current is! CartSuccess) {
+      return;
+    }
+    final items = current.items
         .where((item) => item.food.id != foodId)
         .toList();
     _emit(items);
   }
 
   void _emit(List<CartItem> items) {
-    emit(CartState(items: items));
+    emit(CartSuccess(items: items));
     _localStorage.write(
       LocalStorageKeys.cartItems,
       items.map((item) => item.toJson()).toList(),
     );
+  }
+
+  List<CartItem> _loadItems() {
+    final raw = _localStorage.read<List<dynamic>>(LocalStorageKeys.cartItems);
+    if (raw == null) {
+      return const [];
+    }
+    return raw
+        .whereType<Map>()
+        .map((entry) => CartItem.fromJson(Map<String, dynamic>.from(entry)))
+        .toList();
   }
 }

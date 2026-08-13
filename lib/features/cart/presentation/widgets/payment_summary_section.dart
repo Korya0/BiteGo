@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 class PaymentSummarySection extends StatelessWidget {
   const PaymentSummarySection({required this.state, super.key});
 
-  final CartState state;
+  final CartSuccess state;
 
   @override
   Widget build(BuildContext context) {

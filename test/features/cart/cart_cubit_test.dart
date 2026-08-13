@@ -1,9 +1,12 @@
 import 'package:bite_go/core/services/local_storage.dart';
 import 'package:bite_go/features/cart/presentation/cubit/cart_cubit.dart';
+import 'package:bite_go/features/cart/presentation/cubit/cart_state.dart';
 import 'package:bite_go/features/home/data/models/food_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../search/search_test_doubles.dart' show FakeLocalStorage;
+
+CartSuccess successOf(CartCubit cubit) => cubit.state as CartSuccess;
 
 void main() {
   late FakeLocalStorage localStorage;
@@ -32,33 +35,46 @@ void main() {
     sortOrder: 2,
   );
 
-  setUp(() {
+  setUp(() async {
     localStorage = FakeLocalStorage();
     cubit = CartCubit(localStorage: localStorage);
+    await pumpEventQueue();
   });
 
   tearDown(() => cubit.close());
 
-  test('starts with an empty cart', () {
-    expect(cubit.state.items, isEmpty);
-    expect(cubit.state.totalItems, 0);
-    expect(cubit.state.total, 0);
+  test('starts loading then emits an empty success state', () {
+    expect(cubit.state, isA<CartSuccess>());
+    expect(successOf(cubit).items, isEmpty);
+    expect(successOf(cubit).totalItems, 0);
+    expect(successOf(cubit).total, 0);
   });
 
   test('addItem appends a new item', () {
     cubit.addItem(burger);
 
-    expect(cubit.state.items.length, 1);
-    expect(cubit.state.items.first.food.id, 'burger');
-    expect(cubit.state.items.first.quantity, 1);
+    expect(successOf(cubit).items.length, 1);
+    expect(successOf(cubit).items.first.food.id, 'burger');
+    expect(successOf(cubit).items.first.quantity, 1);
   });
 
   test('addItem merges quantity when the same food is added again', () {
     cubit.addItem(burger, quantity: 2);
     cubit.addItem(burger);
 
-    expect(cubit.state.items.length, 1);
-    expect(cubit.state.items.first.quantity, 3);
+    expect(successOf(cubit).items.length, 1);
+    expect(successOf(cubit).items.first.quantity, 3);
+  });
+
+  test('addItem works before the initial load completes', () {
+    final fresh = CartCubit(localStorage: FakeLocalStorage());
+
+    fresh.addItem(burger);
+
+    expect(successOf(fresh).items.length, 1);
+    expect(successOf(fresh).items.first.quantity, 1);
+
+    fresh.close();
   });
 
   test('increment increases the item quantity', () {
@@ -66,18 +82,18 @@ void main() {
 
     cubit.increment('burger');
 
-    expect(cubit.state.items.first.quantity, 2);
+    expect(successOf(cubit).items.first.quantity, 2);
   });
 
   test('decrement decreases the item quantity and floors at one', () {
     cubit.addItem(burger, quantity: 3);
 
     cubit.decrement('burger');
-    expect(cubit.state.items.first.quantity, 2);
+    expect(successOf(cubit).items.first.quantity, 2);
 
     cubit.decrement('burger');
     cubit.decrement('burger');
-    expect(cubit.state.items.first.quantity, 1);
+    expect(successOf(cubit).items.first.quantity, 1);
   });
 
   test('removeItem removes only the matching item', () {
@@ -86,18 +102,18 @@ void main() {
 
     cubit.removeItem('burger');
 
-    expect(cubit.state.items.length, 1);
-    expect(cubit.state.items.first.food.id, 'pizza');
+    expect(successOf(cubit).items.length, 1);
+    expect(successOf(cubit).items.first.food.id, 'pizza');
   });
 
   test('totals are calculated from the actual items', () {
     cubit.addItem(burger, quantity: 2);
     cubit.addItem(pizza);
 
-    expect(cubit.state.totalItems, 3);
-    expect(cubit.state.subtotal, 34000);
-    expect(cubit.state.deliveryFee, 0);
-    expect(cubit.state.total, 34000);
+    expect(successOf(cubit).totalItems, 3);
+    expect(successOf(cubit).subtotal, 34000);
+    expect(successOf(cubit).deliveryFee, 0);
+    expect(successOf(cubit).total, 34000);
   });
 
   test('persists items to local storage on every change', () {
@@ -108,15 +124,16 @@ void main() {
     expect(stored!.length, 1);
   });
 
-  test('restores persisted items when the cubit is created', () {
+  test('restores persisted items when the cubit is created', () async {
     cubit.addItem(burger, quantity: 2);
     cubit.close();
 
     final restored = CartCubit(localStorage: localStorage);
+    await pumpEventQueue();
 
-    expect(restored.state.items.length, 1);
-    expect(restored.state.items.first.food.id, 'burger');
-    expect(restored.state.items.first.quantity, 2);
+    expect(successOf(restored).items.length, 1);
+    expect(successOf(restored).items.first.food.id, 'burger');
+    expect(successOf(restored).items.first.quantity, 2);
 
     restored.close();
   });
