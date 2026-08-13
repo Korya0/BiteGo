@@ -1,3 +1,4 @@
+import 'package:bite_go/core/common/app_empty_state.dart';
 import 'package:bite_go/core/constants/app_strings.dart';
 import 'package:bite_go/core/routes/app_routes.dart';
 import 'package:bite_go/core/services/local_storage.dart';
@@ -5,7 +6,6 @@ import 'package:bite_go/core/utils/result.dart';
 import 'package:bite_go/features/home/presentation/widgets/home_success_view/food_card.dart';
 import 'package:bite_go/features/search/presentation/cubit/search_cubit.dart';
 import 'package:bite_go/features/search/presentation/views/search_view.dart';
-import 'package:bite_go/features/search/presentation/widgets/empty_search_result.dart';
 import 'package:bite_go/features/search/presentation/widgets/search_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -87,7 +87,7 @@ void main() {
     await tester.pump();
     await tester.pump();
 
-    expect(find.byType(EmptySearchResult), findsOneWidget);
+    expect(find.byType(AppEmptyState), findsOneWidget);
     expect(find.text(AppStrings.searchEmptyResult), findsOneWidget);
     expect(tester.takeException(), isNull);
   });

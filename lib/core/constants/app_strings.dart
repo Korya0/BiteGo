@@ -126,6 +126,21 @@ class AppStrings {
       "We couldn't find any result! Please check your search for any typos "
       'or spelling errors, or try a different search term.';
 
+  // Cart.
+  static const cartTitle = 'My Cart';
+  static const cartEmptyTitle = 'Ouch! Hungry';
+  static const cartEmptyMessage =
+      'Seems like you have not ordered any food yet';
+  static const cartFindFoods = 'Find Foods';
+  static const cartOrderNow = 'Order Now';
+  static const cartOrderPlaced = 'Order placed successfully!';
+  static const cartAddedToCart = 'added to cart!';
+  static const cartPaymentSummary = 'Payment Summary';
+  static const cartTotalItems = 'Total Items';
+  static const cartDeliveryFee = 'Delivery Fee';
+  static const cartFree = 'Free';
+  static const cartTotal = 'Total';
+
   // Forgot password feedback.
   static const forgotPasswordEmailSent =
       'Password reset email sent. Check your inbox and follow the link to set a new password.';

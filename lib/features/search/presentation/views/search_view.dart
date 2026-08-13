@@ -1,6 +1,8 @@
 import 'package:bite_go/core/common/app_app_bar.dart';
+import 'package:bite_go/core/common/app_empty_state.dart';
 import 'package:bite_go/core/common/app_gap.dart';
 import 'package:bite_go/core/common/app_text_button.dart';
+import 'package:bite_go/core/constants/app_assets.dart';
 import 'package:bite_go/core/constants/app_strings.dart';
 import 'package:bite_go/core/utils/context_extension.dart';
 import 'package:bite_go/features/home/data/models/category_model.dart';
@@ -9,7 +11,6 @@ import 'package:bite_go/features/home/presentation/widgets/home_success_view/foo
 import 'package:bite_go/features/search/data/models/order_model.dart';
 import 'package:bite_go/features/search/presentation/cubit/search_cubit.dart';
 import 'package:bite_go/features/search/presentation/cubit/search_state.dart';
-import 'package:bite_go/features/search/presentation/widgets/empty_search_result.dart';
 import 'package:bite_go/features/search/presentation/widgets/recent_orders_section.dart';
 import 'package:bite_go/features/search/presentation/widgets/recent_searches.dart';
 import 'package:bite_go/features/search/presentation/widgets/search_section.dart';
@@ -172,7 +173,10 @@ class _SearchSuccessContent extends StatelessWidget {
             onClearAll: onClearAll,
           )
         : showCenteredEmpty
-        ? const EmptySearchResult()
+        ? const AppEmptyState(
+            assetPath: AppAssets.svgsCouldntFindResult,
+            message: AppStrings.searchEmptyResult,
+          )
         : _SearchResultsGrid(foods: foods);
 
     if (showCenteredEmpty) {
