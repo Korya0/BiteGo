@@ -13,4 +13,6 @@ class AppIconSize {
   double get md => 24.0;
   double get lg => 32.0;
   double get xxl => 48.0;
+
+  double get thumbnail => 80.0;
 }

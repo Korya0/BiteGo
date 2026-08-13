@@ -2,6 +2,7 @@ import 'package:bite_go/core/common/app_button.dart';
 import 'package:bite_go/core/common/app_gap.dart';
 import 'package:bite_go/core/common/image_with_shimmer.dart';
 import 'package:bite_go/core/constants/app_strings.dart';
+import 'package:bite_go/core/di/app_injector.dart';
 import 'package:bite_go/core/utils/context_extension.dart';
 import 'package:bite_go/core/utils/price_formatter.dart';
 import 'package:bite_go/features/cart/presentation/cubit/cart_cubit.dart';
@@ -235,7 +236,7 @@ class _DialogAddToCart extends StatelessWidget {
       text: '${AppStrings.foodDetailsAddToCart} — ${formatPrice(totalPrice, withUnit: true)}',
       onPressed: () {
         final messenger = ScaffoldMessenger.of(context);
-        context.read<CartCubit>().addItem(food, quantity: quantity);
+        getIt<CartCubit>().addItem(food, quantity: quantity);
         Navigator.of(context).pop();
         messenger
           ..hideCurrentSnackBar()

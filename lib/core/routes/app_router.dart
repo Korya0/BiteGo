@@ -13,6 +13,7 @@ import 'package:bite_go/features/authentication/presentation/views/forgot_passwo
 import 'package:bite_go/features/authentication/presentation/views/login_view.dart';
 import 'package:bite_go/features/authentication/presentation/views/pre_authentication_view.dart';
 import 'package:bite_go/features/authentication/presentation/views/sign_up_view.dart';
+import 'package:bite_go/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:bite_go/features/cart/presentation/views/cart_view.dart';
 import 'package:bite_go/features/home/presentation/cubit/home_cubit.dart';
 import 'package:bite_go/features/home/presentation/views/home_view.dart';
@@ -184,7 +185,10 @@ Widget _buildTabPage(
       create: (context) => homeFactory()..loadHomeData(),
       child: const HomeView(),
     ),
-    AppRoutes.cart => const CartView(),
+    AppRoutes.cart => BlocProvider.value(
+      value: getIt<CartCubit>(),
+      child: const CartView(),
+    ),
     AppRoutes.profile => const ProfileView(),
     _ => throw ArgumentError.value(
       path,

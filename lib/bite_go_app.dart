@@ -4,7 +4,6 @@ import 'package:bite_go/core/routes/app_router.dart';
 import 'package:bite_go/core/theme/app_theme.dart';
 import 'package:bite_go/core/utils/context_extension.dart';
 import 'package:bite_go/features/authentication/presentation/cubit/auth_session_cubit.dart';
-import 'package:bite_go/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,11 +13,8 @@ class BiteGoApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider.value(value: getIt<AuthSessionCubit>()),
-        BlocProvider.value(value: getIt<CartCubit>()),
-      ],
+    return BlocProvider.value(
+      value: getIt<AuthSessionCubit>(),
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: AppTheme.systemUiOverlayStyle,
         child: MaterialApp.router(

@@ -35,8 +35,8 @@ class CartItemCard extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(context.radius.sm),
               child: SizedBox(
-                width: 85,
-                height: 82,
+                width: context.iconSize.thumbnail,
+                height: context.iconSize.thumbnail,
                 child: ImageWithShimmer(imageUrl: item.food.imageUrl),
               ),
             ),
