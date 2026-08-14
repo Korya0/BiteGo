@@ -13,6 +13,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
+import '../../core/test_doubles/fake_app_logger.dart';
 import 'search_test_doubles.dart';
 
 void main() {
@@ -44,8 +45,11 @@ void main() {
     await tester.pumpWidget(
       BlocProvider(
         create: (context) =>
-            SearchCubit(homeRepository: homeRepository, localStorage: localStorage)
-              ..loadData(),
+            SearchCubit(
+              homeRepository: homeRepository,
+              localStorage: localStorage,
+              appLogger: FakeAppLogger(),
+            )..loadData(),
         child: MaterialApp.router(routerConfig: router),
       ),
     );
@@ -107,8 +111,11 @@ void main() {
     await tester.pumpWidget(
       BlocProvider(
         create: (context) =>
-            SearchCubit(homeRepository: HangingHomeRepository(), localStorage: localStorage)
-              ..loadData(),
+            SearchCubit(
+              homeRepository: HangingHomeRepository(),
+              localStorage: localStorage,
+              appLogger: FakeAppLogger(),
+            )..loadData(),
         child: MaterialApp.router(routerConfig: router),
       ),
     );

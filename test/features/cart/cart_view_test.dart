@@ -14,6 +14,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
+import '../../core/test_doubles/fake_app_logger.dart';
 import '../search/search_test_doubles.dart' show FakeLocalStorage;
 
 void main() {
@@ -32,7 +33,10 @@ void main() {
   );
 
   setUp(() async {
-    cubit = CartCubit(localStorage: FakeLocalStorage());
+    cubit = CartCubit(
+      localStorage: FakeLocalStorage(),
+      appLogger: FakeAppLogger(),
+    );
     await pumpEventQueue();
   });
 

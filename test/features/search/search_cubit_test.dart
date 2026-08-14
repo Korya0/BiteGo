@@ -5,6 +5,7 @@ import 'package:bite_go/features/search/presentation/cubit/search_cubit.dart';
 import 'package:bite_go/features/search/presentation/cubit/search_state.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../core/test_doubles/fake_app_logger.dart';
 import 'search_test_doubles.dart';
 
 Future<SearchSuccess> _loadSuccess(SearchCubit cubit) async {
@@ -26,6 +27,7 @@ void main() {
     cubit = SearchCubit(
       homeRepository: homeRepository,
       localStorage: localStorage,
+      appLogger: FakeAppLogger(),
     );
   });
 
@@ -189,4 +191,66 @@ void main() {
     expect(state.recentSearches, isEmpty);
     expect(localStorage.contains(LocalStorageKeys.recentSearches), isFalse);
   });
+
+  test('reports and recovers when stored recent searches are corrupt', () async {
+    localStorage.store[LocalStorageKeys.recentSearches] = 42;
+    final logger = FakeAppLogger();
+    final failing = SearchCubit(
+      homeRepository: homeRepository,
+      localStorage: localStorage,
+      appLogger: logger,
+    );
+
+    await failing.loadData();
+
+    final state = failing.state as SearchSuccess;
+    expect(state.recentSearches, isEmpty);
+    expect(
+      logger.reportedReasons,
+      contains('SearchCubit: failed to load recent searches'),
+    );
+
+    failing.close();
+  });
+
+  test('reports a failure when persisting recent searches throws', () async {
+    final logger = FakeAppLogger();
+    final failing = SearchCubit(
+      homeRepository: homeRepository,
+      localStorage: FailingSearchStorage(),
+      appLogger: logger,
+    );
+    await failing.loadData();
+
+    failing.queryChanged('pizza');
+    failing.submitQuery();
+    await pumpEventQueue();
+
+    expect((failing.state as SearchSuccess).recentSearches, ['pizza']);
+    expect(
+      logger.reportedReasons,
+      contains('SearchCubit: failed to persist recent searches'),
+    );
+
+    failing.close();
+  });
+}
+
+class FailingSearchStorage implements LocalStorage {
+  @override
+  Future<void> write<T>(String key, T value) async {
+    throw Exception('write failed');
+  }
+
+  @override
+  T? read<T>(String key) => null;
+
+  @override
+  Future<void> delete(String key) async {}
+
+  @override
+  Future<void> clear() async {}
+
+  @override
+  bool contains(String key) => false;
 }

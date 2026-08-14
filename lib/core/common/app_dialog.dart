@@ -8,6 +8,63 @@ import 'package:go_router/go_router.dart';
 class AppDialog {
   const AppDialog._();
 
+  static Future<T?> showConfirm<T>({
+    required BuildContext context,
+    required String message,
+    required String confirmLabel,
+    String cancelLabel = AppStrings.logoutCancel,
+  }) {
+    return showDialog<T>(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: context.color.backgroundSecondary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(context.radius.lg),
+          ),
+          insetPadding: EdgeInsets.symmetric(horizontal: context.space.lg),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: context.space.md,
+              horizontal: context.space.md,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: context.textStyle.body.copyWith(
+                    fontSize: context.fontSize.md,
+                    color: context.color.textPrimary,
+                  ),
+                ),
+                AppGap.h(context.space.lg),
+                Row(
+                  children: [
+                    Expanded(
+                      child: AppButton.secondary(
+                        text: cancelLabel,
+                        onPressed: () => context.pop(false),
+                      ),
+                    ),
+                    AppGap.w(context.space.sm),
+                    Expanded(
+                      child: AppButton.primary(
+                        text: confirmLabel,
+                        onPressed: () => context.pop(true),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   static Future<T?> showInfo<T>({
     required BuildContext context,
     required String message,
@@ -33,7 +90,7 @@ class AppDialog {
                   message,
                   textAlign: TextAlign.center,
                   style: context.textStyle.body.copyWith(
-                    fontSize: 16,
+                    fontSize: context.fontSize.md,
                     color: context.color.textPrimary,
                   ),
                 ),

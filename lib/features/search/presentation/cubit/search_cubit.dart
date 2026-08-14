@@ -1,3 +1,4 @@
+import 'package:bite_go/core/logging/app_logger.dart';
 import 'package:bite_go/core/services/local_storage.dart';
 import 'package:bite_go/core/utils/result.dart';
 import 'package:bite_go/features/home/data/models/category_model.dart';
@@ -10,14 +11,17 @@ class SearchCubit extends Cubit<SearchState> {
   SearchCubit({
     required HomeRepository homeRepository,
     required LocalStorage localStorage,
+    required AppLogger appLogger,
   })  : _homeRepository = homeRepository,
         _localStorage = localStorage,
+        _appLogger = appLogger,
         super(const SearchInitial());
 
   static const int _maxRecentSearches = 5;
 
   final HomeRepository _homeRepository;
   final LocalStorage _localStorage;
+  final AppLogger _appLogger;
 
   Future<void> loadData() async {
     if (state is SearchLoading) {
@@ -104,13 +108,23 @@ class SearchCubit extends Cubit<SearchState> {
     if (current is! SearchSuccess) {
       return;
     }
-    _localStorage.delete(LocalStorageKeys.recentSearches);
+    _deleteRecentSearches();
     emit(current.copyWith(recentSearches: const []));
   }
 
   List<String> _loadRecentSearches() {
-    return _localStorage.read<List<String>>(LocalStorageKeys.recentSearches) ??
-        const [];
+    try {
+      return _localStorage.read<List<String>>(LocalStorageKeys.recentSearches) ??
+          const [];
+    } catch (error, stackTrace) {
+      _appLogger.error(
+        'SearchCubit: failed to load recent searches',
+        error: error,
+        stackTrace: stackTrace,
+        report: true,
+      );
+      return const [];
+    }
   }
 
   List<String> _prependRecentSearch(List<String> current, String query) {
@@ -119,6 +133,28 @@ class SearchCubit extends Cubit<SearchState> {
   }
 
   void _persistRecentSearches(List<String> searches) {
-    _localStorage.write(LocalStorageKeys.recentSearches, searches);
+    _localStorage.write(LocalStorageKeys.recentSearches, searches).catchError(
+      (Object error, StackTrace stackTrace) {
+        _appLogger.error(
+          'SearchCubit: failed to persist recent searches',
+          error: error,
+          stackTrace: stackTrace,
+          report: true,
+        );
+      },
+    );
+  }
+
+  void _deleteRecentSearches() {
+    _localStorage.delete(LocalStorageKeys.recentSearches).catchError(
+      (Object error, StackTrace stackTrace) {
+        _appLogger.error(
+          'SearchCubit: failed to clear recent searches',
+          error: error,
+          stackTrace: stackTrace,
+          report: true,
+        );
+      },
+    );
   }
 }

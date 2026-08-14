@@ -7,6 +7,8 @@ import 'package:bite_go/core/di/app_injector.dart';
 import 'package:bite_go/core/utils/context_extension.dart';
 import 'package:bite_go/core/utils/price_formatter.dart';
 import 'package:bite_go/features/cart/presentation/cubit/cart_cubit.dart';
+import 'package:bite_go/features/favorites/presentation/cubit/favorites_cubit.dart';
+import 'package:bite_go/features/favorites/presentation/cubit/favorites_state.dart';
 import 'package:bite_go/features/home/data/models/food_model.dart';
 import 'package:bite_go/features/home/presentation/cubit/food_details_cubit.dart';
 import 'package:bite_go/features/home/presentation/cubit/food_details_state.dart';
@@ -20,7 +22,10 @@ Future<void> showFoodDetailsDialog(
 ) {
   return showDialog<void>(
     context: context,
-    builder: (context) => FoodDetailsDialog(food: food),
+    builder: (context) => BlocProvider(
+      create: (context) => getIt<FavoritesCubit>(),
+      child: FoodDetailsDialog(food: food),
+    ),
   );
 }
 
@@ -50,7 +55,7 @@ class FoodDetailsDialog extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      _DialogHeader(imageUrl: state.food.imageUrl),
+                      _DialogHeader(imageUrl: state.food.imageUrl, food: state.food),
                       Flexible(
                         child: SingleChildScrollView(
                           padding: EdgeInsets.fromLTRB(
@@ -94,9 +99,10 @@ class FoodDetailsDialog extends StatelessWidget {
 }
 
 class _DialogHeader extends StatelessWidget {
-  const _DialogHeader({required this.imageUrl});
+  const _DialogHeader({required this.imageUrl, required this.food});
 
   final String imageUrl;
+  final FoodModel food;
 
   @override
   Widget build(BuildContext context) {
@@ -121,21 +127,69 @@ class _DialogHeader extends StatelessWidget {
           Positioned(
             top: context.space.md,
             right: context.space.md,
-            child: GestureDetector(
-              onTap: () => Navigator.of(context).pop(),
-              child: CircleAvatar(
-                backgroundColor: context.color.backgroundPrimary.withValues(
-                  alpha: context.opacity.high,
+            child: Row(
+              children: [
+                _FavoriteToggleButton(food: food),
+                AppGap.w(context.space.sm),
+                GestureDetector(
+                  onTap: () => Navigator.of(context).pop(),
+                  child: CircleAvatar(
+                    backgroundColor: context.color.backgroundPrimary.withValues(
+                      alpha: context.opacity.high,
+                    ),
+                    child: Icon(
+                      Icons.close_rounded,
+                      color: context.color.textPrimary,
+                    ),
+                  ),
                 ),
-                child: Icon(
-                  Icons.close_rounded,
-                  color: context.color.textPrimary,
-                ),
-              ),
+              ],
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class _FavoriteToggleButton extends StatelessWidget {
+  const _FavoriteToggleButton({required this.food});
+
+  final FoodModel food;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<FavoritesCubit, FavoritesState>(
+      builder: (context, state) {
+        final isFavorite = state is FavoritesSuccess &&
+            state.isFavorite(food.id);
+        return GestureDetector(
+          onTap: () async {
+            final cubit = context.read<FavoritesCubit>();
+            await cubit.toggleFavorite(food);
+            if (!context.mounted) {
+              return;
+            }
+            AppToast.show(
+              context: context,
+              message: isFavorite
+                  ? '${food.name} ${AppStrings.favoritesRemoved}'
+                  : '${food.name} ${AppStrings.favoritesAdded}',
+            );
+          },
+          child: CircleAvatar(
+            backgroundColor: context.color.backgroundPrimary.withValues(
+              alpha: context.opacity.high,
+            ),
+            child: Icon(
+              isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+              color: isFavorite
+                  ? context.color.primary
+                  : context.color.textPrimary,
+            ),
+          ),
+        );
+      },
     );
   }
 }

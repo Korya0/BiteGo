@@ -4,6 +4,7 @@ import 'package:bite_go/features/cart/presentation/cubit/cart_state.dart';
 import 'package:bite_go/features/home/data/models/food_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../core/test_doubles/fake_app_logger.dart';
 import '../search/search_test_doubles.dart' show FakeLocalStorage;
 
 CartSuccess successOf(CartCubit cubit) => cubit.state as CartSuccess;
@@ -37,7 +38,10 @@ void main() {
 
   setUp(() async {
     localStorage = FakeLocalStorage();
-    cubit = CartCubit(localStorage: localStorage);
+    cubit = CartCubit(
+      localStorage: localStorage,
+      appLogger: FakeAppLogger(),
+    );
     await pumpEventQueue();
   });
 
@@ -67,7 +71,10 @@ void main() {
   });
 
   test('addItem works before the initial load completes', () {
-    final fresh = CartCubit(localStorage: FakeLocalStorage());
+    final fresh = CartCubit(
+      localStorage: FakeLocalStorage(),
+      appLogger: FakeAppLogger(),
+    );
 
     fresh.addItem(burger);
 
@@ -128,7 +135,10 @@ void main() {
     cubit.addItem(burger, quantity: 2);
     cubit.close();
 
-    final restored = CartCubit(localStorage: localStorage);
+    final restored = CartCubit(
+      localStorage: localStorage,
+      appLogger: FakeAppLogger(),
+    );
     await pumpEventQueue();
 
     expect(successOf(restored).items.length, 1);
@@ -137,4 +147,68 @@ void main() {
 
     restored.close();
   });
+
+  test('reports and recovers when stored cart data is corrupt', () async {
+    localStorage.store[LocalStorageKeys.cartItems] = 'corrupt';
+    final logger = FakeAppLogger();
+
+    final corrupt = CartCubit(
+      localStorage: localStorage,
+      appLogger: logger,
+    );
+    await pumpEventQueue();
+
+    expect(successOf(corrupt).items, isEmpty);
+    expect(
+      logger.reportedReasons,
+      contains('CartCubit: failed to load cart items'),
+    );
+
+    corrupt.close();
+  });
+
+  test('reports a failure when persisting cart items throws', () async {
+    final logger = FakeAppLogger();
+    final cubitWithFailingWrite = CartCubit(
+      localStorage: FailingLocalStorage(failWrite: true),
+      appLogger: logger,
+    );
+    await pumpEventQueue();
+
+    cubitWithFailingWrite.addItem(burger);
+    await pumpEventQueue();
+
+    expect(successOf(cubitWithFailingWrite).items.length, 1);
+    expect(
+      logger.reportedReasons,
+      contains('CartCubit: failed to persist cart items'),
+    );
+
+    cubitWithFailingWrite.close();
+  });
+}
+
+class FailingLocalStorage implements LocalStorage {
+  FailingLocalStorage({this.failWrite = false});
+
+  final bool failWrite;
+
+  @override
+  Future<void> write<T>(String key, T value) async {
+    if (failWrite) {
+      throw Exception('write failed');
+    }
+  }
+
+  @override
+  T? read<T>(String key) => null;
+
+  @override
+  Future<void> delete(String key) async {}
+
+  @override
+  Future<void> clear() async {}
+
+  @override
+  bool contains(String key) => false;
 }
