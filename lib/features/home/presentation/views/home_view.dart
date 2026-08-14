@@ -24,13 +24,12 @@ class HomeView extends StatelessWidget {
           HomeSuccess(
             :final banners,
             :final categories,
-            :final foods,
             :final selectedCategoryId,
           ) =>
             HomeSuccessView(
               banners: banners,
               categories: categories,
-              foods: foods,
+              foods: state.filteredFoods,
               selectedCategoryId: selectedCategoryId,
               onCategorySelected: (categoryId) =>
                   context.read<HomeCubit>().selectCategory(categoryId),
