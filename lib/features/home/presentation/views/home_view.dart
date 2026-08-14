@@ -34,6 +34,7 @@ class HomeView extends StatelessWidget {
               onCategorySelected: (categoryId) =>
                   context.read<HomeCubit>().selectCategory(categoryId),
               onSearchPressed: () => context.push(AppRoutes.search),
+              onFavoritesPressed: () => context.push(AppRoutes.favorites),
             ),
         };
       },

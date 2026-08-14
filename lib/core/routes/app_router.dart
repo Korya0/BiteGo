@@ -15,6 +15,8 @@ import 'package:bite_go/features/authentication/presentation/views/pre_authentic
 import 'package:bite_go/features/authentication/presentation/views/sign_up_view.dart';
 import 'package:bite_go/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:bite_go/features/cart/presentation/views/cart_view.dart';
+import 'package:bite_go/features/favorites/presentation/cubit/favorites_cubit.dart';
+import 'package:bite_go/features/favorites/presentation/views/favorites_view.dart';
 import 'package:bite_go/features/home/presentation/cubit/home_cubit.dart';
 import 'package:bite_go/features/home/presentation/views/home_view.dart';
 import 'package:bite_go/features/profile/profile_view.dart';
@@ -27,6 +29,7 @@ import 'package:go_router/go_router.dart';
 
 final Set<String> _protectedRoutes = {
   for (final tab in bottomNavTabs) tab.path,
+  AppRoutes.favorites,
 };
 
 const Set<String> _authRoutes = {
@@ -127,6 +130,30 @@ GoRouter createAppRouter(
           child: BlocProvider(
             create: (context) => searchFactory()..loadData(),
             child: const SearchView(),
+          ),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.favorites,
+        pageBuilder: (context, state) => CustomTransitionPage<void>(
+          transitionDuration: const Duration(milliseconds: 300),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            final curvedAnimation = CurvedAnimation(
+              parent: animation,
+              curve: Curves.easeOutCubic,
+              reverseCurve: Curves.easeInCubic,
+            );
+            return SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(0, 1),
+                end: Offset.zero,
+              ).animate(curvedAnimation),
+              child: child,
+            );
+          },
+          child: BlocProvider(
+            create: (context) => getIt<FavoritesCubit>(),
+            child: const FavoritesView(),
           ),
         ),
       ),

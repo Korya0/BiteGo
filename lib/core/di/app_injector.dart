@@ -12,6 +12,11 @@ import '../../features/authentication/presentation/cubit/forgot_password_cubit.d
 import '../../features/authentication/presentation/cubit/login_cubit.dart';
 import '../../features/authentication/presentation/cubit/sign_up_cubit.dart';
 import '../../features/cart/presentation/cubit/cart_cubit.dart';
+import '../../features/favorites/data/datasources/favorites_remote_data_source.dart';
+import '../../features/favorites/data/datasources/favorites_remote_data_source_impl.dart';
+import '../../features/favorites/data/repositories/favorites_repository.dart';
+import '../../features/favorites/data/repositories/favorites_repository_impl.dart';
+import '../../features/favorites/presentation/cubit/favorites_cubit.dart';
 import '../../features/home/data/datasources/home_remote_data_source.dart';
 import '../../features/home/data/datasources/home_remote_data_source_impl.dart';
 import '../../features/home/data/repositories/home_repository.dart';
@@ -79,10 +84,29 @@ Future<void> setupDependencies() async {
     () => SearchCubit(
       homeRepository: getIt<HomeRepository>(),
       localStorage: getIt<LocalStorage>(),
+      appLogger: getIt<AppLogger>(),
     ),
   );
   getIt.registerLazySingleton<CartCubit>(
-    () => CartCubit(localStorage: getIt<LocalStorage>()),
+    () => CartCubit(
+      localStorage: getIt<LocalStorage>(),
+      appLogger: getIt<AppLogger>(),
+    ),
+  );
+  getIt.registerLazySingleton<FavoritesRemoteDataSource>(
+    () => FavoritesRemoteDataSourceImpl(firestore: getIt<FirebaseFirestore>()),
+  );
+  getIt.registerLazySingleton<FavoritesRepository>(
+    () => FavoritesRepositoryImpl(
+      favoritesRemoteDataSource: getIt<FavoritesRemoteDataSource>(),
+      appLogger: getIt<AppLogger>(),
+    ),
+  );
+  getIt.registerFactory<FavoritesCubit>(
+    () => FavoritesCubit(
+      authSessionCubit: getIt<AuthSessionCubit>(),
+      favoritesRepository: getIt<FavoritesRepository>(),
+    ),
   );
   getIt.registerSingleton<AppLogger>(
     AppLogger(

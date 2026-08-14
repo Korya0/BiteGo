@@ -116,6 +116,21 @@ class AppStrings {
   static const foodDetailsQuantity = 'Quantity';
   static const foodDetailsAddToCart = 'Add to Cart';
 
+  // Favorites.
+  static const favoritesTitle = 'Favorites';
+  static const favoritesEmptyTitle = 'No favorites yet';
+  static const favoritesEmptyMessage =
+      'Tap the heart icon on any food to save it here';
+  static const favoritesBrowseFoods = 'Browse Foods';
+  static const favoritesSelect = 'Select';
+  static const favoritesCancel = 'Cancel';
+  static const favoritesDelete = 'Delete';
+  static const favoritesSelectedCount = 'selected';
+  static const favoritesRemoveConfirmMessage =
+      'Remove selected favorites? This cannot be undone.';
+  static const favoritesAdded = 'added to favorites!';
+  static const favoritesRemoved = 'removed from favorites!';
+
   // Search.
   static const searchTitle = 'Search Food';
   static const searchHint = 'Search Food';
