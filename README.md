@@ -64,7 +64,7 @@
   <tr>
     <td valign="top" style="border: 1px solid #d0d7de; padding: 16px;">
       <b style="color:#FE8C00;">05. Favorites</b><br><br>
-      <b>Status:</b> ⬜ Not Started<br><br>
+      <b>Status:</b> ✅ Completed<br><br>
       <b>Contains:</b><br>
       • Favorite Foods<br>
       • Remove from Favorites<br>
